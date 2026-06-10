@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestão Kick-Out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#F4F4F4; --paper:#FFFFFF; --ink:#3E3E3E; --muted:#6E6E6E;
+  --line:#E4E4E4; --clay:#EF3236; --clay-d:#C81E22; --steel:#3C5A6E;
+  --good:#2E7D6B; --bad:#C0392B; --gold:#E08A1E;
+  --shadow:0 1px 2px rgba(10,10,10,.05),0 12px 30px -18px rgba(10,10,10,.18);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Montserrat",system-ui,sans-serif;font-size:14px;line-height:1.5;
+  background-image:radial-gradient(rgba(62,62,62,.05) 1px,transparent 1px);background-size:22px 22px;}
+h1,h2,h3{font-family:"Montserrat",sans-serif;font-weight:700;letter-spacing:-.01em;margin:0}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px;color:var(--ink)}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:40;background:rgba(10,10,10,.97);color:#F0F0F0;backdrop-filter:blur(6px);
+  border-bottom:1px solid #262626}
+.head-in{max-width:1180px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto}
+.brand .mk{font-family:"Montserrat",sans-serif;font-weight:800;font-size:22px;color:#fff}
+.brand .mk em{font-style:normal;color:var(--clay);font-weight:400;margin:0 1px}
+.brand small{color:#8A8A8A;font-size:11px;text-transform:uppercase;letter-spacing:.18em}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:transparent;border:1px solid transparent;color:#BFBFBF;padding:8px 14px;border-radius:999px;
+  font-size:13px;font-weight:500;transition:.18s;display:flex;align-items:center;gap:7px}
+nav button:hover{color:#fff;background:rgba(255,255,255,.06)}
+nav button.active{background:var(--clay);color:#fff;border-color:var(--clay)}
+nav button .pill{background:rgba(0,0,0,.22);border-radius:999px;padding:0 7px;font-size:11px;font-weight:700}
+nav button.active .pill{background:rgba(255,255,255,.25)}
+
+main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
+.view{display:none;animation:fade .35s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* CARDS / SECTIONS */
+.section{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  margin-bottom:22px;overflow:hidden}
+.section>.sh{display:flex;align-items:center;gap:12px;padding:16px 22px;border-bottom:1px solid var(--line);
+  background:linear-gradient(0deg,rgba(239,50,54,.03),transparent)}
+.section>.sh .num{font-family:"Montserrat",sans-serif;font-weight:800;font-size:16px;color:#fff;background:var(--clay);
+  width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto}
+.section>.sh h2{font-size:17px}
+.section>.bd{padding:22px}
+
+.lead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.lead h1{font-size:30px;font-weight:800}
+.lead h1 em{font-style:italic;color:var(--clay);font-weight:500}
+.lead p{color:var(--muted);margin:6px 0 0;max-width:560px}
+
+label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
+  font-weight:600;margin-bottom:5px}
+.fld input,.fld select,.fld textarea{width:100%;background:#fff;border:1px solid var(--line);border-radius:9px;
+  padding:9px 11px;transition:.15s;outline:none}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--clay);box-shadow:0 0 0 3px rgba(239,50,54,.12)}
+.fld textarea{resize:vertical;min-height:64px;line-height:1.5}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:720px){.g2,.g3{grid-template-columns:1fr}}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* HOW TO box */
+.howto{background:#fff;border:1px dashed var(--clay);border-radius:12px;padding:14px 16px;font-size:13px;color:#5A5A5A}
+.howto b{color:var(--clay)}
+.howto ol{margin:6px 0 0;padding-left:18px}
+
+/* TABLES (prazos) */
+table{width:100%;border-collapse:collapse}
+.ptable th,.ptable td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);font-size:13px}
+.ptable th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.ptable td:first-child{font-weight:500}
+.ptable input{width:100%;border:1px solid var(--line);border-radius:7px;padding:7px 9px;text-align:right;background:#fff}
+.ptable input:focus{border-color:var(--clay);outline:none;box-shadow:0 0 0 3px rgba(239,50,54,.1)}
+.ptable .dev{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.ptable tr.total td{background:rgba(239,50,54,.05);font-weight:700;border-top:2px solid var(--clay)}
+.ptable tr.total .ro{text-align:right;font-variant-numeric:tabular-nums}
+.dev.pos{color:var(--good)} .dev.neg{color:var(--bad)}
+
+/* FORNECEDOR ROWS */
+.forn{border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;background:#fff;position:relative}
+.forn .topline{display:grid;grid-template-columns:1.1fr 1.3fr .8fr .9fr;gap:12px}
+@media(max-width:720px){.forn .topline{grid-template-columns:1fr 1fr}}
+.forn .rm{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);font-size:18px;line-height:1;
+  width:26px;height:26px;border-radius:7px}
+.forn .rm:hover{background:#FBE6E6;color:var(--bad)}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:none;background:#fff;padding:8px;font-size:12px;font-weight:600;color:var(--muted)}
+.seg button.on-pos{background:var(--good);color:#fff}
+.seg button.on-neg{background:var(--bad);color:#fff}
+.checks{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap}
+.checks label{display:flex;align-items:center;gap:7px;text-transform:none;letter-spacing:0;font-size:13px;
+  color:var(--ink);font-weight:500;cursor:pointer;margin:0}
+.checks input{width:16px;height:16px;accent-color:var(--clay)}
+
+/* qa list (engenharia / relacionamentos) */
+.qa{border-bottom:1px solid var(--line);padding:14px 0}
+.qa:last-child{border-bottom:none}
+.qa .q{font-weight:600;margin-bottom:7px}
+
+.btn{border:1px solid var(--clay);background:var(--clay);color:#fff;padding:10px 18px;border-radius:10px;
+  font-weight:600;font-size:14px;transition:.15s;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{background:var(--clay-d);border-color:var(--clay-d)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--clay);color:var(--clay)}
+.btn.sm{padding:7px 12px;font-size:13px}
+.btn.add{background:#fff;color:var(--clay);border:1px dashed var(--clay)}
+.btn.add:hover{background:rgba(239,50,54,.06)}
+.actbar{display:flex;gap:12px;justify-content:flex-end;align-items:center;flex-wrap:wrap;margin-top:6px}
+.actbar .sp{margin-right:auto;color:var(--muted);font-size:13px}
+
+/* HISTORY */
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.search{flex:1;min-width:220px;position:relative}
+.search input{width:100%;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px 10px 36px}
+.search input:focus{border-color:var(--clay);outline:none;box-shadow:0 0 0 3px rgba(239,50,54,.12)}
+.search svg{position:absolute;left:11px;top:11px;color:var(--muted)}
+.htable-wrap{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:auto;box-shadow:var(--shadow)}
+.htable{min-width:760px}
+.htable th,.htable td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);font-size:13px;white-space:nowrap}
+.htable thead th{position:sticky;top:0;background:#ECECEC;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+  color:#5A5A5A;font-weight:700}
+.htable tbody tr:hover{background:rgba(239,50,54,.04)}
+.htable .num{text-align:right;font-variant-numeric:tabular-nums}
+.htable .acts{text-align:right}
+.htable .acts button{border:none;background:none;color:var(--muted);font-size:13px;padding:4px 6px;border-radius:6px;font-weight:600}
+.htable .acts button:hover{color:var(--clay);background:rgba(239,50,54,.08)}
+.htable .acts button.del:hover{color:var(--bad);background:#FBE6E6}
+.rate{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px}
+.tag.pos{background:rgba(61,122,78,.12);color:var(--good)}
+.tag.neg{background:rgba(192,57,43,.12);color:var(--bad)}
+.empty{padding:46px 20px;text-align:center;color:var(--muted)}
+.empty .big{font-family:"Montserrat",sans-serif;font-weight:700;font-size:18px;color:var(--ink);margin-bottom:6px}
+
+/* dashboard */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+@media(max-width:720px){.stats{grid-template-columns:1fr 1fr}}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.stat .k{font-family:"Montserrat",sans-serif;font-weight:800;font-size:30px;color:var(--clay);line-height:1}
+.stat .l{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;font-weight:600}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:grid;grid-template-columns:160px 1fr 48px;align-items:center;gap:10px;font-size:13px}
+.bar-row .tk{height:18px;background:#ECECEC;border-radius:6px;overflow:hidden}
+.bar-row .fl{height:100%;background:linear-gradient(90deg,var(--clay),var(--gold));border-radius:6px}
+.bar-row .vv{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* toast */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(40px);background:var(--ink);color:#fff;
+  padding:13px 22px;border-radius:12px;font-size:14px;font-weight:500;box-shadow:0 12px 40px -8px rgba(0,0,0,.4);
+  opacity:0;transition:.3s;z-index:90;display:flex;align-items:center;gap:10px;max-width:90vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast .dot{width:9px;height:9px;border-radius:50%;background:var(--clay)}
+#toast.ok .dot{background:#3DBE74} #toast.warn .dot{background:var(--gold)}
+
+footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
+.io-row{display:flex;gap:12px;flex-wrap:wrap}
+/* link de empresa clicavel */
+.flink{background:none;border:none;font:inherit;color:var(--clay);font-weight:700;cursor:pointer;padding:0;text-align:left}
+.flink:hover{text-decoration:underline}
+
+/* tipos */
+.tipoInput:focus{border-color:var(--clay);outline:none;box-shadow:0 0 0 3px rgba(239,50,54,.12)}
+.tip-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:8px}
+.tip-item .nm{font-weight:600;flex:1}
+.tip-item .ct{font-size:12px;color:var(--muted)}
+.tip-item .del{background:none;border:1px solid var(--line);color:var(--muted);border-radius:7px;width:30px;height:30px;cursor:pointer;font-size:16px;flex:0 0 auto}
+.tip-item .del:hover{border-color:var(--bad);color:var(--bad);background:#FBE6E6}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,10,10,.55);display:none;align-items:flex-start;justify-content:center;
+  z-index:100;padding:40px 16px;overflow:auto;backdrop-filter:blur(2px)}
+.modal.show{display:flex;animation:fade .25s ease}
+.modal-card{background:var(--paper);border-radius:16px;box-shadow:0 24px 70px -20px rgba(0,0,0,.5);max-width:720px;width:100%;
+  position:relative;border:1px solid var(--line)}
+.modal-x{position:absolute;top:12px;right:14px;background:none;border:none;font-size:26px;line-height:1;color:var(--muted);cursor:pointer;z-index:2}
+.modal-x:hover{color:var(--clay)}
+.modal-head{padding:24px 26px 16px;border-bottom:1px solid var(--line)}
+.modal-head .eyebrow-l{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--clay);font-weight:700;margin-bottom:6px}
+.modal-head h3{font-family:"Montserrat",sans-serif;font-weight:800;font-size:24px;letter-spacing:-.02em;margin:0}
+.modal-head .sub{color:var(--muted);font-size:13px;margin-top:4px}
+.modal-body{padding:20px 26px 26px}
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px 22px;margin:0 0 18px}
+.dl .kv .vk{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.dl .kv .vv{font-size:15px;margin-top:2px}
+.mh{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700;margin:18px 0 8px}
+.hcard{border:1px solid var(--line);border-left:4px solid var(--clay);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.hcard .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.hcard .ob{font-weight:700} .hcard .dt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.hcard .meta{font-size:13px;color:var(--ink);margin-top:5px;display:flex;gap:16px;flex-wrap:wrap}
+.hcard .fb{font-size:13px;color:var(--muted);margin-top:6px}
+.qa-v{padding:10px 0;border-bottom:1px solid var(--line)}
+.qa-v:last-child{border-bottom:0}
+.qa-v .qq{font-size:12px;color:var(--muted);font-weight:600}
+.qa-v .aa{font-size:14px;margin-top:3px;white-space:pre-wrap}
+.modal .ptable th{background:transparent;color:var(--muted);position:static}
+.modal .ptable td{border-bottom:1px solid var(--line)}
+@media(max-width:720px){.modal{padding:16px 8px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="head-in">
+    <div class="brand"><span class="mk">Kick<em>|</em>Out</span><small>Gestão de Obras</small></div>
+    <nav id="nav">
+      <button data-v="form" class="active">✎ Preencher</button>
+      <button data-v="obras">Obras <span class="pill" id="cObras">0</span></button>
+      <button data-v="forn">Fornecedores <span class="pill" id="cForn">0</span></button>
+      <button data-v="tipos">Tipos <span class="pill" id="cTipos">0</span></button>
+      <button data-v="dash">Dashboard</button>
+      <button data-v="io">Dados</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ============ FORM ============ -->
+<section class="view active" id="v-form">
+  <div class="lead">
+    <div>
+      <h1>Formulário de <em>Reunião Kick-Out</em></h1>
+      <p>Preencha os dados da reunião. Ao salvar, a obra e os fornecedores vão para o histórico — <b>sem duplicar</b>: se a obra ou a empresa já existir, o registro é atualizado.</p>
+    </div>
+    <div class="howto">
+      <b>Como funciona</b>
+      <ol>
+        <li>Preencha os campos abaixo.</li>
+        <li>Clique em <b>Salvar Kickout</b>.</li>
+        <li>Veja em <b>Obras</b> / <b>Fornecedores</b> e exporte em <b>Dados</b>.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <div class="section">
+    <div class="sh"><span class="num">1</span><h2>Identificação da Obra</h2></div>
+    <div class="bd">
+      <div class="grid g3">
+        <div class="fld"><label>Nome da Obra *</label><input id="f_obra" placeholder="Ex.: Aluízio e Cristina"></div>
+        <div class="fld"><label>Data da Reunião</label><input id="f_data" type="date"></div>
+        <div class="fld"><label>Arquitetura</label><input id="f_arq" placeholder="Ex.: Bruno Rubiano"></div>
+        <div class="fld"><label>Regime de Contratação</label>
+          <select id="f_regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
+        <div class="fld"><label>Metragem (m²)</label><input id="f_metr" type="number" step="any" placeholder="300"></div>
+        <div class="fld"><label>Ano de Conclusão</label><input id="f_ano" type="number" placeholder="2025"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <div class="sh"><span class="num">2</span><h2>Equipe do Projeto</h2></div>
+    <div class="bd">
+      <div class="grid g3">
+        <div class="fld"><label>Diretoria</label><input id="f_dir"></div>
+        <div class="fld"><label>Coordenação</label><input id="f_coord"></div>
+        <div class="fld"><label>Engenharia</label><input id="f_eng" placeholder="Engenheiro responsável"></div>
+        <div class="fld"><label>Mestre</label><input id="f_mestre"></div>
+        <div class="fld"><label>Orçamentista</label><input id="f_orc"></div>
+        <div class="fld"><label>Suprimentos</label><input id="f_supri"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <div class="sh"><span class="num">3</span><h2>Prazos e Orçamentos</h2></div>
+    <div class="bd">
+      <table class="ptable" id="ptable">
+        <thead><tr><th style="width:36%">Item</th><th style="width:22%">Previsto</th><th style="width:22%">Real</th><th style="width:20%;text-align:right">Desvio</th></tr></thead>
+        <tbody>
+          <tr data-k="prazo"><td>Prazo (meses)</td><td><input type="number" step="any" class="pv"></td><td><input type="number" step="any" class="rl"></td><td class="dev">0</td></tr>
+          <tr data-k="cinza"><td>Fase Cinza (R$)</td><td><input type="number" step="any" class="pv"></td><td><input type="number" step="any" class="rl"></td><td class="dev">0</td></tr>
+          <tr data-k="acab"><td>Fase Acabamentos (R$)</td><td><input type="number" step="any" class="pv"></td><td><input type="number" step="any" class="rl"></td><td class="dev">0</td></tr>
+          <tr data-k="extras"><td>Extras (R$)</td><td><input type="number" step="any" class="pv"></td><td><input type="number" step="any" class="rl"></td><td class="dev">0</td></tr>
+          <tr data-k="equipe"><td>Equipe (R$)</td><td><input type="number" step="any" class="pv"></td><td><input type="number" step="any" class="rl"></td><td class="dev">0</td></tr>
+          <tr class="total"><td>Total (R$)</td><td class="ro" id="t_pv">0</td><td class="ro" id="t_rl">0</td><td class="dev ro" id="t_dev">0</td></tr>
+        </tbody>
+      </table>
+      <p class="hint">O Total soma Fase Cinza + Acabamentos + Extras + Equipe (o Prazo não entra na soma).</p>
+      <div class="fld" style="margin-top:16px"><label>Observações</label><textarea id="f_obs"></textarea></div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <div class="sh"><span class="num">4</span><h2>Avaliação de Fornecedores</h2></div>
+    <div class="bd">
+      <div id="fornList"></div>
+      <button class="btn add" id="addForn">+ Adicionar fornecedor</button>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <div class="sh"><span class="num">5</span><h2>Engenharia</h2></div>
+    <div class="bd" id="engBlock"></div>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+    <div class="sh"><span class="num">6</span><h2>Relacionamentos</h2></div>
+    <div class="bd" id="relBlock"></div>
+  </div>
+
+  <div class="actbar">
+    <span class="sp" id="editFlag"></span>
+    <button class="btn ghost" id="btnClear">Limpar formulário</button>
+    <button class="btn" id="btnSave">✓ Salvar Kickout</button>
+  </div>
+</section>
+
+<!-- ============ OBRAS ============ -->
+<section class="view" id="v-obras">
+  <div class="lead"><div><h1>Histórico de <em>Obras</em></h1><p>Cada obra aparece uma única vez. Salvar uma obra com o mesmo nome atualiza o registro existente.</p></div></div>
+  <div class="toolbar">
+    <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><input id="srcObra" placeholder="Buscar por obra, arquitetura, engenheiro…"></div>
+  </div>
+  <div class="htable-wrap"><table class="htable"><thead><tr>
+    <th>Obra</th><th>Data</th><th>Arquitetura</th><th>Regime</th><th class="acts"></th>
+  </tr></thead><tbody id="obraBody"></tbody></table></div>
+</section>
+
+<!-- ============ FORNECEDORES ============ -->
+<section class="view" id="v-forn">
+  <div class="lead"><div><h1>Histórico de <em>Fornecedores</em></h1><p>Cada empresa aparece uma única vez. Clique na empresa (ou em <b>Ver histórico</b>) para ver todos os kickouts em que ela apareceu — com data, obra, nota e engenheiro responsável.</p></div></div>
+  <div class="toolbar">
+    <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><input id="srcForn" placeholder="Buscar por empresa, tipo, obra…"></div>
+  </div>
+  <div class="htable-wrap"><table class="htable"><thead><tr>
+    <th>Empresa</th><th>Tipo / Departamento</th><th class="num">Registros</th><th>Nota média</th><th>Última obra</th><th class="acts"></th>
+  </tr></thead><tbody id="fornBody"></tbody></table></div>
+</section>
+
+<!-- ============ TIPOS ============ -->
+<section class="view" id="v-tipos">
+  <div class="lead"><div><h1>Tipos / <em>Departamentos</em></h1><p>Lista única usada no formulário de fornecedores. Cadastre aqui para evitar duplicados (ex.: <i>Mármore</i> e <i>Marmore</i> não convivem) — acentos e maiúsculas são ignorados na comparação.</p></div></div>
+  <div class="section">
+    <div class="sh"><span class="num">+</span><h2>Adicionar tipo</h2></div>
+    <div class="bd">
+      <div class="io-row">
+        <input id="novoTipo" class="tipoInput" placeholder="Ex.: Mármore e Granito" style="flex:1;min-width:240px;border:1px solid var(--line);border-radius:9px;padding:10px 12px">
+        <button class="btn" id="addTipo">+ Adicionar</button>
+      </div>
+      <p class="hint">Enter também adiciona.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="sh"><span class="num">≡</span><h2>Tipos cadastrados <span class="pill" id="cTipos2" style="background:var(--clay);color:#fff;border-radius:999px;padding:1px 9px;font-size:12px"></span></h2></div>
+    <div class="bd"><div id="tiposList"></div></div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<section class="view" id="v-dash">
+  <div class="lead"><div><h1><em>Dashboard</em> de Análise</h1><p>Resumo automático com base nos históricos.</p></div></div>
+  <div class="stats" id="statBox"></div>
+  <div class="section"><div class="sh"><span class="num">⌖</span><h2>Obras por Ano</h2></div><div class="bd"><div class="bars" id="barsAno"></div></div></div>
+  <div class="section"><div class="sh"><span class="num">★</span><h2>Fornecedores melhor avaliados</h2></div><div class="bd"><div class="bars" id="barsForn"></div></div></div>
+</section>
+
+<!-- ============ DADOS ============ -->
+<section class="view" id="v-io">
+  <div class="lead"><div><h1>Gerenciar <em>Dados</em></h1><p>Exporte para Excel no mesmo formato da planilha original, ou importe um arquivo existente.</p></div></div>
+  <div class="section"><div class="sh"><span class="num">↓</span><h2>Exportar</h2></div><div class="bd">
+    <p class="hint" style="margin-top:0">Gera um <b>.xlsx</b> com as abas PREENCHER_AQUI, DASHBOARD, HISTORICO_OBRAS e HISTORICO_FORNECEDORES — pronto para Tabela Dinâmica.</p>
+    <div class="io-row" style="margin-top:12px">
+      <button class="btn" id="expXlsx">⬇ Exportar Excel (.xlsx)</button>
+      <button class="btn ghost" id="expCsvO">CSV Obras</button>
+      <button class="btn ghost" id="expCsvF">CSV Fornecedores</button>
+    </div>
+  </div></div>
+  <div class="section"><div class="sh"><span class="num">↑</span><h2>Importar</h2></div><div class="bd">
+    <p class="hint" style="margin-top:0">Lê as abas <b>HISTORICO_OBRAS</b> e <b>HISTORICO_FORNECEDORES</b> de um .xlsx e mescla nos dados atuais (sem duplicar).</p>
+    <div class="io-row" style="margin-top:12px">
+      <input type="file" id="impFile" accept=".xlsx,.xls" style="display:none">
+      <button class="btn ghost" id="impBtn">📂 Importar planilha…</button>
+    </div>
+  </div></div>
+  <div class="section"><div class="sh"><span class="num">⚠</span><h2>Zona de risco</h2></div><div class="bd">
+    <p class="hint" style="margin-top:0">Apaga todos os dados salvos neste navegador. Não pode ser desfeito.</p>
+    <button class="btn ghost" id="wipe" style="margin-top:12px;border-color:var(--bad);color:var(--bad)">Apagar todos os dados</button>
+  </div></div>
+</section>
+</main>
+
+<div id="modal" class="modal"><div class="modal-card"><button class="modal-x" id="modalX">×</button><div id="modalBody"></div></div></div>
+
+<footer>Gestão Kick-Out · dados salvos localmente neste dispositivo (localStorage)</footer>
+<div id="toast"><span class="dot"></span><span id="toastMsg"></span></div>
+
+<script>
+/* ---------- estado ---------- */
+const KO = "kickout_obras", KF = "kickout_forn", KT = "kickout_tipos";
+let obras = load(KO), forn = load(KF), editKey = null;
+let tipos = loadTipos();
+function load(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}}
+function loadTipos(){try{const a=JSON.parse(localStorage.getItem(KT));return Array.isArray(a)?a:null;}catch(e){return null;}}
+function save(){localStorage.setItem(KO,JSON.stringify(obras));localStorage.setItem(KF,JSON.stringify(forn));localStorage.setItem(KT,JSON.stringify(tipos));refreshCounts()}
+const norm = s => (s||"").toString().trim().toLowerCase();
+const stripAcc = s => (s||"").toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
+
+/* ---------- migração p/ modelo mestre + histórico ---------- */
+function migrate(){
+  // fornecedor antigo (achatado) -> mestre {empresa, tipo, hist:[...]}
+  forn.forEach(f=>{
+    if(!Array.isArray(f.hist)){
+      const o=obras.find(x=>norm(x.obra)===norm(f.obra));
+      f.hist=[{data:(o&&o.data)||'',obra:f.obra||'',ano:f.ano||'',eng:f.eng||'',nota:(f.nota??''),sent:f.sent||'',
+               feedback:f.feedback||'',tipo:f.tipo||'',orcamento:!!f.orcamento,concorrencia:!!f.concorrencia}];
+      ['nota','sent','feedback','obra','ano','eng','orcamento','concorrencia'].forEach(k=>delete f[k]);
+    }
+  });
+  // lista de tipos: semear na 1ª vez e absorver os já existentes nos dados
+  if(tipos===null){
+    tipos=["Mármore e Granito","Marcenaria","Vidros e Espelhos","Esquadrias de Alumínio","Serralheria",
+      "Hidráulica","Elétrica","Ar-condicionado","Gesso e Forro","Pintura","Pisos e Revestimentos",
+      "Pedras","Automação","Paisagismo","Impermeabilização"];
+  }
+  forn.forEach(f=>{ if(f.tipo)addTipoSilent(f.tipo); (f.hist||[]).forEach(h=>{if(h.tipo)addTipoSilent(h.tipo);}); });
+}
+function addTipoSilent(t){ t=(t||'').trim(); if(!t)return; if(!tipos.some(x=>stripAcc(x)===stripAcc(t)))tipos.push(t); }
+const $ = id => document.getElementById(id);
+const num = v => {const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?0:n;};
+const money = n => (n<0?'-':'')+"R$ "+Math.abs(n||0).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+function toast(m,t){const e=$('toast');$('toastMsg').textContent=m;e.className='show '+(t||'');setTimeout(()=>e.className='',2600);}
+
+/* ---------- engenharia / relacionamentos ---------- */
+const ENG = ["Houve patologias durante a obra? Itens que demandam atenção futura","Houve envio de relatórios quinzenais?","Cronograma seguido durante a obra?","Houveram muitas compras de urgência?","Caderno de Notas dos fornecedores gerado e já encaminhado pro cliente?","Feedback do Mestre (suprimentos, gestão de obras e afins)","As Built já iniciado?"];
+const REL = ["Como foi o relacionamento com o cliente?","Como foi o relacionamento com a arquitetura / gerenciadora?","Como foi o relacionamento interno (Orç + Supri + Eng + ADM)?"];
+function buildQA(box,arr,pfx){box.innerHTML=arr.map((q,i)=>`<div class="qa"><div class="q">${q}</div><textarea data-q="${pfx}${i}" placeholder="Descrição…"></textarea></div>`).join('');}
+buildQA($('engBlock'),ENG,'e'); buildQA($('relBlock'),REL,'r');
+
+/* ---------- fornecedor rows ---------- */
+function fornRow(d={}){
+  const wrap=document.createElement('div'); wrap.className='forn';
+  const sent = d.sent==null?'':d.sent;
+  wrap.innerHTML=`
+    <button class="rm" title="Remover">×</button>
+    <div class="topline">
+      <div class="fld"><label>Tipo / Departamento</label><select class="fTipo">${tipoOptions(d.tipo)}</select></div>
+      <div class="fld"><label>Empresa</label><input class="fEmp" placeholder="Nome do fornecedor" value="${esc(d.empresa)}"></div>
+      <div class="fld"><label>Nota (0–5)</label><input class="fNota" type="number" min="0" max="5" step="1" value="${d.nota??''}"></div>
+      <div class="fld"><label>Sentimento</label>
+        <div class="seg fSeg">
+          <button type="button" data-s="Positivo" class="${sent==='Positivo'?'on-pos':''}">Positivo</button>
+          <button type="button" data-s="Negativo" class="${sent==='Negativo'?'on-neg':''}">Negativo</button>
+        </div></div>
+    </div>
+    <div class="fld" style="margin-top:12px"><label>Observação / Feedback</label><textarea class="fFb">${esc(d.feedback)}</textarea></div>
+    <div class="checks">
+      <label><input type="checkbox" class="fOrc" ${d.orcamento?'checked':''}> Empresa usada em orçamentos</label>
+      <label><input type="checkbox" class="fConc" ${d.concorrencia?'checked':''}> Participou da concorrência</label>
+    </div>`;
+  wrap.querySelector('.rm').onclick=()=>wrap.remove();
+  wrap.querySelectorAll('.fSeg button').forEach(b=>b.onclick=()=>{
+    const on=b.classList.contains('on-pos')||b.classList.contains('on-neg');
+    wrap.querySelectorAll('.fSeg button').forEach(x=>x.className='');
+    if(!on)b.className=b.dataset.s==='Positivo'?'on-pos':'on-neg';
+  });
+  const selT=wrap.querySelector('.fTipo'); selT._prev=selT.value;
+  selT.onchange=()=>{
+    if(selT.value==='__novo__'){
+      const r=addTipo(prompt('Novo tipo / departamento:'));
+      refreshTipoSelects();
+      selT.value = r ? r.name : selT._prev;
+    }
+    selT._prev=selT.value;
+  };
+  $('fornList').appendChild(wrap); return wrap;
+}
+function esc(s){return (s||'').toString().replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+/* options do select de tipos */
+function tipoOptions(sel){
+  sel=(sel||'').trim();
+  if(sel && !tipos.some(t=>stripAcc(t)===stripAcc(sel))) tipos.push(sel); // legado fora da lista
+  let html='<option value="">—</option>';
+  tipos.slice().sort((a,b)=>a.localeCompare(b,'pt')).forEach(t=>{
+    const s = stripAcc(t)===stripAcc(sel) ? ' selected':'';
+    html+=`<option value="${esc(t)}"${s}>${esc(t)}</option>`;
+  });
+  html+='<option value="__novo__">➕ Novo tipo…</option>';
+  return html;
+}
+/* re-renderiza todos os selects abertos preservando seleção */
+function refreshTipoSelects(){
+  document.querySelectorAll('select.fTipo').forEach(s=>{const cur=s._prev||s.value;s.innerHTML=tipoOptions(cur);s.value=tipos.some(t=>stripAcc(t)===stripAcc(cur))?cur:'';s._prev=s.value;});
+}
+/* adiciona um tipo (rejeita duplicado ignorando acento/caixa). Retorna {name,isNew} ou null. */
+function addTipo(t){
+  t=(t||'').trim(); if(!t)return null;
+  const ex=tipos.find(x=>stripAcc(x)===stripAcc(t));
+  if(ex){toast('Tipo já existe: '+ex,'warn');return {name:ex,isNew:false};}
+  tipos.push(t);save();renderTipos();return {name:t,isNew:true};
+}
+$('addForn').onclick=()=>fornRow();
+
+/* ---------- prazos calc ---------- */
+function recalc(){
+  let tp=0,tr=0;
+  document.querySelectorAll('#ptable tbody tr[data-k]').forEach(tr0=>{
+    const pv=num(tr0.querySelector('.pv').value), rl=num(tr0.querySelector('.rl').value);
+    const dev=tr0.querySelector('.dev'); const d=pv-rl;
+    dev.textContent = tr0.dataset.k==='prazo'? d.toLocaleString('pt-BR') : money(d);
+    dev.className='dev '+(d>0?'pos':d<0?'neg':'');
+    if(['cinza','acab','extras','equipe'].includes(tr0.dataset.k)){tp+=pv;tr+=rl;}
+  });
+  $('t_pv').textContent=money(tp); $('t_rl').textContent=money(tr);
+  const td=tp-tr; const e=$('t_dev'); e.textContent=money(td); e.className='dev ro '+(td>0?'pos':td<0?'neg':'');
+}
+document.querySelector('#ptable').addEventListener('input',recalc);
+
+/* ---------- coletar / popular ---------- */
+function collect(){
+  const o={
+    obra:$('f_obra').value.trim(), data:$('f_data').value, arq:$('f_arq').value.trim(),
+    metragem:$('f_metr').value, regime:$('f_regime').value, ano:$('f_ano').value, eng:$('f_eng').value.trim(),
+    equipe:{dir:$('f_dir').value,coord:$('f_coord').value,mestre:$('f_mestre').value,orc:$('f_orc').value,supri:$('f_supri').value},
+    prazos:{}, obs:$('f_obs').value, eng_qa:{}, rel_qa:{}
+  };
+  document.querySelectorAll('#ptable tbody tr[data-k]').forEach(t=>o.prazos[t.dataset.k]={pv:num(t.querySelector('.pv').value),rl:num(t.querySelector('.rl').value)});
+  document.querySelectorAll('#engBlock textarea').forEach(t=>o.eng_qa[t.dataset.q]=t.value);
+  document.querySelectorAll('#relBlock textarea').forEach(t=>o.rel_qa[t.dataset.q]=t.value);
+  const fs=[];
+  document.querySelectorAll('#fornList .forn').forEach(w=>{
+    const emp=w.querySelector('.fEmp').value.trim(); if(!emp&&!w.querySelector('.fTipo').value.trim())return;
+    const segOn=w.querySelector('.fSeg .on-pos')?'Positivo':(w.querySelector('.fSeg .on-neg')?'Negativo':'');
+    fs.push({tipo:w.querySelector('.fTipo').value.trim(),empresa:emp,nota:w.querySelector('.fNota').value,
+      sent:segOn,feedback:w.querySelector('.fFb').value.trim(),orcamento:w.querySelector('.fOrc').checked,
+      concorrencia:w.querySelector('.fConc').checked});
+  });
+  return {o,fs};
+}
+function populate(o){
+  $('f_obra').value=o.obra||'';$('f_data').value=o.data||'';$('f_arq').value=o.arq||'';
+  $('f_metr').value=o.metragem||'';$('f_regime').value=o.regime||'';$('f_ano').value=o.ano||'';$('f_eng').value=o.eng||'';
+  const eq=o.equipe||{};$('f_dir').value=eq.dir||'';$('f_coord').value=eq.coord||'';$('f_mestre').value=eq.mestre||'';
+  $('f_orc').value=eq.orc||'';$('f_supri').value=eq.supri||'';$('f_obs').value=o.obs||'';
+  document.querySelectorAll('#ptable tbody tr[data-k]').forEach(t=>{const p=(o.prazos||{})[t.dataset.k]||{};t.querySelector('.pv').value=p.pv||'';t.querySelector('.rl').value=p.rl||'';});
+  document.querySelectorAll('#engBlock textarea').forEach(t=>t.value=(o.eng_qa||{})[t.dataset.q]||'');
+  document.querySelectorAll('#relBlock textarea').forEach(t=>t.value=(o.rel_qa||{})[t.dataset.q]||'');
+  $('fornList').innerHTML='';
+  const mine=[];
+  forn.forEach(f=>(f.hist||[]).forEach(h=>{ if(norm(h.obra)===norm(o.obra))
+    mine.push({tipo:h.tipo||f.tipo,empresa:f.empresa,nota:h.nota,sent:h.sent,feedback:h.feedback,orcamento:h.orcamento,concorrencia:h.concorrencia}); }));
+  if(mine.length)mine.forEach(f=>fornRow(f)); else fornRow();
+  recalc();
+}
+function clearForm(){
+  ['f_obra','f_data','f_arq','f_metr','f_regime','f_ano','f_eng','f_dir','f_coord','f_mestre','f_orc','f_supri','f_obs'].forEach(i=>$(i).value='');
+  document.querySelectorAll('#ptable input').forEach(i=>i.value='');
+  document.querySelectorAll('#engBlock textarea,#relBlock textarea').forEach(t=>t.value='');
+  $('fornList').innerHTML='';fornRow();recalc();editKey=null;$('editFlag').textContent='';
+}
+$('btnClear').onclick=()=>{clearForm();toast('Formulário limpo','warn');};
+
+/* ---------- SALVAR (dedup) ---------- */
+$('btnSave').onclick=()=>{
+  const {o,fs}=collect();
+  if(!o.obra){toast('Informe o Nome da Obra','warn');$('f_obra').focus();return;}
+  // obra: única por nome
+  const oi=obras.findIndex(x=>norm(x.obra)===norm(o.obra));
+  const wasObra = oi>=0;
+  if(wasObra)obras[oi]=o; else obras.push(o);
+  // fornecedores: mestre único por empresa + histórico (1 entrada por obra)
+  let novos=0,upd=0;
+  fs.forEach(f=>{
+    if(!f.empresa)return;
+    const entry={data:o.data,obra:o.obra,ano:o.ano,eng:o.eng,nota:f.nota,sent:f.sent,
+                 feedback:f.feedback,tipo:f.tipo,orcamento:f.orcamento,concorrencia:f.concorrencia};
+    const fi=forn.findIndex(x=>norm(x.empresa)===norm(f.empresa));
+    if(fi>=0){
+      const m=forn[fi]; if(f.tipo)m.tipo=f.tipo; m.hist=m.hist||[];
+      const hi=m.hist.findIndex(h=>norm(h.obra)===norm(o.obra));
+      if(hi>=0)m.hist[hi]=entry; else m.hist.push(entry);
+      upd++;
+    } else { forn.push({empresa:f.empresa,tipo:f.tipo,hist:[entry]}); novos++; }
+  });
+  save();renderAll();
+  let msg=wasObra?'Obra atualizada.':'Obra salva.';
+  if(fs.length)msg+=` Fornecedores: ${novos} novo(s), ${upd} atualizado(s).`;
+  toast(msg,'ok');
+  clearForm();
+};
+
+/* ---------- render históricos ---------- */
+function renderObras(q=''){
+  const tb=$('obraBody');q=norm(q);
+  const rows=obras.filter(o=>!q||[o.obra,o.arq,o.eng,o.regime,o.ano].some(v=>norm(v).includes(q)));
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="5"><div class="empty"><div class="big">Nenhuma obra ${obras.length?'encontrada':'salva ainda'}</div>${obras.length?'Ajuste a busca.':'Preencha o formulário e salve.'}</div></td></tr>`;return;}
+  tb.innerHTML=rows.map(o=>`<tr><td><b>${esc(o.obra)}</b></td><td>${fmtDate(o.data)}</td><td>${esc(o.arq)}</td><td>${esc(o.regime)}</td>
+    <td class="acts"><button onclick="viewObra('${jsq(o.obra)}')">Visualizar</button><button class="del" onclick="delObra('${jsq(o.obra)}')">Excluir</button></td></tr>`).join('');
+}
+function renderForn(q=''){
+  const tb=$('fornBody');q=norm(q);
+  const rows=forn.filter(f=>{if(!q)return true;const inHist=(f.hist||[]).some(h=>[h.obra,h.eng].some(v=>norm(v).includes(q)));return [f.empresa,f.tipo].some(v=>norm(v).includes(q))||inHist;});
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="big">Nenhum fornecedor ${forn.length?'encontrado':'salvo ainda'}</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(f=>{
+    const h=f.hist||[];const notas=h.map(x=>parseFloat(x.nota)).filter(x=>!isNaN(x));
+    const avg=notas.length?(notas.reduce((a,b)=>a+b,0)/notas.length):null;
+    const last=h.slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''))[0]||{};
+    return `<tr>
+      <td><button class="flink" onclick="viewForn('${jsq(f.empresa)}')">${esc(f.empresa)}</button></td>
+      <td>${esc(f.tipo)}</td>
+      <td class="num">${h.length}</td>
+      <td>${avg!=null?'★ '+avg.toFixed(1):'—'}</td>
+      <td>${esc(last.obra||'')}</td>
+      <td class="acts"><button onclick="viewForn('${jsq(f.empresa)}')">Ver histórico</button><button class="del" onclick="delForn('${jsq(f.empresa)}')">Excluir</button></td></tr>`;}).join('');
+}
+function jsq(s){return (s||'').replace(/'/g,"\\'");}
+function fmtDate(d){if(!d)return'';const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}
+window.delObra=k=>{if(confirm('Excluir a obra "'+k+'"? Os fornecedores ficam no histórico.')){obras=obras.filter(x=>norm(x.obra)!==norm(k));save();renderAll();toast('Obra excluída','warn');}};
+window.delForn=k=>{if(confirm('Excluir o fornecedor "'+k+'" e todo o seu histórico?')){forn=forn.filter(x=>norm(x.empresa)!==norm(k));save();renderAll();toast('Fornecedor excluído','warn');}};
+
+/* ---------- modal ---------- */
+function openModal(html){$('modalBody').innerHTML=html;$('modal').classList.add('show');}
+function closeModal(){$('modal').classList.remove('show');}
+$('modalX').onclick=closeModal;
+$('modal').onclick=e=>{if(e.target===$('modal'))closeModal();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+window.viewObra=k=>{
+  const o=obras.find(x=>norm(x.obra)===norm(k));if(!o)return;
+  const t=obraTotals(o);const p=o.prazos||{};const eq=o.equipe||{};
+  const daObra=[];forn.forEach(f=>(f.hist||[]).forEach(h=>{if(norm(h.obra)===norm(o.obra))daObra.push({empresa:f.empresa,...h});}));
+  const kv=(l,v)=>`<div class="kv"><div class="vk">${l}</div><div class="vv">${(v===''||v==null)?'—':v}</div></div>`;
+  const PL={prazo:'Prazo (meses)',cinza:'Fase Cinza',acab:'Fase Acabamentos',extras:'Extras',equipe:'Equipe'};
+  let prz='<table class="ptable" style="margin-top:4px"><thead><tr><th>Item</th><th style="text-align:right">Previsto</th><th style="text-align:right">Real</th><th style="text-align:right">Desvio</th></tr></thead><tbody>';
+  Object.keys(PL).forEach(key=>{const r=p[key]||{};const pv=r.pv||0,rl=r.rl||0,d=pv-rl;const isMoney=key!=='prazo';
+    const fmt=v=>isMoney?money(v):v.toLocaleString('pt-BR');const cls=d>0?'pos':d<0?'neg':'';
+    prz+=`<tr><td>${PL[key]}</td><td style="text-align:right">${fmt(pv)}</td><td style="text-align:right">${fmt(rl)}</td><td class="dev ${cls}" style="text-align:right">${fmt(d)}</td></tr>`;});
+  prz+='</tbody></table>';
+  const qaBlock=(title,arr,qa,pfx)=>{const its=arr.map((q,i)=>{const a=(qa||{})[pfx+i];return (a&&a.trim())?`<div class="qa-v"><div class="qq">${esc(q)}</div><div class="aa">${esc(a)}</div></div>`:'';}).filter(Boolean);return its.length?`<div class="mh">${title}</div>${its.join('')}`:'';};
+  const eqItems=[['Diretoria',eq.dir],['Coordenação',eq.coord],['Engenharia',o.eng||eq.eng],['Mestre',eq.mestre],['Orçamentista',eq.orc],['Suprimentos',eq.supri]];
+  let html=`<div class="modal-head"><div class="eyebrow-l">Obra</div><h3>${esc(o.obra)}</h3>
+    <div class="sub">${fmtDate(o.data)||'sem data'} · ${esc(o.regime)||'regime —'}</div></div>
+    <div class="modal-body">
+    <div class="mh">Identificação</div>
+    <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}</div>
+    <div class="mh">Equipe</div>
+    <div class="dl">${eqItems.map(([l,v])=>kv(l,esc(v))).join('')}</div>
+    <div class="mh">Prazos e Orçamentos</div>${prz}
+    ${o.obs?`<div class="mh">Observações</div><p style="margin:0;font-size:14px;white-space:pre-wrap">${esc(o.obs)}</p>`:''}
+    <div class="mh">Fornecedores desta obra (${daObra.length})</div>`;
+  html+= daObra.length? daObra.map(f=>`<div class="hcard"><div class="top"><span class="ob">${esc(f.empresa)}</span><span class="dt">${(f.nota!==''&&f.nota!=null)?'★ '+f.nota:''}${f.sent?' · '+f.sent:''}</span></div><div class="meta"><span>${esc(f.tipo)||'—'}</span></div>${f.feedback?`<div class="fb">${esc(f.feedback)}</div>`:''}</div>`).join('') : '<p class="hint">Nenhum fornecedor registrado nesta obra.</p>';
+  html+= qaBlock('Engenharia',ENG,o.eng_qa,'e');
+  html+= qaBlock('Relacionamentos',REL,o.rel_qa,'r');
+  openModal(html+'</div>');
+};
+
+window.viewForn=k=>{
+  const f=forn.find(x=>norm(x.empresa)===norm(k));if(!f)return;
+  const h=(f.hist||[]).slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  const notas=h.map(x=>parseFloat(x.nota)).filter(x=>!isNaN(x));
+  const avg=notas.length?(notas.reduce((a,b)=>a+b,0)/notas.length).toFixed(1):'—';
+  let html=`<div class="modal-head"><div class="eyebrow-l">Fornecedor${f.tipo?' · '+esc(f.tipo):''}</div><h3>${esc(f.empresa)}</h3>
+    <div class="sub">${h.length} kickout(s) · nota média ${avg}</div></div>
+    <div class="modal-body"><div class="mh">Histórico de aparições</div>`;
+  html+= h.length? h.map(e=>`<div class="hcard">
+      <div class="top"><span class="ob">${esc(e.obra)||'(obra —)'}</span><span class="dt">${fmtDate(e.data)||'sem data'}</span></div>
+      <div class="meta">
+        <span><b>Nota:</b> ${(e.nota!==''&&e.nota!=null)?'★ '+e.nota:'—'}${e.sent?' · '+e.sent:''}</span>
+        <span><b>Engenheiro:</b> ${esc(e.eng)||'—'}</span>
+        <span><b>Ano:</b> ${e.ano||'—'}</span>
+      </div>${e.feedback?`<div class="fb">"${esc(e.feedback)}"</div>`:''}</div>`).join('') : '<p class="hint">Sem histórico ainda.</p>';
+  openModal(html+'</div>');
+};
+
+/* ---------- tipos ---------- */
+function renderTipos(){
+  const box=$('tiposList');if(!box)return;
+  const cnt={};forn.forEach(f=>{const t=stripAcc(f.tipo);if(t)cnt[t]=(cnt[t]||0)+1;});
+  const arr=tipos.slice().sort((a,b)=>a.localeCompare(b,'pt'));
+  const c2=$('cTipos2');if(c2)c2.textContent=tipos.length;
+  box.innerHTML = arr.length? arr.map(t=>`<div class="tip-item"><span class="nm">${esc(t)}</span><span class="ct">${cnt[stripAcc(t)]||0} fornecedor(es)</span><button class="del" title="Remover" onclick="delTipo('${jsq(t)}')">×</button></div>`).join('') : '<p class="hint">Nenhum tipo cadastrado. Adicione acima.</p>';
+}
+window.delTipo=t=>{if(confirm('Remover o tipo "'+t+'"? (não altera fornecedores já salvos)')){tipos=tipos.filter(x=>x!==t);save();renderTipos();refreshTipoSelects();toast('Tipo removido','warn');}};
+$('addTipo').onclick=()=>{const r=addTipo($('novoTipo').value);if(r&&r.isNew){$('novoTipo').value='';refreshTipoSelects();toast('Tipo adicionado','ok');}};
+$('novoTipo').addEventListener('keydown',e=>{if(e.key==='Enter')$('addTipo').click();});
+
+/* ---------- dashboard ---------- */
+function renderDash(){
+  const orcReal=obras.reduce((s,o)=>{const p=o.prazos||{};return s+['cinza','acab','extras','equipe'].reduce((a,k)=>a+((p[k]||{}).rl||0),0)},0);
+  const positivos=forn.reduce((s,f)=>s+(f.hist||[]).filter(h=>h.sent==='Positivo').length,0);
+  $('statBox').innerHTML=[['Obras',obras.length],['Fornecedores',forn.length],['Aval. positivas',positivos],['Orç. Real Total',money(orcReal)]]
+    .map(([l,k])=>`<div class="stat"><div class="k">${k}</div><div class="l">${l}</div></div>`).join('');
+  const byAno={};obras.forEach(o=>{const a=o.ano||'—';byAno[a]=(byAno[a]||0)+1;});
+  const maxA=Math.max(1,...Object.values(byAno));
+  $('barsAno').innerHTML=Object.keys(byAno).sort().map(a=>`<div class="bar-row"><span>${a}</span><div class="tk"><div class="fl" style="width:${byAno[a]/maxA*100}%"></div></div><span class="vv">${byAno[a]}</span></div>`).join('')||'<p class="hint">Sem dados.</p>';
+  const top=forn.map(f=>{const ns=(f.hist||[]).map(h=>parseFloat(h.nota)).filter(x=>!isNaN(x));return{nome:f.empresa,avg:ns.length?ns.reduce((a,b)=>a+b,0)/ns.length:null};})
+    .filter(x=>x.avg!=null).sort((a,b)=>b.avg-a.avg).slice(0,8);
+  $('barsForn').innerHTML=top.map(f=>`<div class="bar-row"><span title="${esc(f.nome)}">${esc(f.nome).slice(0,22)}</span><div class="tk"><div class="fl" style="width:${(f.avg/5*100)}%"></div></div><span class="vv">${f.avg.toFixed(1)}/5</span></div>`).join('')||'<p class="hint">Sem avaliações com nota.</p>';
+}
+function refreshCounts(){$('cObras').textContent=obras.length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
+function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();refreshCounts();}
+$('srcObra').oninput=e=>renderObras(e.target.value);
+$('srcForn').oninput=e=>renderForn(e.target.value);
+
+/* ---------- navegação ---------- */
+function go(v){document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='v-'+v));
+  if(v!=='form')renderAll();}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+
+/* ---------- export xlsx (formato original) ---------- */
+function obraTotals(o){const p=o.prazos||{};const k=['cinza','acab','extras','equipe'];return{tp:k.reduce((s,x)=>s+((p[x]||{}).pv||0),0),tr:k.reduce((s,x)=>s+((p[x]||{}).rl||0),0)};}
+$('expXlsx').onclick=()=>{
+  const wb=XLSX.utils.book_new();
+  // PREENCHER_AQUI (modelo em branco)
+  const pa=[["FORMULÁRIO DE REUNIÃO KICK-OUT"],[],["1. IDENTIFICAÇÃO DA OBRA"],["Nome da Obra:","","","Data da Reunião:"],["Arquitetura:","","","Metragem (m²):"],["Regime Contratação:","","","Ano de Conclusão:"]];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(pa),"PREENCHER_AQUI");
+  // DASHBOARD
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["DASHBOARD DE ANÁLISE E FILTROS"],["Use Inserir > Tabela Dinâmica sobre HISTORICO_OBRAS."]]),"DASHBOARD");
+  // HISTORICO_OBRAS
+  const ho=[["Obra","Data","Arquitetura","Metragem","Regime","Ano","Engenheiro","Tigre","Prazo Prev","Prazo Real","Orc Prev","Orc Real"]];
+  obras.forEach(o=>{const t=obraTotals(o);const p=o.prazos||{};ho.push([o.obra,fmtDate(o.data),o.arq,n(o.metragem),o.regime,n(o.ano),o.eng,o.tigre||'',(p.prazo||{}).pv||0,(p.prazo||{}).rl||0,t.tp,t.tr]);});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ho),"HISTORICO_OBRAS");
+  // HISTORICO_FORNECEDORES
+  const hf=[["Obra","Departamento","Tipo","Empresa","Avaliação","Feedback","Ano","Engenheiro","Usada em Orçamentos","Concorrência"]];
+  forn.forEach(f=>(f.hist||[]).forEach(h=>hf.push([h.obra,h.tipo||f.tipo,h.tipo||f.tipo,f.empresa,((h.nota!==''&&h.nota!=null)?h.nota:'')+(h.sent?' / '+h.sent:''),h.feedback,n(h.ano),h.eng,h.orcamento?'Sim':'Não',h.concorrencia?'Sim':'Não'])));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(hf),"HISTORICO_FORNECEDORES");
+  XLSX.writeFile(wb,"Gestao_KickOut.xlsx");toast('Excel exportado','ok');
+};
+function n(v){const x=parseFloat(v);return isNaN(x)?'':x;}
+function csv(rows){return rows.map(r=>r.map(c=>{c=(c==null?'':c).toString();return /[",;\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(';')).join('\n');}
+function dl(name,txt){const b=new Blob(["\ufeff"+txt],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
+$('expCsvO').onclick=()=>{const r=[["Obra","Data","Arquitetura","Metragem","Regime","Ano","Engenheiro","Prazo Prev","Prazo Real","Orc Prev","Orc Real"]];obras.forEach(o=>{const t=obraTotals(o);const p=o.prazos||{};r.push([o.obra,fmtDate(o.data),o.arq,o.metragem,o.regime,o.ano,o.eng,(p.prazo||{}).pv||0,(p.prazo||{}).rl||0,t.tp,t.tr]);});dl("historico_obras.csv",csv(r));toast('CSV exportado','ok');};
+$('expCsvF').onclick=()=>{const r=[["Empresa","Tipo/Departamento","Data Kickout","Obra","Nota","Sentimento","Engenheiro","Ano","Feedback"]];forn.forEach(f=>(f.hist||[]).forEach(h=>r.push([f.empresa,h.tipo||f.tipo,fmtDate(h.data),h.obra,h.nota,h.sent,h.eng,h.ano,h.feedback])));dl("historico_fornecedores.csv",csv(r));toast('CSV exportado','ok');};
+
+/* ---------- import xlsx ---------- */
+$('impBtn').onclick=()=>$('impFile').click();
+$('impFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const rd=new FileReader();
+  rd.onload=ev=>{try{const wb=XLSX.read(ev.target.result,{type:'array'});let no=0,nf=0;
+    const so=wb.Sheets["HISTORICO_OBRAS"];if(so){XLSX.utils.sheet_to_json(so).forEach(r=>{const nome=r.Obra||r.obra;if(!nome)return;
+      const o={obra:String(nome).trim(),data:r.Data||'',arq:r.Arquitetura||'',metragem:r.Metragem||'',regime:r.Regime||'',ano:r.Ano||'',eng:r.Engenheiro||'',tigre:r.Tigre||'',
+        prazos:{prazo:{pv:num(r["Prazo Prev"]),rl:num(r["Prazo Real"])},cinza:{pv:num(r["Orc Prev"]),rl:num(r["Orc Real"])},acab:{pv:0,rl:0},extras:{pv:0,rl:0},equipe:{pv:0,rl:0}},equipe:{},eng_qa:{},rel_qa:{}};
+      const i=obras.findIndex(x=>norm(x.obra)===norm(o.obra));if(i>=0)obras[i]=o;else{obras.push(o);no++;}});}
+    const sf=wb.Sheets["HISTORICO_FORNECEDORES"];if(sf){XLSX.utils.sheet_to_json(sf).forEach(r=>{const emp=r.Empresa||r.empresa;if(!emp)return;
+      const tipo=r.Tipo||r.Departamento||'';
+      const entry={data:'',obra:r.Obra||'',ano:r.Ano||'',eng:r.Engenheiro||'',nota:(String(r["Avaliação"]||'').match(/\d/)||[''])[0],sent:/posit/i.test(r["Avaliação"]||'')?'Positivo':(/negat/i.test(r["Avaliação"]||'')?'Negativo':''),feedback:r.Feedback||'',tipo:tipo,orcamento:/sim/i.test(r["Usada em Orçamentos"]||''),concorrencia:/sim/i.test(r["Concorrência"]||'')};
+      const ob=obras.find(x=>norm(x.obra)===norm(entry.obra));if(ob)entry.data=ob.data||'';
+      if(tipo)addTipoSilent(tipo);
+      const empN=String(emp).trim();
+      const i=forn.findIndex(x=>norm(x.empresa)===norm(empN));
+      if(i>=0){const m=forn[i];if(tipo)m.tipo=tipo;m.hist=m.hist||[];const hi=m.hist.findIndex(h=>norm(h.obra)===norm(entry.obra));if(hi>=0)m.hist[hi]=entry;else m.hist.push(entry);}
+      else{forn.push({empresa:empN,tipo:tipo,hist:[entry]});nf++;}});}
+    save();renderAll();toast(`Importado: ${no} obra(s), ${nf} fornecedor(es)`,'ok');
+  }catch(err){toast('Falha ao ler o arquivo','warn');console.error(err);}};
+  rd.readAsArrayBuffer(file);e.target.value='';};
+
+/* ---------- wipe ---------- */
+$('wipe').onclick=()=>{if(confirm('Apagar TODOS os dados salvos?')){obras=[];forn=[];save();renderAll();toast('Dados apagados','warn');}};
+
+/* ---------- init ---------- */
+migrate();
+fornRow();recalc();renderAll();save();
+</script>
+</body>
+</html>
