@@ -645,8 +645,8 @@ window.viewObra = k=>{
   });
   prz+='</tbody></table>';
   const qaBlock=(title,arr,qa,pfx)=>{
-    const its=arr.map((q,i)=>{ const a=(qa||{})[pfx+i]; return (a&&a.trim())?`<div class="qa-v"><div class="qq">${esc(q)}</div><div class="aa">${esc(a)}</div></div>`:''; }).filter(Boolean);
-    return its.length?`<div class="mh">${title}</div>${its.join('')}`:'';
+    const its=arr.map((q,i)=>{ const a=(qa||{})[pfx+i]||''; return `<div class="qa-v"><div class="qq">${esc(q)}</div><div class="aa">${a.trim()?esc(a):'<span style="color:var(--muted)">— não preenchido —</span>'}</div></div>`; });
+    return `<div class="mh">${title}</div>${its.join('')}`;
   };
   const eqItems=[['Diretoria',eq.dir],['Coordenação',eq.coord],['Engenharia',o.eng||eq.eng],['Mestre',eq.mestre],['Orçamentista',eq.orc],['Suprimentos',eq.supri]];
   let html=`<div class="modal-head"><div class="eyebrow-l">Obra</div><h3>${esc(o.obra)}</h3>
