@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -90,8 +89,9 @@ table{width:100%;border-collapse:collapse}
 
 /* FORNECEDOR ROWS */
 .forn{border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;background:#fff;position:relative}
-.forn .topline{display:grid;grid-template-columns:1.1fr 1.3fr .8fr .9fr;gap:12px}
-@media(max-width:720px){.forn .topline{grid-template-columns:1fr 1fr}}
+.forn .topline{display:grid;grid-template-columns:1fr 1.3fr;gap:12px}
+.forn .rateline{display:grid;grid-template-columns:.75fr .75fr 1.2fr 1.3fr;gap:12px;margin-top:12px}
+@media(max-width:720px){.forn .topline{grid-template-columns:1fr 1fr}.forn .rateline{grid-template-columns:1fr 1fr}}
 .forn .rm{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);font-size:18px;line-height:1;
   width:26px;height:26px;border-radius:7px}
 .forn .rm:hover{background:#FBE6E6;color:var(--bad)}
@@ -142,6 +142,12 @@ table{width:100%;border-collapse:collapse}
 .search svg{position:absolute;left:11px;top:11px;color:var(--muted)}
 .ffilter{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:13px;color:var(--ink);cursor:pointer}
 .ffilter:focus{border-color:var(--clay);outline:none;box-shadow:0 0 0 3px rgba(239,50,54,.12)}
+.porte{display:inline-block;min-width:22px;text-align:center;padding:2px 8px;border-radius:6px;background:var(--mist);border:1px solid var(--line);font-weight:700;font-size:12px}
+.sbdot{font-size:11px;font-weight:700;letter-spacing:.03em;padding:3px 10px;border-radius:999px;margin-left:12px;white-space:nowrap;vertical-align:middle}
+.sbdot.off{background:#2a2a2a;color:#9a9a9a}
+.sbdot.on{background:rgba(46,125,107,.20);color:#5fd3a9}
+.sbdot.sync{background:rgba(224,138,30,.20);color:#f0b657}
+.sbdot.err{background:rgba(239,50,54,.20);color:#ff8a8d}
 .htable-wrap{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:auto;box-shadow:var(--shadow)}
 .htable{min-width:760px}
 .htable th,.htable td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);font-size:13px;white-space:nowrap}
@@ -247,7 +253,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 <body>
 <header>
   <div class="head-in">
-    <div class="brand"><span class="mk">Kick<em>|</em>Out</span><small>Gestão de Obras</small></div>
+    <div class="brand"><span class="mk">Kick<em>|</em>Out</span><small>Gestão de Obras</small><span id="sbStatus" class="sbdot off">● Local</span></div>
     <nav id="nav">
       <button data-v="form" class="active">✎ Preencher</button>
       <button data-v="obras">Obras <span class="pill" id="cObras">0</span></button>
@@ -285,6 +291,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
         <div class="fld"><label>Nome da Obra *</label><input id="f_obra" placeholder="Ex.: Aluízio e Cristina"></div>
         <div class="fld"><label>Data da Reunião</label><input id="f_data" type="date"></div>
         <div class="fld"><label>Arquitetura</label><input id="f_arq" placeholder="Ex.: Bruno Rubiano"></div>
+        <div class="fld"><label>Gerenciadora</label><input id="f_ger" placeholder="Ex.: nome da gerenciadora"></div>
         <div class="fld"><label>Regime de Contratação</label>
           <select id="f_regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
         <div class="fld"><label>Metragem (m²)</label><input id="f_metr" type="number" step="any" placeholder="300"></div>
@@ -304,6 +311,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
         <div class="fld"><label>Mestre</label><input id="f_mestre"></div>
         <div class="fld"><label>Orçamentista</label><input id="f_orc"></div>
         <div class="fld"><label>Suprimentos</label><input id="f_supri"></div>
+        <div class="fld"><label>Administrativo (ADM)</label><input id="f_adm"></div>
       </div>
     </div>
   </div>
@@ -332,6 +340,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   <div class="section">
     <div class="sh"><span class="num">4</span><h2>Avaliação de Fornecedores</h2></div>
     <div class="bd">
+      <p class="hint" style="margin:-2px 0 14px">Escala das notas — <b>0</b> Péssimo · <b>1</b> Ruim · <b>2</b> Regular · <b>3</b> Satisfatório · <b>4</b> Bom · <b>5</b> Excelente</p>
       <div id="fornList"></div>
       <button class="btn add" id="addForn">+ Adicionar fornecedor</button>
     </div>
@@ -373,10 +382,10 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   <div class="toolbar">
     <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><input id="srcForn" placeholder="Buscar por empresa, tipo, obra…"></div>
     <select id="filtForn" class="ffilter"><option value="">Todos os tipos</option></select>
-    <select id="sortForn" class="ffilter"><option value="nota">Melhor nota</option><option value="cit">Mais citados</option><option value="az">A–Z</option></select>
+    <select id="sortForn" class="ffilter"><option value="tec">Melhor Técnico</option><option value="parc">Melhor Parceria</option><option value="cit">Mais citados</option><option value="az">A–Z</option></select>
   </div>
   <div class="htable-wrap"><table class="htable"><thead><tr>
-    <th>Empresa</th><th>Tipo / Departamento</th><th class="num">Registros</th><th>Nota média</th><th>Última obra</th><th class="acts"></th>
+    <th>Empresa</th><th>Tipo / Departamento</th><th>Porte</th><th class="num">Reg.</th><th>Técnico</th><th>Parceria</th><th>Última obra</th><th class="acts"></th>
   </tr></thead><tbody id="fornBody"></tbody></table></div>
 </section>
 
@@ -425,6 +434,17 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
       <button class="btn ghost" id="impBtn">📂 Importar planilha…</button>
     </div>
   </div></div>
+  <div class="section"><div class="sh"><span class="num">☁</span><h2>Conexão Supabase (online)</h2></div><div class="bd">
+    <p class="hint" style="margin-top:0">Conecte a um banco Supabase para salvar online e sincronizar entre dispositivos. A chave <b>anon public</b> fica salva só neste navegador. Precisa do app <b>hospedado</b> (ex.: Vercel) — não funciona abrindo o arquivo direto no PC.</p>
+    <div class="fld" style="margin-top:12px"><label>URL do projeto</label><input id="sbUrl" placeholder="https://xxxx.supabase.co"></div>
+    <div class="fld" style="margin-top:10px"><label>Chave anon public</label><input id="sbKey" type="password" placeholder="eyJhbGci..."></div>
+    <div class="io-row" style="margin-top:12px">
+      <button class="btn" id="sbSave">Salvar e conectar</button>
+      <button class="btn ghost" id="sbSync">Sincronizar agora</button>
+      <button class="btn ghost" id="sbOff" style="border-color:var(--bad);color:var(--bad)">Desconectar</button>
+    </div>
+    <p class="hint" id="sbMsg" style="margin-top:10px"></p>
+  </div></div>
   <div class="section"><div class="sh"><span class="num">⚠</span><h2>Zona de risco</h2></div><div class="bd">
     <p class="hint" style="margin-top:0">Apaga todos os dados salvos neste navegador. Não pode ser desfeito.</p>
     <button class="btn ghost" id="wipe" style="margin-top:12px;border-color:var(--bad);color:var(--bad)">Apagar todos os dados</button>
@@ -444,9 +464,65 @@ let obras = load(KO), forn = load(KF), editKey = null;
 let tipos = loadTipos();
 function load(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}}
 function loadTipos(){try{const a=JSON.parse(localStorage.getItem(KT));return Array.isArray(a)?a:null;}catch(e){return null;}}
-function save(){localStorage.setItem(KO,JSON.stringify(obras));localStorage.setItem(KF,JSON.stringify(forn));localStorage.setItem(KT,JSON.stringify(tipos));refreshCounts()}
+function persistLocal(){localStorage.setItem(KO,JSON.stringify(obras));localStorage.setItem(KF,JSON.stringify(forn));localStorage.setItem(KT,JSON.stringify(tipos));refreshCounts();}
+function save(){persistLocal();bumpMeta();sbSchedulePush();}
+
+/* ---------- meta / timestamp de conteúdo ---------- */
+const KM="kickout_meta";
+function getMeta(){try{return JSON.parse(localStorage.getItem(KM))||{}}catch(e){return{}}}
+function setMeta(ts){localStorage.setItem(KM,JSON.stringify({updatedAt:ts}));}
+function bumpMeta(){setMeta(new Date().toISOString());}
+
+/* ---------- Supabase (sincronização opcional) ---------- */
+const SBU="kickout_sb_url", SBK="kickout_sb_key", SB_ROW=1;
+let sbUrl=localStorage.getItem(SBU)||"", sbKey=localStorage.getItem(SBK)||"";
+const sbOn=()=>!!(sbUrl&&sbKey);
+function getState(){return {obras,forn,tipos,updatedAt:(getMeta().updatedAt||'')};}
+function applyState(d){if(!d)return;if(Array.isArray(d.obras))obras=d.obras;if(Array.isArray(d.forn))forn=d.forn;if(Array.isArray(d.tipos))tipos=d.tipos;}
+function hasData(s){return !!(s&&((s.obras&&s.obras.length)||(s.forn&&s.forn.length)||(s.tipos&&s.tipos.length)));}
+function sbEndpoint(){return sbUrl.replace(/\/+$/,'')+'/rest/v1/kickout_data';}
+function sbHead(extra){return Object.assign({apikey:sbKey,Authorization:'Bearer '+sbKey},extra||{});}
+async function sbPull(){
+  const r=await fetch(sbEndpoint()+'?id=eq.'+SB_ROW+'&select=obras,forn,tipos,updated_at',{headers:sbHead()});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const rows=await r.json(); if(!rows||!rows[0])return null;
+  const row=rows[0]; return {obras:row.obras||[],forn:row.forn||[],tipos:row.tipos||[],updatedAt:row.updated_at||''};
+}
+async function sbPushNow(){
+  const s=getState();
+  const r=await fetch(sbEndpoint(),{method:'POST',headers:sbHead({'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'}),
+    body:JSON.stringify([{id:SB_ROW,obras:s.obras,forn:s.forn,tipos:s.tipos,updated_at:new Date().toISOString()}])});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+}
+function setSb(status,msg){
+  const el=$('sbStatus');
+  const map={off:['off','● Local'],on:['on','● Online'],sync:['sync','● Sincronizando'],err:['err','● Offline']};
+  const v=map[status]||map.off; if(el){el.className='sbdot '+v[0];el.textContent=v[1];}
+  const m=$('sbMsg'); if(m&&msg!==undefined)m.textContent=msg;
+}
+let _pushT=null;
+function sbSchedulePush(){ if(!sbOn())return; setSb('sync'); clearTimeout(_pushT);
+  _pushT=setTimeout(async()=>{try{await sbPushNow();setSb('on');}catch(e){setSb('err');}},1200); }
+async function sbSyncOnLoad(){
+  if(!sbOn()){setSb('off');return;}
+  setSb('sync','Conectando ao Supabase…');
+  try{
+    const remote=await sbPull();
+    const localTs=getMeta().updatedAt||'';
+    const localHas=hasData(getState()), remoteHas=hasData(remote);
+    if(remoteHas && (!localHas || (remote.updatedAt||'')>localTs)){
+      applyState(remote); persistLocal(); setMeta(remote.updatedAt||new Date().toISOString());
+      renderAll(); setSb('on','Sincronizado — dados do servidor carregados.');
+    }else{
+      if(!getMeta().updatedAt)bumpMeta();
+      await sbPushNow(); setSb('on','Sincronizado — dados locais enviados.');
+    }
+  }catch(e){ setSb('err','Sem conexão: '+e.message+' (o app segue salvando localmente).'); }
+}
 const norm = s => (s||"").toString().trim().toLowerCase();
 const stripAcc = s => (s||"").toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
+const pick = (a,b)=>{a=parseFloat(a);if(!isNaN(a))return a;b=parseFloat(b);return isNaN(b)?null:b;};
+function notaLabel(e){const t=pick(e.notaTec,e.nota),p=pick(e.notaParc,e.nota);const parts=[];if(t!=null)parts.push('Téc ★'+t);if(p!=null)parts.push('Parc ★'+p);return parts.join(' · ');}
 
 /* ---------- migração p/ modelo mestre + histórico ---------- */
 function migrate(){
@@ -470,7 +546,7 @@ function migrate(){
 function addTipoSilent(t){ t=(t||'').trim(); if(!t)return; if(!tipos.some(x=>stripAcc(x)===stripAcc(t)))tipos.push(t); }
 const $ = id => document.getElementById(id);
 const num = v => {const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?0:n;};
-const money = n => (n<0?'-':'')+"R$ "+Math.abs(n||0).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+const money = n => (n<0?'-':'')+"R$ "+Math.abs(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 function toast(m,t){const e=$('toast');$('toastMsg').textContent=m;e.className='show '+(t||'');setTimeout(()=>e.className='',2600);}
 
 /* ---------- engenharia / relacionamentos ---------- */
@@ -531,7 +607,16 @@ function fornRow(d={}){
     <div class="topline">
       <div class="fld"><label>Tipo / Departamento</label><select class="fTipo">${tipoOptions(d.tipo)}</select></div>
       <div class="fld"><label>Empresa</label><input class="fEmp" placeholder="Nome do fornecedor" value="${esc(d.empresa)}"></div>
-      <div class="fld"><label>Nota (0–5)</label><input class="fNota" type="number" min="0" max="5" step="1" value="${d.nota??''}"></div>
+    </div>
+    <div class="rateline">
+      <div class="fld"><label>Técnico (0–5)</label><input class="fTec" type="number" min="0" max="5" step="1" value="${d.notaTec??d.nota??''}"></div>
+      <div class="fld"><label>Parceria (0–5)</label><input class="fParc" type="number" min="0" max="5" step="1" value="${d.notaParc??d.nota??''}"></div>
+      <div class="fld"><label>Porte</label><select class="fPorte">
+        <option value="">—</option>
+        <option value="A"${d.porte==='A'?' selected':''}>A – Obra grande</option>
+        <option value="B"${d.porte==='B'?' selected':''}>B – Obra intermediária</option>
+        <option value="C"${d.porte==='C'?' selected':''}>C – Obra pequeno porte</option>
+      </select></div>
       <div class="fld"><label>Sentimento</label>
         <div class="seg fSeg">
           <button type="button" data-s="Positivo" class="${sent==='Positivo'?'on-pos':''}">Positivo</button>
@@ -604,9 +689,9 @@ document.querySelector('#ptable').addEventListener('input',recalc);
 /* ---------- coletar / popular ---------- */
 function collect(){
   const o={
-    obra:$('f_obra').value.trim(), data:$('f_data').value, arq:$('f_arq').value.trim(),
+    obra:$('f_obra').value.trim(), data:$('f_data').value, arq:$('f_arq').value.trim(), ger:$('f_ger').value.trim(),
     metragem:$('f_metr').value, regime:$('f_regime').value, ano:$('f_ano').value, eng:$('f_eng').value.trim(),
-    equipe:{dir:$('f_dir').value,coord:$('f_coord').value,mestre:$('f_mestre').value,orc:$('f_orc').value,supri:$('f_supri').value},
+    equipe:{dir:$('f_dir').value,coord:$('f_coord').value,mestre:$('f_mestre').value,orc:$('f_orc').value,supri:$('f_supri').value,adm:$('f_adm').value},
     prazos:{}, obs:$('f_obs').value, eng_qa:{}, rel_qa:{}
   };
   document.querySelectorAll('#ptable tbody tr[data-k]').forEach(t=>o.prazos[t.dataset.k]={pv:num(t.querySelector('.pv').value),rl:num(t.querySelector('.rl').value)});
@@ -622,17 +707,18 @@ function collect(){
   document.querySelectorAll('#fornList .forn').forEach(w=>{
     const emp=w.querySelector('.fEmp').value.trim(); if(!emp&&!w.querySelector('.fTipo').value.trim())return;
     const segOn=w.querySelector('.fSeg .on-pos')?'Positivo':(w.querySelector('.fSeg .on-neg')?'Negativo':'');
-    fs.push({tipo:w.querySelector('.fTipo').value.trim(),empresa:emp,nota:w.querySelector('.fNota').value,
+    fs.push({tipo:w.querySelector('.fTipo').value.trim(),empresa:emp,
+      notaTec:w.querySelector('.fTec').value,notaParc:w.querySelector('.fParc').value,porte:w.querySelector('.fPorte').value,
       sent:segOn,feedback:w.querySelector('.fFb').value.trim(),orcamento:w.querySelector('.fOrc').checked,
       concorrencia:w.querySelector('.fConc').checked});
   });
   return {o,fs};
 }
 function populate(o){
-  $('f_obra').value=o.obra||'';$('f_data').value=o.data||'';$('f_arq').value=o.arq||'';
+  $('f_obra').value=o.obra||'';$('f_data').value=o.data||'';$('f_arq').value=o.arq||'';$('f_ger').value=o.ger||'';
   $('f_metr').value=o.metragem||'';$('f_regime').value=o.regime||'';$('f_ano').value=o.ano||'';$('f_eng').value=o.eng||'';
   const eq=o.equipe||{};$('f_dir').value=eq.dir||'';$('f_coord').value=eq.coord||'';$('f_mestre').value=eq.mestre||'';
-  $('f_orc').value=eq.orc||'';$('f_supri').value=eq.supri||'';$('f_obs').value=o.obs||'';
+  $('f_orc').value=eq.orc||'';$('f_supri').value=eq.supri||'';$('f_adm').value=eq.adm||'';$('f_obs').value=o.obs||'';
   document.querySelectorAll('#ptable tbody tr[data-k]').forEach(t=>{const p=(o.prazos||{})[t.dataset.k]||{};t.querySelector('.pv').value=p.pv||'';t.querySelector('.rl').value=p.rl||'';});
   buildEng();buildRel();
   const EQ=Array.isArray(o.eng_qa)?o.eng_qa:[];
@@ -651,12 +737,12 @@ function populate(o){
   $('fornList').innerHTML='';
   const mine=[];
   forn.forEach(f=>(f.hist||[]).forEach(h=>{ if(norm(h.obra)===norm(o.obra))
-    mine.push({tipo:h.tipo||f.tipo,empresa:f.empresa,nota:h.nota,sent:h.sent,feedback:h.feedback,orcamento:h.orcamento,concorrencia:h.concorrencia}); }));
+    mine.push({tipo:h.tipo||f.tipo,empresa:f.empresa,notaTec:h.notaTec,notaParc:h.notaParc,nota:h.nota,porte:h.porte||f.porte,sent:h.sent,feedback:h.feedback,orcamento:h.orcamento,concorrencia:h.concorrencia}); }));
   if(mine.length)mine.forEach(f=>fornRow(f)); else fornRow();
   recalc();
 }
 function clearForm(){
-  ['f_obra','f_data','f_arq','f_metr','f_regime','f_ano','f_eng','f_dir','f_coord','f_mestre','f_orc','f_supri','f_obs'].forEach(i=>$(i).value='');
+  ['f_obra','f_data','f_arq','f_ger','f_metr','f_regime','f_ano','f_eng','f_dir','f_coord','f_mestre','f_orc','f_supri','f_adm','f_obs'].forEach(i=>$(i).value='');
   document.querySelectorAll('#ptable input').forEach(i=>i.value='');
   buildEng();buildRel();
   $('fornList').innerHTML='';fornRow();recalc();editKey=null;$('editFlag').textContent='';
@@ -675,15 +761,15 @@ $('btnSave').onclick=()=>{
   let novos=0,upd=0;
   fs.forEach(f=>{
     if(!f.empresa)return;
-    const entry={data:o.data,obra:o.obra,ano:o.ano,eng:o.eng,nota:f.nota,sent:f.sent,
+    const entry={data:o.data,obra:o.obra,ano:o.ano,eng:o.eng,notaTec:f.notaTec,notaParc:f.notaParc,porte:f.porte,sent:f.sent,
                  feedback:f.feedback,tipo:f.tipo,orcamento:f.orcamento,concorrencia:f.concorrencia};
     const fi=forn.findIndex(x=>norm(x.empresa)===norm(f.empresa));
     if(fi>=0){
-      const m=forn[fi]; if(f.tipo)m.tipo=f.tipo; m.hist=m.hist||[];
+      const m=forn[fi]; if(f.tipo)m.tipo=f.tipo; if(f.porte)m.porte=f.porte; m.hist=m.hist||[];
       const hi=m.hist.findIndex(h=>norm(h.obra)===norm(o.obra));
       if(hi>=0)m.hist[hi]=entry; else m.hist.push(entry);
       upd++;
-    } else { forn.push({empresa:f.empresa,tipo:f.tipo,hist:[entry]}); novos++; }
+    } else { forn.push({empresa:f.empresa,tipo:f.tipo,porte:f.porte,hist:[entry]}); novos++; }
   });
   save();renderAll();
   let msg=wasObra?'Obra atualizada.':'Obra salva.';
@@ -706,27 +792,30 @@ function renderForn(q=''){
   const filt=$('filtForn'); if(filt){const cur=filt.value;
     filt.innerHTML='<option value="">Todos os tipos</option>'+tipos.slice().sort((a,b)=>a.localeCompare(b,'pt')).map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
     filt.value=tipos.some(t=>t===cur)?cur:'';}
-  const fTipo=filt?filt.value:''; const sortBy=$('sortForn')?$('sortForn').value:'nota';
-  // métrica de nota média por fornecedor
-  const avgOf=f=>{const ns=(f.hist||[]).map(x=>parseFloat(x.nota)).filter(x=>!isNaN(x));return ns.length?ns.reduce((a,b)=>a+b,0)/ns.length:null;};
+  const fTipo=filt?filt.value:''; const sortBy=$('sortForn')?$('sortForn').value:'tec';
+  const avgTecOf=f=>{const ns=(f.hist||[]).map(x=>pick(x.notaTec,x.nota)).filter(x=>x!=null);return ns.length?ns.reduce((a,b)=>a+b,0)/ns.length:null;};
+  const avgParcOf=f=>{const ns=(f.hist||[]).map(x=>pick(x.notaParc,x.nota)).filter(x=>x!=null);return ns.length?ns.reduce((a,b)=>a+b,0)/ns.length:null;};
   const matchTipo=f=>!fTipo||stripAcc(f.tipo)===stripAcc(fTipo)||(f.hist||[]).some(h=>stripAcc(h.tipo)===stripAcc(fTipo));
   let rows=forn.filter(f=>{
     if(!matchTipo(f))return false;
     if(!q)return true;
     const inHist=(f.hist||[]).some(h=>[h.obra,h.eng].some(v=>norm(v).includes(q)));
     return [f.empresa,f.tipo].some(v=>norm(v).includes(q))||inHist;});
-  rows=rows.map(f=>({f,avg:avgOf(f),n:(f.hist||[]).length}));
-  if(sortBy==='nota')rows.sort((a,b)=>(b.avg??-1)-(a.avg??-1)||b.n-a.n);
-  else if(sortBy==='cit')rows.sort((a,b)=>b.n-a.n||(b.avg??-1)-(a.avg??-1));
+  rows=rows.map(f=>({f,tec:avgTecOf(f),parc:avgParcOf(f),n:(f.hist||[]).length}));
+  if(sortBy==='tec')rows.sort((a,b)=>(b.tec??-1)-(a.tec??-1)||b.n-a.n);
+  else if(sortBy==='parc')rows.sort((a,b)=>(b.parc??-1)-(a.parc??-1)||b.n-a.n);
+  else if(sortBy==='cit')rows.sort((a,b)=>b.n-a.n);
   else rows.sort((a,b)=>(a.f.empresa||'').localeCompare(b.f.empresa||'','pt'));
-  if(!rows.length){tb.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="big">Nenhum fornecedor ${forn.length?'encontrado':'salvo ainda'}</div></div></td></tr>`;return;}
-  tb.innerHTML=rows.map(({f,avg,n})=>{
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="8"><div class="empty"><div class="big">Nenhum fornecedor ${forn.length?'encontrado':'salvo ainda'}</div></div></td></tr>`;return;}
+  tb.innerHTML=rows.map(({f,tec,parc,n})=>{
     const last=(f.hist||[]).slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''))[0]||{};
     return `<tr>
       <td><button class="flink" onclick="viewForn('${jsq(f.empresa)}')">${esc(f.empresa)}</button></td>
       <td>${esc(f.tipo)}</td>
+      <td>${f.porte?'<span class="porte">'+esc(f.porte)+'</span>':'—'}</td>
       <td class="num">${n}</td>
-      <td>${avg!=null?'★ '+avg.toFixed(1):'—'}</td>
+      <td>${tec!=null?'★ '+tec.toFixed(1):'—'}</td>
+      <td>${parc!=null?'★ '+parc.toFixed(1):'—'}</td>
       <td>${esc(last.obra||'')}</td>
       <td class="acts"><button onclick="viewForn('${jsq(f.empresa)}')">Ver histórico</button><button class="del" onclick="delForn('${jsq(f.empresa)}')">Excluir</button></td></tr>`;}).join('');
 }
@@ -775,18 +864,18 @@ window.viewObra=k=>{
       return rows.length?`<div class="qa-v"><div class="qq">${esc(c.q)}</div>${rows.join('')}</div>`:'';
     }).filter(Boolean);
     return its.length?`<div class="mh">Relacionamentos</div>${its.join('')}`:'';};
-  const eqItems=[['Diretoria',eq.dir],['Coordenação',eq.coord],['Engenharia',o.eng||eq.eng],['Mestre',eq.mestre],['Orçamentista',eq.orc],['Suprimentos',eq.supri]];
+  const eqItems=[['Diretoria',eq.dir],['Coordenação',eq.coord],['Engenharia',o.eng||eq.eng],['Mestre',eq.mestre],['Orçamentista',eq.orc],['Suprimentos',eq.supri],['Administrativo',eq.adm]];
   let html=`<div class="modal-head"><div class="eyebrow-l">Obra</div><h3>${esc(o.obra)}</h3>
     <div class="sub">${fmtDate(o.data)||'sem data'} · ${esc(o.regime)||'regime —'}</div></div>
     <div class="modal-body">
     <div class="mh">Identificação</div>
-    <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}</div>
+    <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Gerenciadora',esc(o.ger))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}</div>
     <div class="mh">Equipe</div>
     <div class="dl">${eqItems.map(([l,v])=>kv(l,esc(v))).join('')}</div>
     <div class="mh">Prazos e Orçamentos</div>${prz}
     ${o.obs?`<div class="mh">Observações</div><p style="margin:0;font-size:14px;white-space:pre-wrap">${esc(o.obs)}</p>`:''}
     <div class="mh">Fornecedores desta obra (${daObra.length})</div>`;
-  html+= daObra.length? daObra.map(f=>`<div class="hcard" style="border-left-color:${sentCol(f.sent)}"><div class="top"><span class="ob">${esc(f.empresa)}</span><span class="dt">${(f.nota!==''&&f.nota!=null)?'★ '+f.nota:''}${f.sent?' · '+f.sent:''}</span></div><div class="meta"><span>${esc(f.tipo)||'—'}</span></div>${f.feedback?`<div class="fb">${esc(f.feedback)}</div>`:''}</div>`).join('') : '<p class="hint">Nenhum fornecedor registrado nesta obra.</p>';
+  html+= daObra.length? daObra.map(f=>`<div class="hcard" style="border-left-color:${sentCol(f.sent)}"><div class="top"><span class="ob">${esc(f.empresa)}</span><span class="dt">${notaLabel(f)}${f.sent?' · '+f.sent:''}</span></div><div class="meta"><span>${esc(f.tipo)||'—'}</span>${f.porte?`<span>Porte ${esc(f.porte)}</span>`:''}</div>${f.feedback?`<div class="fb">${esc(f.feedback)}</div>`:''}</div>`).join('') : '<p class="hint">Nenhum fornecedor registrado nesta obra.</p>';
   html+= engView();
   html+= relView();
   openModal(html+'</div>');
@@ -803,18 +892,23 @@ window.viewAno=ano=>{
 window.viewForn=k=>{
   const f=forn.find(x=>norm(x.empresa)===norm(k));if(!f)return;
   const h=(f.hist||[]).slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
-  const notas=h.map(x=>parseFloat(x.nota)).filter(x=>!isNaN(x));
-  const avg=notas.length?(notas.reduce((a,b)=>a+b,0)/notas.length).toFixed(1):'—';
-  let html=`<div class="modal-head"><div class="eyebrow-l">Fornecedor${f.tipo?' · '+esc(f.tipo):''}</div><h3>${esc(f.empresa)}</h3>
-    <div class="sub">${h.length} kickout(s) · nota média ${avg}</div></div>
+  const mean=arr=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1):'—';
+  const avgT=mean(h.map(x=>pick(x.notaTec,x.nota)).filter(x=>x!=null));
+  const avgP=mean(h.map(x=>pick(x.notaParc,x.nota)).filter(x=>x!=null));
+  let html=`<div class="modal-head"><div class="eyebrow-l">Fornecedor${f.tipo?' · '+esc(f.tipo):''}${f.porte?' · Porte '+esc(f.porte):''}</div><h3>${esc(f.empresa)}</h3>
+    <div class="sub">${h.length} kickout(s) · Técnico méd. ${avgT} · Parceria méd. ${avgP}</div></div>
     <div class="modal-body"><div class="mh">Histórico de aparições</div>`;
-  html+= h.length? h.map(e=>`<div class="hcard" style="border-left-color:${sentCol(e.sent)}">
+  html+= h.length? h.map(e=>{const t=pick(e.notaTec,e.nota),p=pick(e.notaParc,e.nota);
+    return `<div class="hcard" style="border-left-color:${sentCol(e.sent)}">
       <div class="top"><span class="ob">${esc(e.obra)||'(obra —)'}</span><span class="dt">${fmtDate(e.data)||'sem data'}</span></div>
       <div class="meta">
-        <span><b>Nota:</b> ${(e.nota!==''&&e.nota!=null)?'★ '+e.nota:'—'}${e.sent?' · '+e.sent:''}</span>
+        <span><b>Técnico:</b> ${t!=null?'★ '+t:'—'}</span>
+        <span><b>Parceria:</b> ${p!=null?'★ '+p:'—'}</span>
+        ${e.sent?`<span><b>Sentimento:</b> ${e.sent}</span>`:''}
+        ${e.porte?`<span><b>Porte:</b> ${esc(e.porte)}</span>`:''}
         <span><b>Engenheiro:</b> ${esc(e.eng)||'—'}</span>
         <span><b>Ano:</b> ${e.ano||'—'}</span>
-      </div>${e.feedback?`<div class="fb">"${esc(e.feedback)}"</div>`:''}</div>`).join('') : '<p class="hint">Sem histórico ainda.</p>';
+      </div>${e.feedback?`<div class="fb">"${esc(e.feedback)}"</div>`:''}</div>`;}).join('') : '<p class="hint">Sem histórico ainda.</p>';
   openModal(html+'</div>');
 };
 
@@ -871,12 +965,14 @@ $('expXlsx').onclick=()=>{
   // DASHBOARD
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["DASHBOARD DE ANÁLISE E FILTROS"],["Use Inserir > Tabela Dinâmica sobre HISTORICO_OBRAS."]]),"DASHBOARD");
   // HISTORICO_OBRAS
-  const ho=[["Obra","Data","Arquitetura","Metragem","Regime","Ano","Engenheiro","Tigre","Prazo Prev","Prazo Real","Orc Prev","Orc Real"]];
-  obras.forEach(o=>{const t=obraTotals(o);const p=o.prazos||{};ho.push([o.obra,fmtDate(o.data),o.arq,n(o.metragem),o.regime,n(o.ano),o.eng,o.tigre||'',(p.prazo||{}).pv||0,(p.prazo||{}).rl||0,t.tp,t.tr]);});
+  const ho=[["Obra","Data","Arquitetura","Gerenciadora","Metragem","Regime","Ano","Engenheiro","Administrativo","Prazo Prev","Prazo Real","Orc Prev","Orc Real"]];
+  obras.forEach(o=>{const t=obraTotals(o);const p=o.prazos||{};const eq=o.equipe||{};ho.push([o.obra,fmtDate(o.data),o.arq,o.ger||'',n(o.metragem),o.regime,n(o.ano),o.eng,eq.adm||'',(p.prazo||{}).pv||0,(p.prazo||{}).rl||0,t.tp,t.tr]);});
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ho),"HISTORICO_OBRAS");
   // HISTORICO_FORNECEDORES
-  const hf=[["Obra","Departamento","Tipo","Empresa","Avaliação","Feedback","Ano","Engenheiro","Usada em Orçamentos","Concorrência"]];
-  forn.forEach(f=>(f.hist||[]).forEach(h=>hf.push([h.obra,h.tipo||f.tipo,h.tipo||f.tipo,f.empresa,((h.nota!==''&&h.nota!=null)?h.nota:'')+(h.sent?' / '+h.sent:''),h.feedback,n(h.ano),h.eng,h.orcamento?'Sim':'Não',h.concorrencia?'Sim':'Não'])));
+  const hf=[["Obra","Departamento","Tipo","Empresa","Avaliação","Porte","Feedback","Ano","Engenheiro","Usada em Orçamentos","Concorrência"]];
+  forn.forEach(f=>(f.hist||[]).forEach(h=>{const t=pick(h.notaTec,h.nota),p=pick(h.notaParc,h.nota);
+    const av=[t!=null?'Téc '+t:'',p!=null?'Parc '+p:'',h.sent||''].filter(Boolean).join(' / ');
+    hf.push([h.obra,h.tipo||f.tipo,h.tipo||f.tipo,f.empresa,av,h.porte||f.porte||'',h.feedback,n(h.ano),h.eng,h.orcamento?'Sim':'Não',h.concorrencia?'Sim':'Não']);}));
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(hf),"HISTORICO_FORNECEDORES");
   XLSX.writeFile(wb,"Gestao_KickOut.xlsx");toast('Excel exportado','ok');
 };
@@ -884,25 +980,29 @@ function n(v){const x=parseFloat(v);return isNaN(x)?'':x;}
 function csv(rows){return rows.map(r=>r.map(c=>{c=(c==null?'':c).toString();return /[",;\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(';')).join('\n');}
 function dl(name,txt){const b=new Blob(["\ufeff"+txt],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
 $('expCsvO').onclick=()=>{const r=[["Obra","Data","Arquitetura","Metragem","Regime","Ano","Engenheiro","Prazo Prev","Prazo Real","Orc Prev","Orc Real"]];obras.forEach(o=>{const t=obraTotals(o);const p=o.prazos||{};r.push([o.obra,fmtDate(o.data),o.arq,o.metragem,o.regime,o.ano,o.eng,(p.prazo||{}).pv||0,(p.prazo||{}).rl||0,t.tp,t.tr]);});dl("historico_obras.csv",csv(r));toast('CSV exportado','ok');};
-$('expCsvF').onclick=()=>{const r=[["Empresa","Tipo/Departamento","Data Kickout","Obra","Nota","Sentimento","Engenheiro","Ano","Feedback"]];forn.forEach(f=>(f.hist||[]).forEach(h=>r.push([f.empresa,h.tipo||f.tipo,fmtDate(h.data),h.obra,h.nota,h.sent,h.eng,h.ano,h.feedback])));dl("historico_fornecedores.csv",csv(r));toast('CSV exportado','ok');};
+$('expCsvF').onclick=()=>{const r=[["Empresa","Tipo/Departamento","Porte","Data Kickout","Obra","Técnico","Parceria","Sentimento","Engenheiro","Ano","Feedback"]];forn.forEach(f=>(f.hist||[]).forEach(h=>{const t=pick(h.notaTec,h.nota),p=pick(h.notaParc,h.nota);r.push([f.empresa,h.tipo||f.tipo,h.porte||f.porte||'',fmtDate(h.data),h.obra,t??'',p??'',h.sent,h.eng,h.ano,h.feedback]);}));dl("historico_fornecedores.csv",csv(r));toast('CSV exportado','ok');};
 
 /* ---------- import xlsx ---------- */
 $('impBtn').onclick=()=>$('impFile').click();
 $('impFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const rd=new FileReader();
   rd.onload=ev=>{try{const wb=XLSX.read(ev.target.result,{type:'array'});let no=0,nf=0;
     const so=wb.Sheets["HISTORICO_OBRAS"];if(so){XLSX.utils.sheet_to_json(so).forEach(r=>{const nome=r.Obra||r.obra;if(!nome)return;
-      const o={obra:String(nome).trim(),data:r.Data||'',arq:r.Arquitetura||'',metragem:r.Metragem||'',regime:r.Regime||'',ano:r.Ano||'',eng:r.Engenheiro||'',tigre:r.Tigre||'',
-        prazos:{prazo:{pv:num(r["Prazo Prev"]),rl:num(r["Prazo Real"])},cinza:{pv:num(r["Orc Prev"]),rl:num(r["Orc Real"])},acab:{pv:0,rl:0},extras:{pv:0,rl:0},equipe:{pv:0,rl:0}},equipe:{},eng_qa:{},rel_qa:{}};
+      const o={obra:String(nome).trim(),data:r.Data||'',arq:r.Arquitetura||'',ger:r.Gerenciadora||'',metragem:r.Metragem||'',regime:r.Regime||'',ano:r.Ano||'',eng:r.Engenheiro||'',
+        prazos:{prazo:{pv:num(r["Prazo Prev"]),rl:num(r["Prazo Real"])},cinza:{pv:num(r["Orc Prev"]),rl:num(r["Orc Real"])},acab:{pv:0,rl:0},extras:{pv:0,rl:0},equipe:{pv:0,rl:0}},equipe:{adm:r.Administrativo||''},eng_qa:{},rel_qa:{}};
       const i=obras.findIndex(x=>norm(x.obra)===norm(o.obra));if(i>=0)obras[i]=o;else{obras.push(o);no++;}});}
     const sf=wb.Sheets["HISTORICO_FORNECEDORES"];if(sf){XLSX.utils.sheet_to_json(sf).forEach(r=>{const emp=r.Empresa||r.empresa;if(!emp)return;
       const tipo=r.Tipo||r.Departamento||'';
-      const entry={data:'',obra:r.Obra||'',ano:r.Ano||'',eng:r.Engenheiro||'',nota:(String(r["Avaliação"]||'').match(/\d/)||[''])[0],sent:/posit/i.test(r["Avaliação"]||'')?'Positivo':(/negat/i.test(r["Avaliação"]||'')?'Negativo':''),feedback:r.Feedback||'',tipo:tipo,orcamento:/sim/i.test(r["Usada em Orçamentos"]||''),concorrencia:/sim/i.test(r["Concorrência"]||'')};
+      const av=String(r["Avaliação"]||'');
+      const mt=av.match(/t[ée]c\D*(\d)/i), mp=av.match(/parc\D*(\d)/i);
+      const notaTec=mt?mt[1]:(av.match(/\d/)||[''])[0], notaParc=mp?mp[1]:'';
+      const porte=(String(r["Porte"]||'').match(/[ABC]/i)||[''])[0].toUpperCase();
+      const entry={data:'',obra:r.Obra||'',ano:r.Ano||'',eng:r.Engenheiro||'',notaTec,notaParc,porte,sent:/posit/i.test(av)?'Positivo':(/negat/i.test(av)?'Negativo':''),feedback:r.Feedback||'',tipo:tipo,orcamento:/sim/i.test(r["Usada em Orçamentos"]||''),concorrencia:/sim/i.test(r["Concorrência"]||'')};
       const ob=obras.find(x=>norm(x.obra)===norm(entry.obra));if(ob)entry.data=ob.data||'';
       if(tipo)addTipoSilent(tipo);
       const empN=String(emp).trim();
       const i=forn.findIndex(x=>norm(x.empresa)===norm(empN));
-      if(i>=0){const m=forn[i];if(tipo)m.tipo=tipo;m.hist=m.hist||[];const hi=m.hist.findIndex(h=>norm(h.obra)===norm(entry.obra));if(hi>=0)m.hist[hi]=entry;else m.hist.push(entry);}
-      else{forn.push({empresa:empN,tipo:tipo,hist:[entry]});nf++;}});}
+      if(i>=0){const m=forn[i];if(tipo)m.tipo=tipo;if(porte)m.porte=porte;m.hist=m.hist||[];const hi=m.hist.findIndex(h=>norm(h.obra)===norm(entry.obra));if(hi>=0)m.hist[hi]=entry;else m.hist.push(entry);}
+      else{forn.push({empresa:empN,tipo:tipo,porte:porte,hist:[entry]});nf++;}});}
     save();renderAll();toast(`Importado: ${no} obra(s), ${nf} fornecedor(es)`,'ok');
   }catch(err){toast('Falha ao ler o arquivo','warn');console.error(err);}};
   rd.readAsArrayBuffer(file);e.target.value='';};
@@ -912,7 +1012,20 @@ $('wipe').onclick=()=>{if(confirm('Apagar TODOS os dados salvos?')){obras=[];for
 
 /* ---------- init ---------- */
 migrate();
-fornRow();recalc();renderAll();save();
+fornRow();recalc();renderAll();persistLocal();
+
+/* ---- painel Supabase ---- */
+if($('sbUrl')){$('sbUrl').value=sbUrl;$('sbKey').value=sbKey;}
+if($('sbSave'))$('sbSave').onclick=async()=>{
+  sbUrl=$('sbUrl').value.trim();sbKey=$('sbKey').value.trim();
+  localStorage.setItem(SBU,sbUrl);localStorage.setItem(SBK,sbKey);
+  if(!sbOn()){setSb('off','Preencha a URL e a chave anon.');return;}
+  await sbSyncOnLoad();
+};
+if($('sbSync'))$('sbSync').onclick=async()=>{ if(!sbOn()){toast('Configure a conexão primeiro','warn');return;} await sbSyncOnLoad(); toast('Sincronização concluída','ok'); };
+if($('sbOff'))$('sbOff').onclick=()=>{ if(confirm('Desconectar do Supabase? Os dados continuam salvos localmente neste navegador.')){sbUrl='';sbKey='';localStorage.removeItem(SBU);localStorage.removeItem(SBK);if($('sbUrl'))$('sbUrl').value='';if($('sbKey'))$('sbKey').value='';setSb('off','Desconectado.');} };
+
+sbSyncOnLoad();
 </script>
 </body>
 </html>
