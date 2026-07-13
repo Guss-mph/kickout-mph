@@ -475,7 +475,9 @@ function bumpMeta(){setMeta(new Date().toISOString());}
 
 /* ---------- Supabase (sincronização opcional) ---------- */
 const SBU="kickout_sb_url", SBK="kickout_sb_key", SB_ROW=1;
-let sbUrl=localStorage.getItem(SBU)||"", sbKey=localStorage.getItem(SBK)||"";
+const SB_DEFAULT_URL="https://zjfyveqbbvsycnvdivje.supabase.co";
+const SB_DEFAULT_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnl2ZXFiYnZzeWNudmRpdmplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExOTE3MDIsImV4cCI6MjA5Njc2NzcwMn0.6zx3n8v6C3k9XTdRLw72R_jhSpk7xJ8a6K_Wr1KXcdk";
+let sbUrl=localStorage.getItem(SBU)||SB_DEFAULT_URL, sbKey=localStorage.getItem(SBK)||SB_DEFAULT_KEY;
 const sbOn=()=>!!(sbUrl&&sbKey);
 function getState(){return {obras,forn,tipos,updatedAt:(getMeta().updatedAt||'')};}
 function applyState(d){if(!d)return;if(Array.isArray(d.obras))obras=d.obras;if(Array.isArray(d.forn))forn=d.forn;if(Array.isArray(d.tipos))tipos=d.tipos;}
