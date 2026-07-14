@@ -51,6 +51,24 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .section>.sh .num{font-family:"Montserrat",sans-serif;font-weight:800;font-size:16px;color:#fff;background:var(--clay);
   width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto}
 .section>.sh h2{font-size:17px}
+.sec-meta{margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sec-tag{font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--muted);background:var(--mist);border:1px solid var(--line);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.sec-done{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap}
+.sec-done input{width:16px;height:16px;accent-color:var(--good);cursor:pointer}
+.rasc-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;background:#fff}
+.rasc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.rasc-name{font-weight:800;font-size:16px}
+.rasc-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.rasc-pct{font-weight:800;font-size:20px;color:var(--clay);text-align:right;line-height:1;white-space:nowrap}
+.rasc-pct small{display:block;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.04em}
+.prog-bar{height:8px;background:var(--mist);border-radius:999px;overflow:hidden;margin:12px 0}
+.prog-bar>div{height:100%;background:var(--good);border-radius:999px;transition:width .3s}
+.prog-chips{display:flex;flex-wrap:wrap;gap:7px}
+.prog-chip{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--mist);color:var(--muted);border:1px solid var(--line)}
+.prog-chip.on{background:rgba(31,166,90,.14);color:#1a7a45;border-color:rgba(31,166,90,.3)}
+.rasc-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.rasc-acts .del-btn{border-color:var(--bad);color:var(--bad)}
+.rasc-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.05em;color:var(--gold);background:rgba(224,138,30,.14);border:1px solid rgba(224,138,30,.35);border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:middle}
 .section>.bd{padding:22px}
 
 .lead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
@@ -101,6 +119,10 @@ table{width:100%;border-collapse:collapse}
 .seg button.on-neg{background:var(--bad);color:#fff}
 .seg button.on-good{background:var(--good);color:#fff}
 .seg button.on-bad{background:var(--bad);color:#fff}
+.seg button.on-na{background:var(--muted);color:#fff}
+.engrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
+.engrow .seg{max-width:280px;flex:1 1 200px}
+.sublabel{display:block;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px}
 .qa textarea{width:100%;background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 12px;resize:vertical;min-height:60px;line-height:1.5}
 .qa textarea:focus{outline:none;border-color:var(--clay);box-shadow:0 0 0 3px rgba(239,50,54,.12)}
 .rel-rate{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
@@ -130,6 +152,11 @@ table{width:100%;border-collapse:collapse}
 .btn.ghost:hover{border-color:var(--clay);color:var(--clay)}
 .btn.sm{padding:7px 12px;font-size:13px}
 .btn.add{background:#fff;color:var(--clay);border:1px dashed var(--clay)}
+.eqrow{display:flex;gap:10px;align-items:flex-end;margin-bottom:10px}
+.eqrow .fld{flex:1;margin:0}
+.eqrow .fld:first-child{flex:1.5}
+.eqrow .eqrm{flex:0 0 auto;height:40px;width:40px;border:1px solid var(--line);background:#fff;border-radius:9px;color:var(--muted);font-size:18px;line-height:1;cursor:pointer}
+.eqrow .eqrm:hover{background:#FBE6E6;color:var(--bad);border-color:var(--bad)}
 .btn.add:hover{background:rgba(239,50,54,.06)}
 .actbar{display:flex;gap:12px;justify-content:flex-end;align-items:center;flex-wrap:wrap;margin-top:6px}
 .actbar .sp{margin-right:auto;color:var(--muted);font-size:13px}
@@ -209,6 +236,11 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 .io-row{display:flex;gap:12px;flex-wrap:wrap}
 /* link de empresa clicavel */
 .flink{background:none;border:none;font:inherit;color:var(--clay);font-weight:700;cursor:pointer;padding:0;text-align:left}
+#fornBody .flink{color:var(--ink)}
+.nota-legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 14px;font-size:12px;font-weight:600;color:var(--muted)}
+.nota-legend .ll{font-weight:700;color:var(--ink)}
+.nota-legend .lchip{display:inline-flex;align-items:center;gap:6px}
+.nota-legend .lchip i{width:13px;height:13px;border-radius:3px;display:inline-block}
 .flink:hover{text-decoration:underline}
 
 /* tipos */
@@ -257,6 +289,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
     <nav id="nav">
       <button data-v="form" class="active">✎ Preencher</button>
       <button data-v="obras">Obras <span class="pill" id="cObras">0</span></button>
+      <button data-v="rascunho">Rascunhos <span class="pill" id="cRasc">0</span></button>
       <button data-v="forn">Fornecedores <span class="pill" id="cForn">0</span></button>
       <button data-v="tipos">Tipos</button>
       <button data-v="dash">Dashboard</button>
@@ -276,16 +309,16 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
     <div class="howto">
       <b>Como funciona</b>
       <ol>
-        <li>Preencha os campos abaixo.</li>
-        <li>Clique em <b>Salvar Kickout</b>.</li>
-        <li>Veja em <b>Obras</b> / <b>Fornecedores</b> e exporte em <b>Dados</b>.</li>
+        <li>Cada setor preenche a <b>sua parte</b> e marca <b>"Parte preenchida"</b> no topo da seção.</li>
+        <li>Clique em <b>Salvar rascunho</b> — fica em <b>Rascunhos</b> para os outros setores completarem.</li>
+        <li>Na reunião, abra o rascunho, revise e clique em <b>Validar Kickout</b> para virar obra oficial.</li>
       </ol>
     </div>
   </div>
 
   <!-- 1 -->
   <div class="section">
-    <div class="sh"><span class="num">1</span><h2>Identificação da Obra</h2></div>
+    <div class="sh"><span class="num">1</span><h2>Identificação da Obra</h2><div class="sec-meta"><span class="sec-tag">Engenharia / Coord.</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="ident"> Parte preenchida</label></div></div>
     <div class="bd">
       <div class="grid g3">
         <div class="fld"><label>Nome da Obra *</label><input id="f_obra" placeholder="Ex.: Aluízio e Cristina"></div>
@@ -302,23 +335,18 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 
   <!-- 2 -->
   <div class="section">
-    <div class="sh"><span class="num">2</span><h2>Equipe do Projeto</h2></div>
+    <div class="sh"><span class="num">2</span><h2>Equipe do Projeto</h2><div class="sec-meta"><span class="sec-tag">Coordenação / ADM</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="equipe"> Parte preenchida</label></div></div>
     <div class="bd">
-      <div class="grid g3">
-        <div class="fld"><label>Diretoria</label><input id="f_dir"></div>
-        <div class="fld"><label>Coordenação</label><input id="f_coord"></div>
-        <div class="fld"><label>Engenharia</label><input id="f_eng" placeholder="Engenheiro responsável"></div>
-        <div class="fld"><label>Mestre</label><input id="f_mestre"></div>
-        <div class="fld"><label>Orçamentista</label><input id="f_orc"></div>
-        <div class="fld"><label>Suprimentos</label><input id="f_supri"></div>
-        <div class="fld"><label>Administrativo (ADM)</label><input id="f_adm"></div>
-      </div>
+      <p class="hint" style="margin:-2px 0 14px">Adicione cada pessoa e informe a função. A pessoa com função <b>Engenheiro</b> é usada como responsável nos relatórios, na tabela de Obras e no histórico de fornecedores.</p>
+      <div id="eqList"></div>
+      <button class="btn add" id="addEq" type="button">+ Adicionar pessoa</button>
+      <datalist id="eqFuncList"><option value="Diretoria"><option value="Coordenação"><option value="Engenheiro 1"><option value="Engenheiro 2"><option value="Engenheiro 3"><option value="Mestre"><option value="Orçamentista"><option value="Suprimentos"><option value="ADM"></datalist>
     </div>
   </div>
 
   <!-- 3 -->
   <div class="section">
-    <div class="sh"><span class="num">3</span><h2>Prazos e Orçamentos</h2></div>
+    <div class="sh"><span class="num">3</span><h2>Prazos e Orçamentos</h2><div class="sec-meta"><span class="sec-tag">Orçamentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="prazos"> Parte preenchida</label></div></div>
     <div class="bd">
       <table class="ptable" id="ptable">
         <thead><tr><th style="width:36%">Item</th><th style="width:22%">Previsto</th><th style="width:22%">Real</th><th style="width:20%;text-align:right">Desvio</th></tr></thead>
@@ -338,7 +366,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 
   <!-- 4 -->
   <div class="section">
-    <div class="sh"><span class="num">4</span><h2>Avaliação de Fornecedores</h2></div>
+    <div class="sh"><span class="num">4</span><h2>Avaliação de Fornecedores</h2><div class="sec-meta"><span class="sec-tag">Suprimentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="forn"> Parte preenchida</label></div></div>
     <div class="bd">
       <p class="hint" style="margin:-2px 0 14px">Escala das notas — <b>0</b> Péssimo · <b>1</b> Ruim · <b>2</b> Regular · <b>3</b> Satisfatório · <b>4</b> Bom · <b>5</b> Excelente</p>
       <div id="fornList"></div>
@@ -348,20 +376,21 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 
   <!-- 5 -->
   <div class="section">
-    <div class="sh"><span class="num">5</span><h2>Engenharia</h2></div>
+    <div class="sh"><span class="num">5</span><h2>Engenharia</h2><div class="sec-meta"><span class="sec-tag">Gestão de Obras</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="eng"> Parte preenchida</label></div></div>
     <div class="bd" id="engBlock"></div>
   </div>
 
   <!-- 6 -->
   <div class="section">
-    <div class="sh"><span class="num">6</span><h2>Relacionamentos</h2></div>
+    <div class="sh"><span class="num">6</span><h2>Relacionamentos</h2><div class="sec-meta"><span class="sec-tag">Todos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="rel"> Parte preenchida</label></div></div>
     <div class="bd" id="relBlock"></div>
   </div>
 
   <div class="actbar">
     <span class="sp" id="editFlag"></span>
     <button class="btn ghost" id="btnClear">Limpar formulário</button>
-    <button class="btn" id="btnSave">✓ Salvar Kickout</button>
+    <button class="btn ghost" id="btnRascunho">💾 Salvar rascunho</button>
+    <button class="btn" id="btnSave">✓ Validar Kickout</button>
   </div>
 </section>
 
@@ -376,6 +405,12 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   </tr></thead><tbody id="obraBody"></tbody></table></div>
 </section>
 
+<!-- ============ RASCUNHOS ============ -->
+<section class="view" id="v-rascunho">
+  <div class="lead"><div><h1>Kickouts em <em>Rascunho</em></h1><p>Cada setor preenche a sua parte e marca "Parte preenchida". Na reunião, abra o rascunho, revise e clique em <b>Validar Kickout</b> para virar obra oficial.</p></div></div>
+  <div id="rascList"></div>
+</section>
+
 <!-- ============ FORNECEDORES ============ -->
 <section class="view" id="v-forn">
   <div class="lead"><div><h1>Histórico de <em>Fornecedores</em></h1><p>Cada empresa aparece uma única vez. Clique na empresa (ou em <b>Ver histórico</b>) para ver todos os kickouts em que ela apareceu — com data, obra, nota e engenheiro responsável.</p></div></div>
@@ -383,6 +418,14 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
     <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><input id="srcForn" placeholder="Buscar por empresa, tipo, obra…"></div>
     <select id="filtForn" class="ffilter"><option value="">Todos os tipos</option></select>
     <select id="sortForn" class="ffilter"><option value="tec">Melhor Técnico</option><option value="parc">Melhor Parceria</option><option value="cit">Mais citados</option><option value="az">A–Z</option></select>
+  </div>
+  <div class="nota-legend">
+    <span class="ll">Notas:</span>
+    <span class="lchip"><i style="background:#D32F2F"></i>0 e 1 · Ruim</span>
+    <span class="lchip"><i style="background:#EF7D1A"></i>2 · Regular</span>
+    <span class="lchip"><i style="background:#E0A800"></i>3 · Satisfatório</span>
+    <span class="lchip"><i style="background:#1FA65A"></i>4 · Bom</span>
+    <span class="lchip"><i style="background:#2A52BE"></i>5 · Excelente</span>
   </div>
   <div class="htable-wrap"><table class="htable"><thead><tr>
     <th>Empresa</th><th>Tipo / Departamento</th><th>Porte</th><th class="num">Reg.</th><th>Técnico</th><th>Parceria</th><th>Última obra</th><th class="acts"></th>
@@ -411,7 +454,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 <!-- ============ DASHBOARD ============ -->
 <section class="view" id="v-dash">
   <div class="lead"><div><h1><em>Dashboard</em> de Análise</h1><p>Visão geral com base em tudo que foi registrado.</p></div></div>
-  <div class="section"><div class="sh"><span class="num">★</span><h2>Arquiteturas — melhores notas</h2></div><div class="bd"><div id="dashArq"></div></div></div>
+  <div class="section"><div class="sh"><span class="num">★</span><h2>Arquiteturas — mais obras</h2></div><div class="bd"><div id="dashArq"></div></div></div>
   <div class="section"><div class="sh"><span class="num">↗</span><h2>Fornecedores mais citados</h2></div><div class="bd"><div id="dashForn"></div></div></div>
   <div class="section"><div class="sh"><span class="num">⌖</span><h2>Obras fechadas por ano</h2></div><div class="bd"><div id="dashAno"></div></div></div>
 </section>
@@ -521,10 +564,31 @@ async function sbSyncOnLoad(){
     }
   }catch(e){ setSb('err','Sem conexão: '+e.message+' (o app segue salvando localmente).'); }
 }
+/* merge seguro: puxa o estado mais recente do servidor, aplica SÓ a alteração local por cima e grava.
+   Evita que setores salvando ao mesmo tempo sobrescrevam o trabalho um do outro. */
+async function commitSynced(mutate){
+  let ok=false, didMutate=false;
+  if(sbOn()){
+    setSb('sync','Sincronizando…');
+    try{
+      const remote=await sbPull();
+      if(remote&&Array.isArray(remote.obras)){obras=remote.obras;forn=Array.isArray(remote.forn)?remote.forn:[];tipos=Array.isArray(remote.tipos)?remote.tipos:[];}
+      mutate(); didMutate=true;
+      persistLocal(); bumpMeta();
+      await sbPushNow(); setSb('on'); ok=true;
+    }catch(e){
+      if(!didMutate)mutate();
+      persistLocal(); bumpMeta(); setSb('err'); sbSchedulePush();
+    }
+  }else{ mutate(); persistLocal(); bumpMeta(); }
+  renderAll();
+  return ok || !sbOn();
+}
 const norm = s => (s||"").toString().trim().toLowerCase();
 const stripAcc = s => (s||"").toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
 const pick = (a,b)=>{a=parseFloat(a);if(!isNaN(a))return a;b=parseFloat(b);return isNaN(b)?null:b;};
-function notaLabel(e){const t=pick(e.notaTec,e.nota),p=pick(e.notaParc,e.nota);const parts=[];if(t!=null)parts.push('Téc ★'+t);if(p!=null)parts.push('Parc ★'+p);return parts.join(' · ');}
+function notaColor(v){const n=Math.round(v);if(n<=1)return '#D32F2F';if(n===2)return '#EF7D1A';if(n===3)return '#E0A800';if(n===4)return '#1FA65A';return '#2A52BE';}
+function notaLabel(e){const t=pick(e.notaTec,e.nota),p=pick(e.notaParc,e.nota);const parts=[];if(t!=null)parts.push(`Téc <b style="color:${notaColor(t)}">★${t}</b>`);if(p!=null)parts.push(`Parc <b style="color:${notaColor(p)}">★${p}</b>`);return parts.join(' · ');}
 
 /* ---------- migração p/ modelo mestre + histórico ---------- */
 function migrate(){
@@ -544,6 +608,16 @@ function migrate(){
       "Pedras","Automação","Paisagismo","Impermeabilização"];
   }
   forn.forEach(f=>{ if(f.tipo)addTipoSilent(f.tipo); (f.hist||[]).forEach(h=>{if(h.tipo)addTipoSilent(h.tipo);}); });
+  // equipe: objeto fixo antigo -> lista {nome,funcao}
+  obras.forEach(o=>{
+    if(o.equipe && !Array.isArray(o.equipe)){
+      const e=o.equipe,list=[];const push=(nome,func)=>{if(nome&&String(nome).trim())list.push({nome:String(nome).trim(),funcao:func});};
+      push(e.dir,'Diretoria');push(e.coord,'Coordenação');push(o.eng||e.eng,'Engenheiro');push(e.mestre,'Mestre');push(e.orc,'Orçamentista');push(e.supri,'Suprimentos');push(e.adm,'ADM');
+      o.equipe=list;
+    }
+    if(!Array.isArray(o.equipe))o.equipe=[];
+  });
+  obras.forEach(o=>{ if(!o.status)o.status='validado'; });
 }
 function addTipoSilent(t){ t=(t||'').trim(); if(!t)return; if(!tipos.some(x=>stripAcc(x)===stripAcc(t)))tipos.push(t); }
 const $ = id => document.getElementById(id);
@@ -553,54 +627,67 @@ function toast(m,t){const e=$('toast');$('toastMsg').textContent=m;e.className='
 
 /* ---------- engenharia / relacionamentos ---------- */
 const ENG = [
-  {q:"Houve patologias durante a obra? (itens que demandam atenção futura)",type:"yesno",good:"Não",openOn:"Sim",ph:"Qual patologia / o que demanda atenção futura?"},
-  {q:"Houve envio de relatórios quinzenais?",type:"yesno",good:"Sim",openOn:"Não",ph:"Por que não foram enviados?"},
-  {q:"Cronograma seguido durante a obra?",type:"yesno",good:"Sim",openOn:"Não",ph:"O que impactou o cronograma?"},
-  {q:"Houveram muitas compras de urgência?",type:"yesno",good:"Não",openOn:"Sim",ph:"Quais / por quê?"},
-  {q:"Caderno de Notas dos fornecedores gerado e já encaminhado pro cliente?",type:"yesno",good:"Sim",openOn:null},
+  {q:"Houve patologias durante a obra? (itens que demandam atenção futura)",type:"yesno",good:"Não"},
+  {q:"Houve envio de relatórios quinzenais?",type:"yesno",good:"Sim"},
+  {q:"Cronograma seguido durante a obra?",type:"yesno",good:"Sim"},
+  {q:"Houveram muitas compras de urgência?",type:"yesno",good:"Não"},
+  {q:"Caderno de Notas dos fornecedores gerado e já encaminhado pro cliente?",type:"yesno",good:"Sim",na:true},
   {q:"Feedback do Mestre (suprimentos, gestão de obras e afins)",type:"text",ph:"Feedback do mestre…"},
-  {q:"As Built já iniciado?",type:"yesno",good:"Sim",openOn:null}
+  {q:"As Built já iniciado?",type:"yesno",good:"Sim",na:true,prazo:true}
 ];
 const REL = [
-  {q:"Como foi o relacionamento com o cliente?",type:"rating"},
-  {q:"Como foi o relacionamento com a arquitetura / gerenciadora?",type:"rating"},
+  {q:"Como foi o relacionamento com o cliente?",type:"comment"},
+  {q:"Como foi o relacionamento com a arquitetura / gerenciadora?",type:"comment"},
   {q:"Como foi o relacionamento interno (Orç + Supri + Eng + ADM)?",type:"group",subs:["Orçamentos","Suprimentos","Engenharia","ADM"]}
 ];
 function buildEng(){
   const box=$('engBlock');
   box.innerHTML=ENG.map((c,i)=>{
     if(c.type==='text') return `<div class="qa" data-i="${i}"><div class="q">${c.q}</div><textarea class="engTxt" placeholder="${esc(c.ph||'Descrição…')}"></textarea></div>`;
+    const naBtn=c.na?`<button type="button" data-a="N/A">N/A</button>`:'';
     return `<div class="qa" data-i="${i}"><div class="q">${c.q}</div>
-      <div class="seg engSeg" style="max-width:240px"><button type="button" data-a="Sim">Sim</button><button type="button" data-a="Não">Não</button></div>
-      ${c.openOn?`<div class="eng-extra" style="display:none;margin-top:10px"><textarea class="engTxt" placeholder="${esc(c.ph||'Descreva…')}"></textarea></div>`:''}</div>`;
+      <div class="engrow">
+        <div class="seg engSeg"><button type="button" data-a="Sim">Sim</button><button type="button" data-a="Não">Não</button>${naBtn}</div>
+        <button type="button" class="relToggle engToggle">+ comentário</button>
+      </div>
+      ${c.prazo?`<div class="eng-prazo" style="display:none;margin-top:10px"><label class="sublabel">Data de prazo limite</label><input type="date" class="engPrazo" style="max-width:200px"></div>`:''}
+      <div class="eng-extra" style="display:none;margin-top:10px"><textarea class="engTxt" placeholder="Comentário (opcional)…"></textarea></div></div>`;
   }).join('');
   ENG.forEach((c,i)=>{ if(c.type==='text')return;
     const bx=box.querySelector(`.qa[data-i="${i}"]`);
     bx.querySelectorAll('.engSeg button').forEach(b=>b.onclick=()=>{
-      const was=b.classList.contains('on-good')||b.classList.contains('on-bad');
+      const was=b.classList.contains('on-good')||b.classList.contains('on-bad')||b.classList.contains('on-na');
       bx.querySelectorAll('.engSeg button').forEach(x=>x.className='');
-      let ans=''; if(!was){b.className=(b.dataset.a===c.good)?'on-good':'on-bad';ans=b.dataset.a;}
-      const ex=bx.querySelector('.eng-extra'); if(ex)ex.style.display=(c.openOn&&ans===c.openOn)?'block':'none';
+      let ans=''; if(!was){ b.className = b.dataset.a==='N/A' ? 'on-na' : (b.dataset.a===c.good?'on-good':'on-bad'); ans=b.dataset.a; }
+      if(c.prazo){const pz=bx.querySelector('.eng-prazo'); if(pz)pz.style.display=(ans==='Sim'||ans==='Não')?'block':'none';}
     });
+    const tg=bx.querySelector('.engToggle');
+    tg.onclick=()=>{const ex=bx.querySelector('.eng-extra');const show=(ex.style.display==='none'||!ex.style.display);
+      ex.style.display=show?'block':'none';tg.textContent=show?'− comentário':'+ comentário';tg.classList.toggle('active',show);};
   });
 }
 function buildRel(){
   const box=$('relBlock');
-  const rate=(label)=>`<div class="rel-rate"><div class="ratebox"><label>${label}</label><input class="relNota" type="number" min="1" max="5" step="1"></div><button type="button" class="relToggle">+ comentário</button></div><div class="rel-extra" style="display:none;margin-top:8px"><textarea class="relTxt" placeholder="Comentário…"></textarea></div>`;
   box.innerHTML=REL.map((c,i)=>{
-    if(c.type==='rating') return `<div class="qa" data-i="${i}"><div class="q">${c.q}</div>${rate('Nota (1–5)')}</div>`;
+    if(c.type==='comment') return `<div class="qa" data-i="${i}"><div class="q">${c.q}</div><textarea class="relTxt" placeholder="Comentário…"></textarea></div>`;
     return `<div class="qa" data-i="${i}"><div class="q">${c.q}</div><div class="rel-group">${
-      c.subs.map((s,j)=>`<div class="rel-sub" data-j="${j}">${rate(esc(s)+' — Nota (1–5)')}</div>`).join('')}</div></div>`;
+      c.subs.map((s,j)=>`<div class="rel-sub" data-j="${j}"><label class="sublabel">${esc(s)}</label><textarea class="relTxt" placeholder="Comentário sobre ${esc(s)}…"></textarea></div>`).join('')}</div></div>`;
   }).join('');
-  box.querySelectorAll('.relToggle').forEach(btn=>btn.onclick=()=>{
-    const ex=btn.closest('.rel-rate').nextElementSibling;
-    const show=(ex.style.display==='none'||!ex.style.display);
-    ex.style.display=show?'block':'none'; btn.textContent=show?'− comentário':'+ comentário'; btn.classList.toggle('active',show);
-  });
 }
 buildEng(); buildRel();
 
 /* ---------- fornecedor rows ---------- */
+function equipeRow(d={}){
+  const wrap=document.createElement('div'); wrap.className='eqrow';
+  wrap.innerHTML=`
+    <div class="fld"><label>Nome</label><input class="eqNome" placeholder="Nome da pessoa" value="${esc(d.nome)}"></div>
+    <div class="fld"><label>Função</label><input class="eqFunc" list="eqFuncList" placeholder="Ex.: Engenheiro 1, ADM, Suprimentos…" value="${esc(d.funcao)}"></div>
+    <button class="eqrm" title="Remover" type="button">×</button>`;
+  wrap.querySelector('.eqrm').onclick=()=>wrap.remove();
+  $('eqList').appendChild(wrap); return wrap;
+}
+function eqCollect(){return [...document.querySelectorAll('#eqList .eqrow')].map(r=>({nome:r.querySelector('.eqNome').value.trim(),funcao:r.querySelector('.eqFunc').value.trim()})).filter(r=>r.nome||r.funcao);}
+function eqEng(list){const e=(list||eqCollect()).find(r=>/engenheir|engenharia/i.test(r.funcao||''));return e?e.nome:'';}
 function fornRow(d={}){
   const wrap=document.createElement('div'); wrap.className='forn';
   const sent = d.sent==null?'':d.sent;
@@ -669,9 +756,11 @@ function addTipo(t){
   t=(t||'').trim(); if(!t)return null;
   const ex=tipos.find(x=>stripAcc(x)===stripAcc(t));
   if(ex){toast('Tipo já existe: '+ex,'warn');return {name:ex,isNew:false};}
-  tipos.push(t);save();renderTipos();return {name:t,isNew:true};
+  commitSynced(()=>{ if(!tipos.some(x=>stripAcc(x)===stripAcc(t)))tipos.push(t); }).then(()=>refreshTipoSelects());
+  return {name:t,isNew:true};
 }
 $('addForn').onclick=()=>fornRow();
+$('addEq').onclick=()=>equipeRow();
 
 /* ---------- prazos calc ---------- */
 function recalc(){
@@ -690,21 +779,23 @@ document.querySelector('#ptable').addEventListener('input',recalc);
 
 /* ---------- coletar / popular ---------- */
 function collect(){
+  const _eqL=eqCollect();
   const o={
     obra:$('f_obra').value.trim(), data:$('f_data').value, arq:$('f_arq').value.trim(), ger:$('f_ger').value.trim(),
-    metragem:$('f_metr').value, regime:$('f_regime').value, ano:$('f_ano').value, eng:$('f_eng').value.trim(),
-    equipe:{dir:$('f_dir').value,coord:$('f_coord').value,mestre:$('f_mestre').value,orc:$('f_orc').value,supri:$('f_supri').value,adm:$('f_adm').value},
+    metragem:$('f_metr').value, regime:$('f_regime').value, ano:$('f_ano').value, eng:eqEng(_eqL),
+    equipe:_eqL,
     prazos:{}, obs:$('f_obs').value, eng_qa:{}, rel_qa:{}
   };
   document.querySelectorAll('#ptable tbody tr[data-k]').forEach(t=>o.prazos[t.dataset.k]={pv:num(t.querySelector('.pv').value),rl:num(t.querySelector('.rl').value)});
   o.eng_qa=ENG.map((c,i)=>{const bx=$('engBlock').querySelector(`.qa[data-i="${i}"]`);
     if(c.type==='text')return {txt:bx.querySelector('.engTxt').value};
-    const sel=[...bx.querySelectorAll('.engSeg button')].find(b=>b.classList.contains('on-good')||b.classList.contains('on-bad'));
+    const sel=[...bx.querySelectorAll('.engSeg button')].find(b=>b.classList.contains('on-good')||b.classList.contains('on-bad')||b.classList.contains('on-na'));
     const ta=bx.querySelector('.engTxt');
-    return {ans:sel?sel.dataset.a:'',txt:ta?ta.value:''};});
+    const pz=bx.querySelector('.engPrazo');
+    const r={ans:sel?sel.dataset.a:'',txt:ta?ta.value:''}; if(pz)r.prazo=pz.value; return r;});
   o.rel_qa=REL.map((c,i)=>{const bx=$('relBlock').querySelector(`.qa[data-i="${i}"]`);
-    if(c.type==='rating')return {nota:bx.querySelector('.relNota').value,txt:bx.querySelector('.relTxt').value};
-    return {subs:[...bx.querySelectorAll('.rel-sub')].map(sb=>({nota:sb.querySelector('.relNota').value,txt:sb.querySelector('.relTxt').value}))};});
+    if(c.type==='comment')return {txt:bx.querySelector('.relTxt').value};
+    return {subs:[...bx.querySelectorAll('.rel-sub')].map(sb=>({txt:sb.querySelector('.relTxt').value}))};});
   const fs=[];
   document.querySelectorAll('#fornList .forn').forEach(w=>{
     const emp=w.querySelector('.fEmp').value.trim(); if(!emp&&!w.querySelector('.fTipo').value.trim())return;
@@ -714,76 +805,84 @@ function collect(){
       sent:segOn,feedback:w.querySelector('.fFb').value.trim(),orcamento:w.querySelector('.fOrc').checked,
       concorrencia:w.querySelector('.fConc').checked});
   });
+  o.done=[...document.querySelectorAll('.secChk:checked')].map(c=>c.dataset.sec);
   return {o,fs};
 }
 function populate(o){
   $('f_obra').value=o.obra||'';$('f_data').value=o.data||'';$('f_arq').value=o.arq||'';$('f_ger').value=o.ger||'';
-  $('f_metr').value=o.metragem||'';$('f_regime').value=o.regime||'';$('f_ano').value=o.ano||'';$('f_eng').value=o.eng||'';
-  const eq=o.equipe||{};$('f_dir').value=eq.dir||'';$('f_coord').value=eq.coord||'';$('f_mestre').value=eq.mestre||'';
-  $('f_orc').value=eq.orc||'';$('f_supri').value=eq.supri||'';$('f_adm').value=eq.adm||'';$('f_obs').value=o.obs||'';
+  $('f_metr').value=o.metragem||'';$('f_regime').value=o.regime||'';$('f_ano').value=o.ano||'';
+  $('eqList').innerHTML='';(Array.isArray(o.equipe)?o.equipe:[]).forEach(p=>equipeRow(p));if(!$('eqList').children.length)equipeRow();
+  $('f_obs').value=o.obs||'';
   document.querySelectorAll('#ptable tbody tr[data-k]').forEach(t=>{const p=(o.prazos||{})[t.dataset.k]||{};t.querySelector('.pv').value=p.pv||'';t.querySelector('.rl').value=p.rl||'';});
   buildEng();buildRel();
   const EQ=Array.isArray(o.eng_qa)?o.eng_qa:[];
   ENG.forEach((c,i)=>{const bx=$('engBlock').querySelector(`.qa[data-i="${i}"]`);const d=EQ[i]||{};
     if(c.type==='text'){bx.querySelector('.engTxt').value=d.txt||'';return;}
     const b=[...bx.querySelectorAll('.engSeg button')].find(x=>x.dataset.a===d.ans);
-    if(b)b.className=(d.ans===c.good)?'on-good':'on-bad';
+    if(b)b.className=(d.ans==='N/A')?'on-na':((d.ans===c.good)?'on-good':'on-bad');
     const ta=bx.querySelector('.engTxt');if(ta)ta.value=d.txt||'';
-    const ex=bx.querySelector('.eng-extra');if(ex)ex.style.display=(c.openOn&&d.ans===c.openOn)?'block':'none';});
+    if(c.prazo){const pz=bx.querySelector('.engPrazo');if(pz){pz.value=d.prazo||'';const pzbox=bx.querySelector('.eng-prazo');if(pzbox)pzbox.style.display=(d.ans==='Sim'||d.ans==='Não')?'block':'none';}}
+    if(d.txt&&d.txt.trim()){const ex=bx.querySelector('.eng-extra');if(ex)ex.style.display='block';const tg=bx.querySelector('.engToggle');if(tg)tg.textContent='− comentário';}});
   const RQ=Array.isArray(o.rel_qa)?o.rel_qa:[];
   REL.forEach((c,i)=>{const bx=$('relBlock').querySelector(`.qa[data-i="${i}"]`);const d=RQ[i]||{};
-    if(c.type==='rating'){bx.querySelector('.relNota').value=d.nota||'';const t=bx.querySelector('.relTxt');t.value=d.txt||'';
-      if(d.txt&&d.txt.trim()){bx.querySelector('.rel-extra').style.display='block';bx.querySelector('.relToggle').textContent='− comentário';}
-    }else{const subs=d.subs||[];bx.querySelectorAll('.rel-sub').forEach((sb,j)=>{const sd=subs[j]||{};sb.querySelector('.relNota').value=sd.nota||'';const t=sb.querySelector('.relTxt');t.value=sd.txt||'';
-      if(sd.txt&&sd.txt.trim()){sb.querySelector('.rel-extra').style.display='block';sb.querySelector('.relToggle').textContent='− comentário';}});}});
+    if(c.type==='comment'){bx.querySelector('.relTxt').value=d.txt||'';}
+    else{const subs=d.subs||[];bx.querySelectorAll('.rel-sub').forEach((sb,j)=>{const sd=subs[j]||{};sb.querySelector('.relTxt').value=sd.txt||'';});}});
   $('fornList').innerHTML='';
-  const mine=[];
-  forn.forEach(f=>(f.hist||[]).forEach(h=>{ if(norm(h.obra)===norm(o.obra))
-    mine.push({tipo:h.tipo||f.tipo,empresa:f.empresa,notaTec:h.notaTec,notaParc:h.notaParc,nota:h.nota,porte:h.porte||f.porte,sent:h.sent,feedback:h.feedback,orcamento:h.orcamento,concorrencia:h.concorrencia}); }));
+  let mine=[];
+  if(Array.isArray(o.draftForn)){ mine=o.draftForn; }
+  else { forn.forEach(f=>(f.hist||[]).forEach(h=>{ if(norm(h.obra)===norm(o.obra))
+    mine.push({tipo:h.tipo||f.tipo,empresa:f.empresa,notaTec:h.notaTec,notaParc:h.notaParc,nota:h.nota,porte:h.porte||f.porte,sent:h.sent,feedback:h.feedback,orcamento:h.orcamento,concorrencia:h.concorrencia}); })); }
   if(mine.length)mine.forEach(f=>fornRow(f)); else fornRow();
+  document.querySelectorAll('.secChk').forEach(c=>c.checked=false);
+  (Array.isArray(o.done)?o.done:[]).forEach(k=>{const c=document.querySelector('.secChk[data-sec="'+k+'"]');if(c)c.checked=true;});
   recalc();
 }
 function clearForm(){
-  ['f_obra','f_data','f_arq','f_ger','f_metr','f_regime','f_ano','f_eng','f_dir','f_coord','f_mestre','f_orc','f_supri','f_adm','f_obs'].forEach(i=>$(i).value='');
+  ['f_obra','f_data','f_arq','f_ger','f_metr','f_regime','f_ano','f_obs'].forEach(i=>$(i).value='');
+  $('eqList').innerHTML='';equipeRow();
   document.querySelectorAll('#ptable input').forEach(i=>i.value='');
   buildEng();buildRel();
   $('fornList').innerHTML='';fornRow();recalc();editKey=null;$('editFlag').textContent='';
+  document.querySelectorAll('.secChk').forEach(c=>c.checked=false);
 }
 $('btnClear').onclick=()=>{clearForm();toast('Formulário limpo','warn');};
 
-/* ---------- SALVAR (dedup) ---------- */
-$('btnSave').onclick=()=>{
+/* ---------- SALVAR (rascunho / validado) ---------- */
+async function saveObra(status){
   const {o,fs}=collect();
   if(!o.obra){toast('Informe o Nome da Obra','warn');$('f_obra').focus();return;}
-  // obra: única por nome
-  const oi=obras.findIndex(x=>norm(x.obra)===norm(o.obra));
-  const wasObra = oi>=0;
-  if(wasObra)obras[oi]=o; else obras.push(o);
-  // fornecedores: mestre único por empresa + histórico (1 entrada por obra)
+  o.status=status;
+  if(status==='rascunho')o.draftForn=fs; else delete o.draftForn;
   let novos=0,upd=0;
-  fs.forEach(f=>{
-    if(!f.empresa)return;
-    const entry={data:o.data,obra:o.obra,ano:o.ano,eng:o.eng,notaTec:f.notaTec,notaParc:f.notaParc,porte:f.porte,sent:f.sent,
-                 feedback:f.feedback,tipo:f.tipo,orcamento:f.orcamento,concorrencia:f.concorrencia};
-    const fi=forn.findIndex(x=>norm(x.empresa)===norm(f.empresa));
-    if(fi>=0){
-      const m=forn[fi]; if(f.tipo)m.tipo=f.tipo; if(f.porte)m.porte=f.porte; m.hist=m.hist||[];
-      const hi=m.hist.findIndex(h=>norm(h.obra)===norm(o.obra));
-      if(hi>=0)m.hist[hi]=entry; else m.hist.push(entry);
-      upd++;
-    } else { forn.push({empresa:f.empresa,tipo:f.tipo,porte:f.porte,hist:[entry]}); novos++; }
+  await commitSynced(()=>{
+    const oi=obras.findIndex(x=>norm(x.obra)===norm(o.obra));
+    if(oi>=0)obras[oi]=o; else obras.push(o);
+    if(status!=='rascunho'){
+      novos=0;upd=0;
+      fs.forEach(f=>{
+        if(!f.empresa)return;
+        const entry={data:o.data,obra:o.obra,ano:o.ano,eng:o.eng,notaTec:f.notaTec,notaParc:f.notaParc,porte:f.porte,sent:f.sent,
+                     feedback:f.feedback,tipo:f.tipo,orcamento:f.orcamento,concorrencia:f.concorrencia};
+        const fi=forn.findIndex(x=>norm(x.empresa)===norm(f.empresa));
+        if(fi>=0){
+          const m=forn[fi]; if(f.tipo)m.tipo=f.tipo; if(f.porte)m.porte=f.porte; m.hist=m.hist||[];
+          const hi=m.hist.findIndex(h=>norm(h.obra)===norm(o.obra));
+          if(hi>=0)m.hist[hi]=entry; else m.hist.push(entry);
+          upd++;
+        } else { forn.push({empresa:f.empresa,tipo:f.tipo,porte:f.porte,hist:[entry]}); novos++; }
+      });
+    }
   });
-  save();renderAll();
-  let msg=wasObra?'Obra atualizada.':'Obra salva.';
-  if(fs.length)msg+=` Fornecedores: ${novos} novo(s), ${upd} atualizado(s).`;
-  toast(msg,'ok');
-  clearForm();
-};
+  if(status==='rascunho'){ toast('Rascunho salvo.','ok'); clearForm(); go('rascunho'); }
+  else { let msg='Kickout validado.'; if(fs.length)msg+=` Fornecedores: ${novos} novo(s), ${upd} atualizado(s).`; toast(msg,'ok'); clearForm(); go('obras'); }
+}
+$('btnSave').onclick=()=>saveObra('validado');
+$('btnRascunho').onclick=()=>saveObra('rascunho');
 
 /* ---------- render históricos ---------- */
 function renderObras(q=''){
   const tb=$('obraBody');q=norm(q);
-  const rows=obras.filter(o=>!q||[o.obra,o.arq,o.eng,o.regime,o.ano].some(v=>norm(v).includes(q)));
+  const rows=obras.filter(o=>o.status!=='rascunho').filter(o=>!q||[o.obra,o.arq,o.eng,o.regime,o.ano].some(v=>norm(v).includes(q)));
   if(!rows.length){tb.innerHTML=`<tr><td colspan="5"><div class="empty"><div class="big">Nenhuma obra ${obras.length?'encontrada':'salva ainda'}</div>${obras.length?'Ajuste a busca.':'Preencha o formulário e salve.'}</div></td></tr>`;return;}
   tb.innerHTML=rows.map(o=>`<tr><td><b>${esc(o.obra)}</b></td><td>${fmtDate(o.data)}</td><td>${esc(o.arq)}</td><td>${esc(o.regime)}</td>
     <td class="acts"><button onclick="viewObra('${jsq(o.obra)}')">Visualizar</button><button class="del" onclick="delObra('${jsq(o.obra)}')">Excluir</button></td></tr>`).join('');
@@ -816,15 +915,48 @@ function renderForn(q=''){
       <td>${esc(f.tipo)}</td>
       <td>${f.porte?'<span class="porte">'+esc(f.porte)+'</span>':'—'}</td>
       <td class="num">${n}</td>
-      <td>${tec!=null?'★ '+tec.toFixed(1):'—'}</td>
-      <td>${parc!=null?'★ '+parc.toFixed(1):'—'}</td>
+      <td>${tec!=null?`<b style="color:${notaColor(tec)}">★ ${tec.toFixed(1)}</b>`:'—'}</td>
+      <td>${parc!=null?`<b style="color:${notaColor(parc)}">★ ${parc.toFixed(1)}</b>`:'—'}</td>
       <td>${esc(last.obra||'')}</td>
       <td class="acts"><button onclick="viewForn('${jsq(f.empresa)}')">Ver histórico</button><button class="del" onclick="delForn('${jsq(f.empresa)}')">Excluir</button></td></tr>`;}).join('');
 }
 function jsq(s){return (s||'').replace(/'/g,"\\'");}
 function fmtDate(d){if(!d)return'';const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}
-window.delObra=k=>{if(confirm('Excluir a obra "'+k+'"? Os fornecedores ficam no histórico.')){obras=obras.filter(x=>norm(x.obra)!==norm(k));save();renderAll();toast('Obra excluída','warn');}};
-window.delForn=k=>{if(confirm('Excluir o fornecedor "'+k+'" e todo o seu histórico?')){forn=forn.filter(x=>norm(x.empresa)!==norm(k));save();renderAll();toast('Fornecedor excluído','warn');}};
+window.delObra=k=>{if(confirm('Excluir a obra "'+k+'"? Os fornecedores ficam no histórico.')){commitSynced(()=>{obras=obras.filter(x=>norm(x.obra)!==norm(k));}).then(()=>toast('Obra excluída','warn'));}};
+
+/* ---------- rascunhos (por setor) ---------- */
+const SECTIONS=[
+  {key:'ident',setor:'Engenharia / Coord.'},
+  {key:'equipe',setor:'Coordenação / ADM'},
+  {key:'prazos',setor:'Orçamentos'},
+  {key:'forn',setor:'Suprimentos'},
+  {key:'eng',setor:'Gestão de Obras'},
+  {key:'rel',setor:'Todos'}
+];
+function renderRascunhos(){
+  const box=$('rascList'); if(!box)return;
+  const rs=obras.filter(o=>o.status==='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  if(!rs.length){box.innerHTML='<p class="hint">Nenhum rascunho em andamento. Preencha o formulário e clique em <b>Salvar rascunho</b>.</p>';return;}
+  box.innerHTML=rs.map(o=>{
+    const done=Array.isArray(o.done)?o.done:[];
+    const pct=Math.round(done.length/SECTIONS.length*100);
+    const chips=SECTIONS.map(s=>`<span class="prog-chip ${done.includes(s.key)?'on':''}">${done.includes(s.key)?'✓':'⏳'} ${s.setor}</span>`).join('');
+    return `<div class="rasc-card">
+      <div class="rasc-top">
+        <div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div>
+        <div class="rasc-pct">${done.length}/${SECTIONS.length}<small>setores</small></div>
+      </div>
+      <div class="prog-bar"><div style="width:${pct}%"></div></div>
+      <div class="prog-chips">${chips}</div>
+      <div class="rasc-acts">
+        <button class="btn" onclick="abrirRascunho('${jsq(o.obra)}')">✎ Abrir / continuar</button>
+        <button class="btn ghost del-btn" onclick="delRascunho('${jsq(o.obra)}')">Excluir</button>
+      </div></div>`;
+  }).join('');
+}
+window.abrirRascunho=k=>{const o=obras.find(x=>norm(x.obra)===norm(k)&&x.status==='rascunho');if(!o)return;populate(o);editKey=o.obra;$('editFlag').textContent='Rascunho: '+o.obra;go('form');window.scrollTo(0,0);};
+window.delRascunho=k=>{if(confirm('Excluir este rascunho? (não afeta o histórico oficial)')){commitSynced(()=>{obras=obras.filter(x=>!(norm(x.obra)===norm(k)&&x.status==='rascunho'));}).then(()=>toast('Rascunho excluído','warn'));}};
+window.delForn=k=>{if(confirm('Excluir o fornecedor "'+k+'" e todo o seu histórico?')){commitSynced(()=>{forn=forn.filter(x=>norm(x.empresa)!==norm(k));}).then(()=>toast('Fornecedor excluído','warn'));}};
 
 /* ---------- modal ---------- */
 function openModal(html){$('modalBody').innerHTML=html;$('modal').classList.add('show');}
@@ -848,32 +980,31 @@ window.viewObra=k=>{
   const engView=()=>{const EQ=Array.isArray(o.eng_qa)?o.eng_qa:[];
     const its=ENG.map((c,i)=>{const d=EQ[i]||{};
       if(c.type==='text')return (d.txt&&d.txt.trim())?`<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa">${esc(d.txt)}</div></div>`:'';
-      if(!d.ans)return '';
-      const color=(d.ans===c.good)?'var(--good)':'var(--bad)';
+      if(!d.ans && !(d.txt&&d.txt.trim()) && !d.prazo)return '';
+      const color=d.ans==='N/A'?'var(--muted)':((d.ans===c.good)?'var(--good)':'var(--bad)');
+      const ansPart=d.ans?`<div class="aa"><b style="color:${color}">${d.ans}</b></div>`:'';
+      const pzPart=(c.prazo&&d.prazo)?`<div class="aa"><b>Prazo limite:</b> ${fmtDate(d.prazo)}</div>`:'';
       const ex=(d.txt&&d.txt.trim())?`<div class="aa">${esc(d.txt)}</div>`:'';
-      return `<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa"><b style="color:${color}">${d.ans}</b></div>${ex}</div>`;
+      return `<div class="qa-v"><div class="qq">${esc(c.q)}</div>${ansPart}${pzPart}${ex}</div>`;
     }).filter(Boolean);
     return its.length?`<div class="mh">Engenharia</div>${its.join('')}`:'';};
-  const stars=n=>{n=parseFloat(n);return isNaN(n)?'—':'★ '+n+'/5';};
   const relView=()=>{const RQ=Array.isArray(o.rel_qa)?o.rel_qa:[];
     const its=REL.map((c,i)=>{const d=RQ[i]||{};
-      if(c.type==='rating'){if((d.nota==null||d.nota==='')&&!(d.txt&&d.txt.trim()))return '';
-        const ex=(d.txt&&d.txt.trim())?`<div class="aa">${esc(d.txt)}</div>`:'';
-        return `<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa"><b>${stars(d.nota)}</b></div>${ex}</div>`;}
+      if(c.type==='comment'){return (d.txt&&d.txt.trim())?`<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa">${esc(d.txt)}</div></div>`:'';}
       const subs=d.subs||[];
-      const rows=c.subs.map((s,j)=>{const sd=subs[j]||{};if((sd.nota==null||sd.nota==='')&&!(sd.txt&&sd.txt.trim()))return '';
-        return `<div class="aa" style="margin-top:4px"><b>${esc(s)}:</b> ${stars(sd.nota)}${(sd.txt&&sd.txt.trim())?' — '+esc(sd.txt):''}</div>`;}).filter(Boolean);
+      const rows=c.subs.map((s,j)=>{const sd=subs[j]||{};return (sd.txt&&sd.txt.trim())?`<div class="aa" style="margin-top:4px"><b>${esc(s)}:</b> ${esc(sd.txt)}</div>`:'';}).filter(Boolean);
       return rows.length?`<div class="qa-v"><div class="qq">${esc(c.q)}</div>${rows.join('')}</div>`:'';
     }).filter(Boolean);
     return its.length?`<div class="mh">Relacionamentos</div>${its.join('')}`:'';};
-  const eqItems=[['Diretoria',eq.dir],['Coordenação',eq.coord],['Engenharia',o.eng||eq.eng],['Mestre',eq.mestre],['Orçamentista',eq.orc],['Suprimentos',eq.supri],['Administrativo',eq.adm]];
+  const eqArr=Array.isArray(o.equipe)?o.equipe:[];
+  const eqItems=eqArr.map(p=>[p.funcao||'—',p.nome]);
   let html=`<div class="modal-head"><div class="eyebrow-l">Obra</div><h3>${esc(o.obra)}</h3>
     <div class="sub">${fmtDate(o.data)||'sem data'} · ${esc(o.regime)||'regime —'}</div></div>
     <div class="modal-body">
     <div class="mh">Identificação</div>
     <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Gerenciadora',esc(o.ger))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}</div>
     <div class="mh">Equipe</div>
-    <div class="dl">${eqItems.map(([l,v])=>kv(l,esc(v))).join('')}</div>
+    ${eqArr.length?`<div class="dl">${eqItems.map(([l,v])=>kv(l,esc(v))).join('')}</div>`:'<p class="hint">Equipe não informada.</p>'}
     <div class="mh">Prazos e Orçamentos</div>${prz}
     ${o.obs?`<div class="mh">Observações</div><p style="margin:0;font-size:14px;white-space:pre-wrap">${esc(o.obs)}</p>`:''}
     <div class="mh">Fornecedores desta obra (${daObra.length})</div>`;
@@ -884,7 +1015,7 @@ window.viewObra=k=>{
 };
 
 window.viewAno=ano=>{
-  const list=obras.filter(o=>(o.ano||'—')===ano).sort((a,b)=>(a.obra||'').localeCompare(b.obra||'','pt'));
+  const list=obras.filter(o=>o.status!=='rascunho').filter(o=>(o.ano||'—')===ano).sort((a,b)=>(a.obra||'').localeCompare(b.obra||'','pt'));
   let html=`<div class="modal-head"><div class="eyebrow-l">Ano ${esc(ano)}</div><h3>Obras fechadas em ${esc(ano)}</h3><div class="sub">${list.length} obra(s)</div></div><div class="modal-body">`;
   html+= list.length? list.map(o=>`<div class="hcard clickable" onclick="viewObra('${jsq(o.obra)}')">
       <div class="top"><span class="ob">${esc(o.obra)}</span><span class="dt">${fmtDate(o.data)||''}</span></div>
@@ -904,8 +1035,8 @@ window.viewForn=k=>{
     return `<div class="hcard" style="border-left-color:${sentCol(e.sent)}">
       <div class="top"><span class="ob">${esc(e.obra)||'(obra —)'}</span><span class="dt">${fmtDate(e.data)||'sem data'}</span></div>
       <div class="meta">
-        <span><b>Técnico:</b> ${t!=null?'★ '+t:'—'}</span>
-        <span><b>Parceria:</b> ${p!=null?'★ '+p:'—'}</span>
+        <span><b>Técnico:</b> ${t!=null?`<b style="color:${notaColor(t)}">★ ${t}</b>`:'—'}</span>
+        <span><b>Parceria:</b> ${p!=null?`<b style="color:${notaColor(p)}">★ ${p}</b>`:'—'}</span>
         ${e.sent?`<span><b>Sentimento:</b> ${e.sent}</span>`:''}
         ${e.porte?`<span><b>Porte:</b> ${esc(e.porte)}</span>`:''}
         <span><b>Engenheiro:</b> ${esc(e.eng)||'—'}</span>
@@ -923,29 +1054,30 @@ function renderTipos(){
   box.innerHTML = arr.length? arr.map(t=>`<div class="tip-item"><button class="flink nm" title="Ver melhores fornecedores deste tipo" onclick="verFornDoTipo('${jsq(t)}')">${esc(t)}</button><span class="ct">${cnt[stripAcc(t)]||0} fornecedor(es)</span><button class="del" title="Remover" onclick="delTipo('${jsq(t)}')">×</button></div>`).join('') : '<p class="hint">Nenhum tipo cadastrado. Adicione acima.</p>';
 }
 window.verFornDoTipo=t=>{ go('forn'); const f=$('filtForn'); if(f)f.value=t; const s=$('sortForn'); if(s)s.value='nota'; const sr=$('srcForn'); if(sr)sr.value=''; renderForn(''); };
-window.delTipo=t=>{if(confirm('Remover o tipo "'+t+'"? (não altera fornecedores já salvos)')){tipos=tipos.filter(x=>x!==t);save();renderTipos();refreshTipoSelects();toast('Tipo removido','warn');}};
+window.delTipo=t=>{if(confirm('Remover o tipo "'+t+'"? (não altera fornecedores já salvos)')){commitSynced(()=>{tipos=tipos.filter(x=>x!==t);}).then(()=>{refreshTipoSelects();toast('Tipo removido','warn');});}};
 $('addTipo').onclick=()=>{const r=addTipo($('novoTipo').value);if(r&&r.isNew){$('novoTipo').value='';refreshTipoSelects();toast('Tipo adicionado','ok');}};
 $('novoTipo').addEventListener('keydown',e=>{if(e.key==='Enter')$('addTipo').click();});
 
 /* ---------- dashboard ---------- */
 function renderDash(){
-  const stars=v=>{const n=Math.round(v);let s='';for(let i=1;i<=5;i++)s+=`<span class="st ${i<=n?'on':''}">★</span>`;return `<span class="stars">${s}</span>`;};
-  // 1) Arquiteturas por nota média (relacionamento com a arquitetura/gerenciadora = rel_qa[1])
+  const dObras=obras.filter(o=>o.status!=='rascunho');
+  // 1) Arquiteturas por nº de obras
   const arqMap={};
-  obras.forEach(o=>{const a=(o.arq||'').trim();if(!a)return;const rq=Array.isArray(o.rel_qa)?o.rel_qa:[];const nota=parseFloat((rq[1]||{}).nota);if(isNaN(nota))return;(arqMap[a]=arqMap[a]||[]).push(nota);});
-  const arq=Object.entries(arqMap).map(([nome,arr])=>({nome,avg:arr.reduce((a,b)=>a+b,0)/arr.length,n:arr.length})).sort((a,b)=>b.avg-a.avg);
-  $('dashArq').innerHTML=arq.length?arq.map((a,i)=>`<div class="rank"><span class="pos">${i+1}</span><span class="nm">${esc(a.nome)}</span>${stars(a.avg)}<span class="vv">${a.avg.toFixed(1)}<small>(${a.n})</small></span></div>`).join(''):'<p class="hint">Nenhuma nota de arquitetura registrada ainda.</p>';
+  dObras.forEach(o=>{const a=(o.arq||'').trim();if(!a)return;arqMap[a]=(arqMap[a]||0)+1;});
+  const arq=Object.entries(arqMap).map(([nome,cnt])=>({nome,n:cnt})).sort((a,b)=>b.n-a.n);
+  const maxArq=Math.max(1,...arq.map(x=>x.n));
+  $('dashArq').innerHTML=arq.length?arq.map((a,i)=>`<div class="rank"><span class="pos">${i+1}</span><span class="nm">${esc(a.nome)}</span><div class="minibar"><div style="width:${a.n/maxArq*100}%"></div></div><span class="vv">${a.n}<small>obra(s)</small></span></div>`).join(''):'<p class="hint">Nenhuma arquitetura registrada.</p>';
   // 2) Fornecedores mais citados (nº de obras) + tipo
   const fcit=forn.map(f=>({nome:f.empresa,tipo:f.tipo,n:(f.hist||[]).length})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
   const maxF=Math.max(1,...fcit.map(x=>x.n));
   $('dashForn').innerHTML=fcit.length?fcit.map((f,i)=>`<div class="rank clickable" onclick="viewForn('${jsq(f.nome)}')"><span class="pos">${i+1}</span><span class="nm">${esc(f.nome)}<small>${esc(f.tipo)||'—'}</small></span><div class="minibar"><div style="width:${f.n/maxF*100}%"></div></div><span class="vv">${f.n}<small>obra(s)</small></span><span class="chev">›</span></div>`).join(''):'<p class="hint">Nenhum fornecedor registrado.</p>';
   // 3) Obras fechadas por ano
-  const byAno={};obras.forEach(o=>{const a=(o.ano||'—');byAno[a]=(byAno[a]||0)+1;});
+  const byAno={};dObras.forEach(o=>{const a=(o.ano||'—');byAno[a]=(byAno[a]||0)+1;});
   const anos=Object.keys(byAno).sort();const maxA=Math.max(1,...Object.values(byAno));
   $('dashAno').innerHTML=anos.length?anos.map(a=>`<div class="rank clickable" onclick="viewAno('${jsq(a)}')"><span class="nm">${a}</span><div class="minibar"><div style="width:${byAno[a]/maxA*100}%"></div></div><span class="vv">${byAno[a]}<small>obra(s)</small></span><span class="chev">›</span></div>`).join(''):'<p class="hint">Sem obras.</p>';
 }
-function refreshCounts(){$('cObras').textContent=obras.length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
-function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();refreshCounts();}
+function refreshCounts(){$('cObras').textContent=obras.filter(o=>o.status!=='rascunho').length;const cr=$('cRasc');if(cr)cr.textContent=obras.filter(o=>o.status==='rascunho').length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
+function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();renderRascunhos();refreshCounts();}
 $('srcObra').oninput=e=>renderObras(e.target.value);
 $('srcForn').oninput=e=>renderForn(e.target.value);
 $('filtForn').onchange=()=>renderForn($('srcForn').value);
@@ -968,7 +1100,7 @@ $('expXlsx').onclick=()=>{
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([["DASHBOARD DE ANÁLISE E FILTROS"],["Use Inserir > Tabela Dinâmica sobre HISTORICO_OBRAS."]]),"DASHBOARD");
   // HISTORICO_OBRAS
   const ho=[["Obra","Data","Arquitetura","Gerenciadora","Metragem","Regime","Ano","Engenheiro","Administrativo","Prazo Prev","Prazo Real","Orc Prev","Orc Real"]];
-  obras.forEach(o=>{const t=obraTotals(o);const p=o.prazos||{};const eq=o.equipe||{};ho.push([o.obra,fmtDate(o.data),o.arq,o.ger||'',n(o.metragem),o.regime,n(o.ano),o.eng,eq.adm||'',(p.prazo||{}).pv||0,(p.prazo||{}).rl||0,t.tp,t.tr]);});
+  obras.forEach(o=>{const t=obraTotals(o);const p=o.prazos||{};const adm=(Array.isArray(o.equipe)?o.equipe:[]).find(x=>/adm|administrat/i.test(x.funcao||''));ho.push([o.obra,fmtDate(o.data),o.arq,o.ger||'',n(o.metragem),o.regime,n(o.ano),o.eng,adm?adm.nome:'',(p.prazo||{}).pv||0,(p.prazo||{}).rl||0,t.tp,t.tr]);});
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ho),"HISTORICO_OBRAS");
   // HISTORICO_FORNECEDORES
   const hf=[["Obra","Departamento","Tipo","Empresa","Avaliação","Porte","Feedback","Ano","Engenheiro","Usada em Orçamentos","Concorrência"]];
@@ -990,7 +1122,7 @@ $('impFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const rd=
   rd.onload=ev=>{try{const wb=XLSX.read(ev.target.result,{type:'array'});let no=0,nf=0;
     const so=wb.Sheets["HISTORICO_OBRAS"];if(so){XLSX.utils.sheet_to_json(so).forEach(r=>{const nome=r.Obra||r.obra;if(!nome)return;
       const o={obra:String(nome).trim(),data:r.Data||'',arq:r.Arquitetura||'',ger:r.Gerenciadora||'',metragem:r.Metragem||'',regime:r.Regime||'',ano:r.Ano||'',eng:r.Engenheiro||'',
-        prazos:{prazo:{pv:num(r["Prazo Prev"]),rl:num(r["Prazo Real"])},cinza:{pv:num(r["Orc Prev"]),rl:num(r["Orc Real"])},acab:{pv:0,rl:0},extras:{pv:0,rl:0},equipe:{pv:0,rl:0}},equipe:{adm:r.Administrativo||''},eng_qa:{},rel_qa:{}};
+        prazos:{prazo:{pv:num(r["Prazo Prev"]),rl:num(r["Prazo Real"])},cinza:{pv:num(r["Orc Prev"]),rl:num(r["Orc Real"])},acab:{pv:0,rl:0},extras:{pv:0,rl:0},equipe:{pv:0,rl:0}},equipe:[...(r.Engenheiro?[{nome:String(r.Engenheiro).trim(),funcao:'Engenheiro'}]:[]),...(r.Administrativo?[{nome:String(r.Administrativo).trim(),funcao:'ADM'}]:[])],eng_qa:{},rel_qa:{}};
       const i=obras.findIndex(x=>norm(x.obra)===norm(o.obra));if(i>=0)obras[i]=o;else{obras.push(o);no++;}});}
     const sf=wb.Sheets["HISTORICO_FORNECEDORES"];if(sf){XLSX.utils.sheet_to_json(sf).forEach(r=>{const emp=r.Empresa||r.empresa;if(!emp)return;
       const tipo=r.Tipo||r.Departamento||'';
@@ -1010,11 +1142,11 @@ $('impFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const rd=
   rd.readAsArrayBuffer(file);e.target.value='';};
 
 /* ---------- wipe ---------- */
-$('wipe').onclick=()=>{if(confirm('Apagar TODOS os dados salvos?')){obras=[];forn=[];save();renderAll();toast('Dados apagados','warn');}};
+$('wipe').onclick=()=>{if(confirm('Apagar TODOS os dados salvos?')){commitSynced(()=>{obras=[];forn=[];tipos=[];}).then(()=>toast('Dados apagados','warn'));}};
 
 /* ---------- init ---------- */
 migrate();
-fornRow();recalc();renderAll();persistLocal();
+fornRow();equipeRow();recalc();renderAll();persistLocal();
 
 /* ---- painel Supabase ---- */
 if($('sbUrl')){$('sbUrl').value=sbUrl;$('sbKey').value=sbKey;}
