@@ -279,6 +279,15 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 .qa-v .aa{font-size:14px;margin-top:3px;white-space:pre-wrap}
 .modal .ptable th{background:transparent;color:var(--muted);position:static}
 .modal .ptable td{border-bottom:1px solid var(--line)}
+.io-lock{display:flex;justify-content:center;padding:30px 0}
+.lock-box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:34px 30px;max-width:360px;width:100%;text-align:center;box-shadow:0 10px 40px -24px rgba(0,0,0,.3)}
+.lock-ic{font-size:34px;margin-bottom:8px}
+.lock-box h2{font-size:20px;margin:0 0 6px}
+.lock-box>p{color:var(--muted);font-size:13px;margin:0 0 16px}
+.lock-box input{width:100%;text-align:center;letter-spacing:.3em;font-size:18px;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:12px;font-family:inherit}
+.lock-box input:focus{outline:none;border-color:var(--clay)}
+.lock-box .btn{width:100%}
+.lock-err{color:var(--bad);font-weight:600;font-size:13px;min-height:18px;margin:10px 0 0}
 @media(max-width:720px){.modal{padding:16px 8px}}
 .print-only{display:none}
 @media print{
@@ -474,6 +483,17 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 <!-- ============ DADOS ============ -->
 <section class="view" id="v-io">
   <div class="lead"><div><h1>Gerenciar <em>Dados</em></h1><p>Exporte para Excel no mesmo formato da planilha original, ou importe um arquivo existente.</p></div></div>
+  <div id="ioLock" class="io-lock">
+    <div class="lock-box">
+      <div class="lock-ic">🔒</div>
+      <h2>Área do ADM</h2>
+      <p>Esta aba é restrita. Digite a senha para acessar.</p>
+      <input id="ioPin" type="password" inputmode="numeric" placeholder="Senha" autocomplete="off">
+      <button class="btn" id="ioUnlock">Entrar</button>
+      <p class="lock-err" id="ioErr"></p>
+    </div>
+  </div>
+  <div id="ioGate" style="display:none">
   <div class="section"><div class="sh"><span class="num">↓</span><h2>Exportar</h2></div><div class="bd">
     <p class="hint" style="margin-top:0">Gera um <b>.xlsx</b> com as abas PREENCHER_AQUI, DASHBOARD, HISTORICO_OBRAS e HISTORICO_FORNECEDORES — pronto para Tabela Dinâmica.</p>
     <div class="io-row" style="margin-top:12px">
@@ -504,6 +524,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
     <p class="hint" style="margin-top:0">Apaga todos os dados salvos neste navegador. Não pode ser desfeito.</p>
     <button class="btn ghost" id="wipe" style="margin-top:12px;border-color:var(--bad);color:var(--bad)">Apagar todos os dados</button>
   </div></div>
+  </div>
 </section>
 </main>
 
@@ -1098,8 +1119,15 @@ $('filtForn').onchange=()=>renderForn($('srcForn').value);
 $('sortForn').onchange=()=>renderForn($('srcForn').value);
 
 /* ---------- navegação ---------- */
+const IO_PIN_HASH=2088438773;
+function hashPin(s){let x=5381;for(const c of String(s))x=(((x<<5)+x)+c.charCodeAt(0))>>>0;return x;}
+function lockIo(){const g=$('ioGate'),l=$('ioLock');if(g)g.style.display='none';if(l)l.style.display='flex';const pin=$('ioPin');if(pin)pin.value='';const er=$('ioErr');if(er)er.textContent='';setTimeout(()=>{const p=$('ioPin');if(p)p.focus();},60);}
+function tryIoPin(){const pin=$('ioPin');if(!pin)return;if(hashPin(pin.value.trim())===IO_PIN_HASH){$('ioLock').style.display='none';$('ioGate').style.display='block';}else{$('ioErr').textContent='Senha incorreta.';pin.value='';pin.focus();}}
+if($('ioUnlock'))$('ioUnlock').onclick=tryIoPin;
+if($('ioPin'))$('ioPin').addEventListener('keydown',e=>{if(e.key==='Enter')tryIoPin();});
 function go(v){document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='v-'+v));
+  if(v==='io')lockIo();
   if(v!=='form')renderAll();}
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 
