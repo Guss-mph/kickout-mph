@@ -280,6 +280,18 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 .modal .ptable th{background:transparent;color:var(--muted);position:static}
 .modal .ptable td{border-bottom:1px solid var(--line)}
 @media(max-width:720px){.modal{padding:16px 8px}}
+.print-only{display:none}
+@media print{
+  body>*:not(#modal){display:none !important}
+  #modal{position:static !important;display:block !important;background:#fff !important;padding:0 !important;inset:auto !important}
+  #modal .modal-card{box-shadow:none !important;max-height:none !important;max-width:100% !important;width:100% !important;border-radius:0 !important;overflow:visible !important;animation:none !important}
+  #modalX,.print-btn{display:none !important}
+  .print-only{display:block !important}
+  .print-brand{padding:0 26px 10px;margin:0 0 8px;border-bottom:2px solid var(--clay);font-size:13px;color:var(--ink);font-weight:600}
+  .print-brand b{color:var(--clay)}
+  .kv,.qa-v,.hcard,tr{break-inside:avoid}
+  @page{margin:12mm}
+}
 </style>
 </head>
 <body>
@@ -998,8 +1010,10 @@ window.viewObra=k=>{
     return its.length?`<div class="mh">Relacionamentos</div>${its.join('')}`:'';};
   const eqArr=Array.isArray(o.equipe)?o.equipe:[];
   const eqItems=eqArr.map(p=>[p.funcao||'—',p.nome]);
-  let html=`<div class="modal-head"><div class="eyebrow-l">Obra</div><h3>${esc(o.obra)}</h3>
-    <div class="sub">${fmtDate(o.data)||'sem data'} · ${esc(o.regime)||'regime —'}</div></div>
+  let html=`<div class="print-only print-brand"><b>Kick|Out</b> · Documento de Kickout — MpH Engenharia</div>
+    <div class="modal-head"><div class="eyebrow-l">Obra</div><h3>${esc(o.obra)}</h3>
+    <div class="sub">${fmtDate(o.data)||'sem data'} · ${esc(o.regime)||'regime —'}</div>
+    <button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
     <div class="modal-body">
     <div class="mh">Identificação</div>
     <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Gerenciadora',esc(o.ger))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}</div>
