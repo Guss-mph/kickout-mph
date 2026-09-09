@@ -288,6 +288,24 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 .lock-box input:focus{outline:none;border-color:var(--clay)}
 .lock-box .btn{width:100%}
 .lock-err{color:var(--bad);font-weight:600;font-size:13px;min-height:18px;margin:10px 0 0}
+.login-screen{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#3E3E3E,#242424);display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:#fff;border-radius:20px;padding:34px 30px;max-width:430px;width:100%;box-shadow:0 20px 60px -20px rgba(0,0,0,.5);text-align:center}
+.login-logo .mk{font-family:"Montserrat",sans-serif;font-weight:800;font-size:30px;color:var(--ink)}
+.login-logo .mk em{color:var(--clay);font-style:normal}
+.login-sub{color:var(--muted);font-size:14px;margin:6px 0 22px}
+.login-roles{display:flex;flex-direction:column;gap:10px}
+.role-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--mist);border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-family:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;transition:.15s}
+.role-btn small{font-weight:500;font-size:12px;color:var(--muted)}
+.role-btn:hover{border-color:var(--clay);background:#fff;transform:translateY(-1px)}
+.gestor-pass{margin-top:16px}
+.gestor-pass input{width:100%;text-align:center;letter-spacing:.3em;font-size:18px;padding:12px;border:1px solid var(--line);border-radius:10px;font-family:inherit}
+.gestor-pass input:focus{outline:none;border-color:var(--clay)}
+.login-actions{display:flex;gap:8px;margin-top:12px}
+.login-actions .btn{flex:1}
+.role-badge{font-size:12px;font-weight:700;color:#fff;background:var(--clay);border-radius:999px;padding:5px 12px;white-space:nowrap}
+.logout-btn{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.logout-btn:hover{border-color:#fff}
+body.setor-mode .sec-done{display:none}
 @media(max-width:720px){.modal{padding:16px 8px}}
 .print-only{display:none}
 @media print{
@@ -304,6 +322,27 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 </style>
 </head>
 <body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><span class="mk">Kick<em>|</em>Out</span></div>
+    <p class="login-sub">Selecione seu acesso para continuar</p>
+    <div class="login-roles" id="loginRoles">
+      <button class="role-btn" data-role="gestor">👤 Gestor <small>Cria e valida os kickouts — requer senha</small></button>
+      <button class="role-btn" data-role="suprimentos">📦 Suprimentos <small>Preenche a Avaliação de Fornecedores</small></button>
+      <button class="role-btn" data-role="orcamentos">💰 Orçamentos <small>Preenche os Prazos e Orçamentos</small></button>
+      <button class="role-btn" data-role="engenharia">🏗️ Engenharia <small>Preenche a seção de Engenharia</small></button>
+      <button class="role-btn" data-role="admobra">📋 ADM de Obra <small>Preenche a Equipe do Projeto</small></button>
+    </div>
+    <div id="gestorPass" class="gestor-pass" style="display:none">
+      <input id="loginPin" type="password" inputmode="numeric" placeholder="Senha do Gestor" autocomplete="off">
+      <div class="login-actions">
+        <button class="btn ghost" id="loginBack">Voltar</button>
+        <button class="btn" id="loginEnter">Entrar</button>
+      </div>
+      <p class="lock-err" id="loginErr"></p>
+    </div>
+  </div>
+</div>
 <header>
   <div class="head-in">
     <div class="brand"><span class="mk">Kick<em>|</em>Out</span><small>Gestão de Obras</small><span id="sbStatus" class="sbdot off">● Local</span></div>
@@ -316,6 +355,8 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
       <button data-v="dash">Dashboard</button>
       <button data-v="io">Dados</button>
     </nav>
+    <span id="roleBadge" class="role-badge" style="display:none"></span>
+    <button id="logoutBtn" class="logout-btn" style="display:none">⇄ Trocar acesso</button>
   </div>
 </header>
 
@@ -338,7 +379,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   </div>
 
   <!-- 1 -->
-  <div class="section">
+  <div class="section" data-sec="ident">
     <div class="sh"><span class="num">1</span><h2>Identificação da Obra</h2><div class="sec-meta"><span class="sec-tag">Engenharia / Coord.</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="ident"> Parte preenchida</label></div></div>
     <div class="bd">
       <div class="grid g3">
@@ -355,7 +396,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   </div>
 
   <!-- 2 -->
-  <div class="section">
+  <div class="section" data-sec="equipe">
     <div class="sh"><span class="num">2</span><h2>Equipe do Projeto</h2><div class="sec-meta"><span class="sec-tag">Coordenação / ADM</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="equipe"> Parte preenchida</label></div></div>
     <div class="bd">
       <p class="hint" style="margin:-2px 0 14px">Adicione cada pessoa e informe a função. A pessoa com função <b>Engenheiro</b> é usada como responsável nos relatórios, na tabela de Obras e no histórico de fornecedores.</p>
@@ -366,7 +407,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   </div>
 
   <!-- 3 -->
-  <div class="section">
+  <div class="section" data-sec="prazos">
     <div class="sh"><span class="num">3</span><h2>Prazos e Orçamentos</h2><div class="sec-meta"><span class="sec-tag">Orçamentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="prazos"> Parte preenchida</label></div></div>
     <div class="bd">
       <table class="ptable" id="ptable">
@@ -386,7 +427,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   </div>
 
   <!-- 4 -->
-  <div class="section">
+  <div class="section" data-sec="forn">
     <div class="sh"><span class="num">4</span><h2>Avaliação de Fornecedores</h2><div class="sec-meta"><span class="sec-tag">Suprimentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="forn"> Parte preenchida</label></div></div>
     <div class="bd">
       <p class="hint" style="margin:-2px 0 14px">Escala das notas — <b>0</b> Péssimo · <b>1</b> Ruim · <b>2</b> Regular · <b>3</b> Satisfatório · <b>4</b> Bom · <b>5</b> Excelente</p>
@@ -396,23 +437,34 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   </div>
 
   <!-- 5 -->
-  <div class="section">
+  <div class="section" data-sec="eng">
     <div class="sh"><span class="num">5</span><h2>Engenharia</h2><div class="sec-meta"><span class="sec-tag">Gestão de Obras</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="eng"> Parte preenchida</label></div></div>
     <div class="bd" id="engBlock"></div>
   </div>
 
   <!-- 6 -->
-  <div class="section">
+  <div class="section" data-sec="rel">
     <div class="sh"><span class="num">6</span><h2>Relacionamentos</h2><div class="sec-meta"><span class="sec-tag">Todos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="rel"> Parte preenchida</label></div></div>
     <div class="bd" id="relBlock"></div>
   </div>
 
-  <div class="actbar">
+  <div class="actbar" id="formActions">
     <span class="sp" id="editFlag"></span>
     <button class="btn ghost" id="btnClear">Limpar formulário</button>
     <button class="btn ghost" id="btnRascunho">💾 Salvar rascunho</button>
     <button class="btn" id="btnSave">✓ Validar Kickout</button>
   </div>
+  <div class="actbar" id="setorActions" style="display:none">
+    <span class="sp" id="setorFlag"></span>
+    <button class="btn ghost" id="setorBack">← Voltar</button>
+    <button class="btn" id="setorSave">💾 Salvar minha parte</button>
+  </div>
+</section>
+
+<!-- ============ SETOR (minhas obras) ============ -->
+<section class="view" id="v-setor">
+  <div class="lead"><div><h1 id="setorTitle">Minhas <em>obras</em></h1><p id="setorSub">Selecione uma obra para preencher a sua parte.</p></div></div>
+  <div id="setorList"></div>
 </section>
 
 <!-- ============ OBRAS ============ -->
@@ -1112,7 +1164,7 @@ function renderDash(){
   $('dashAno').innerHTML=anos.length?anos.map(a=>`<div class="rank clickable" onclick="viewAno('${jsq(a)}')"><span class="nm">${a}</span><div class="minibar"><div style="width:${byAno[a]/maxA*100}%"></div></div><span class="vv">${byAno[a]}<small>obra(s)</small></span><span class="chev">›</span></div>`).join(''):'<p class="hint">Sem obras.</p>';
 }
 function refreshCounts(){$('cObras').textContent=obras.filter(o=>o.status!=='rascunho').length;const cr=$('cRasc');if(cr)cr.textContent=obras.filter(o=>o.status==='rascunho').length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
-function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();renderRascunhos();refreshCounts();}
+function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();renderRascunhos();refreshCounts();if(currentRole&&ROLES[currentRole]&&!ROLES[currentRole].full)renderSetorList();}
 $('srcObra').oninput=e=>renderObras(e.target.value);
 $('srcForn').oninput=e=>renderForn(e.target.value);
 $('filtForn').onchange=()=>renderForn($('srcForn').value);
@@ -1127,9 +1179,105 @@ if($('ioUnlock'))$('ioUnlock').onclick=tryIoPin;
 if($('ioPin'))$('ioPin').addEventListener('keydown',e=>{if(e.key==='Enter')tryIoPin();});
 function go(v){document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='v-'+v));
-  if(v==='io')lockIo();
-  if(v!=='form')renderAll();}
+  if(v==='io'){ if(currentRole==='gestor'){$('ioGate').style.display='block';$('ioLock').style.display='none';} else lockIo(); }
+  if(v==='setor')renderSetorList();
+  if(v!=='form'&&v!=='setor')renderAll();}
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+
+/* ================= LOGIN / PAPÉIS ================= */
+const ROLES={
+  gestor:{nome:'Gestor', full:true},
+  suprimentos:{nome:'Suprimentos', sec:'forn'},
+  orcamentos:{nome:'Orçamentos', sec:'prazos'},
+  engenharia:{nome:'Engenharia', sec:'eng'},
+  admobra:{nome:'ADM de Obra', sec:'equipe'}
+};
+let currentRole=null, currentObraName=null;
+
+document.querySelectorAll('.role-btn').forEach(b=>b.onclick=()=>{
+  const r=b.dataset.role;
+  if(r==='gestor'){ $('loginRoles').style.display='none'; $('gestorPass').style.display='block'; setTimeout(()=>$('loginPin').focus(),50); }
+  else enterApp(r);
+});
+function loginBackFn(){ $('gestorPass').style.display='none'; $('loginRoles').style.display=''; $('loginPin').value=''; $('loginErr').textContent=''; }
+if($('loginBack'))$('loginBack').onclick=loginBackFn;
+function tryGestor(){ if(hashPin($('loginPin').value.trim())===IO_PIN_HASH){ enterApp('gestor'); loginBackFn(); } else { $('loginErr').textContent='Senha incorreta.'; $('loginPin').value=''; $('loginPin').focus(); } }
+if($('loginEnter'))$('loginEnter').onclick=tryGestor;
+if($('loginPin'))$('loginPin').addEventListener('keydown',e=>{if(e.key==='Enter')tryGestor();});
+
+function restoreFullForm(){
+  $('formActions').style.display='';$('setorActions').style.display='none';
+  const h=document.querySelector('#v-form .howto'); if(h)h.style.display='';
+  document.querySelectorAll('#v-form .section').forEach(s=>s.style.display='');
+}
+function enterApp(role){
+  currentRole=role; currentObraName=null;
+  $('loginScreen').style.display='none';
+  $('roleBadge').style.display=''; $('roleBadge').textContent=ROLES[role].nome;
+  $('logoutBtn').style.display='';
+  if(ROLES[role].full){
+    document.body.classList.remove('setor-mode');
+    $('nav').style.display=''; restoreFullForm(); clearForm(); go('form');
+  } else {
+    document.body.classList.add('setor-mode');
+    $('nav').style.display='none'; renderSetorList(); go('setor');
+  }
+  window.scrollTo(0,0);
+}
+if($('logoutBtn'))$('logoutBtn').onclick=()=>{
+  currentRole=null; currentObraName=null;
+  document.body.classList.remove('setor-mode'); restoreFullForm();
+  $('nav').style.display=''; $('roleBadge').style.display='none'; $('logoutBtn').style.display='none';
+  $('loginScreen').style.display='flex'; loginBackFn();
+};
+
+/* lista de obras abertas para o setor preencher */
+function renderSetorList(){
+  const box=$('setorList'); if(!box)return;
+  const r=ROLES[currentRole]; if(!r||r.full)return;
+  $('setorTitle').innerHTML='Obras aguardando <em>'+esc(r.nome)+'</em>';
+  const rs=obras.filter(o=>o.status==='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  if(!rs.length){box.innerHTML='<p class="hint">Nenhuma obra aberta no momento. Aguarde o Gestor criar uma obra em rascunho.</p>';return;}
+  box.innerHTML=rs.map(o=>{
+    const done=Array.isArray(o.done)?o.done:[];
+    const feito=done.includes(r.sec);
+    return `<div class="rasc-card">
+      <div class="rasc-top">
+        <div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div>
+        <span class="prog-chip ${feito?'on':''}">${feito?'✓ você já preencheu':'⏳ pendente'}</span>
+      </div>
+      <div class="rasc-acts"><button class="btn" onclick="abrirSetorObra('${jsq(o.obra)}')">✎ Preencher minha parte</button></div>
+    </div>`;
+  }).join('');
+}
+window.abrirSetorObra=k=>{
+  const o=obras.find(x=>norm(x.obra)===norm(k)&&x.status==='rascunho'); if(!o)return;
+  currentObraName=o.obra; populate(o);
+  const r=ROLES[currentRole];
+  $('formActions').style.display='none'; $('setorActions').style.display='flex';
+  $('setorFlag').textContent=o.obra+' · '+r.nome;
+  const h=document.querySelector('#v-form .howto'); if(h)h.style.display='none';
+  document.querySelectorAll('#v-form .section').forEach(s=>{ s.style.display=(s.dataset.sec===r.sec)?'':'none'; });
+  go('form'); window.scrollTo(0,0);
+};
+if($('setorBack'))$('setorBack').onclick=()=>{ currentObraName=null; renderSetorList(); go('setor'); window.scrollTo(0,0); };
+if($('setorSave'))$('setorSave').onclick=()=>{
+  const r=ROLES[currentRole]; if(!r||r.full)return;
+  if(!currentObraName){toast('Nenhuma obra selecionada','warn');return;}
+  const {o,fs}=collect(); const sec=r.sec; const name=currentObraName;
+  commitSynced(()=>{
+    const idx=obras.findIndex(x=>norm(x.obra)===norm(name)&&x.status==='rascunho');
+    if(idx<0)return;
+    const ob=obras[idx];
+    if(sec==='forn') ob.draftForn=fs;
+    else if(sec==='prazos') ob.prazos=o.prazos;
+    else if(sec==='eng') ob.eng_qa=o.eng_qa;
+    else if(sec==='equipe'){ ob.equipe=o.equipe; ob.eng=o.eng; }
+    else if(sec==='rel') ob.rel_qa=o.rel_qa;
+    ob.done=Array.isArray(ob.done)?ob.done:[];
+    if(!ob.done.includes(sec))ob.done.push(sec);
+  }).then(()=>{ toast('Sua parte foi salva! ✓','ok'); currentObraName=null; renderSetorList(); go('setor'); window.scrollTo(0,0); });
+};
 
 /* ---------- export xlsx (formato original) ---------- */
 function obraTotals(o){const p=o.prazos||{};const k=['cinza','acab','extras','equipe'];return{tp:k.reduce((s,x)=>s+((p[x]||{}).pv||0),0),tr:k.reduce((s,x)=>s+((p[x]||{}).rl||0),0)};}
