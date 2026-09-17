@@ -306,6 +306,11 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
 .logout-btn{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
 .logout-btn:hover{border-color:#fff}
 body.setor-mode .sec-done{display:none}
+.motivo-box{margin-top:14px;padding:14px 16px;background:rgba(239,50,54,.05);border:1px solid rgba(239,50,54,.25);border-radius:12px}
+.motivo-box select,.motivo-box textarea{width:100%}
+.satis-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.satis-row select{flex:1;min-width:200px}
+.relNa.on-na{background:var(--muted);color:#fff;border-color:var(--muted)}
 @media(max-width:720px){.modal{padding:16px 8px}}
 .print-only{display:none}
 @media print{
@@ -391,6 +396,7 @@ body.setor-mode .sec-done{display:none}
           <select id="f_regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
         <div class="fld"><label>Metragem (m²)</label><input id="f_metr" type="number" step="any" placeholder="300"></div>
         <div class="fld"><label>Ano de Conclusão</label><input id="f_ano" type="number" placeholder="2025"></div>
+        <div class="fld"><label>Complexidade da obra</label><select id="f_complex"><option value="">—</option><option>Baixa</option><option>Média</option><option>Alta</option><option>Muito alta</option></select></div>
       </div>
     </div>
   </div>
@@ -421,6 +427,18 @@ body.setor-mode .sec-done{display:none}
           <tr class="total"><td>Total (R$)</td><td class="ro" id="t_pv">0</td><td class="ro" id="t_rl">0</td><td class="dev ro" id="t_dev">0</td></tr>
         </tbody>
       </table>
+      <div id="atrasoBox" class="motivo-box" style="display:none">
+        <label class="sublabel">⚠ Motivo do atraso (prazo real acima do previsto)</label>
+        <select id="f_atrasoMot"><option value="">Selecione…</option><option>Alterações solicitadas pelo cliente</option><option>Demora nas definições da arquitetura</option><option>Problemas de projeto / compatibilização</option><option>Problemas de fornecimento</option><option>Problemas de mão de obra</option><option>Planejamento interno da construtora</option><option>Fatores externos (clima, órgãos, licenças)</option><option>Outro</option></select>
+        <button type="button" class="relToggle" id="atrasoObsBtn" style="margin-top:8px">+ observação</button>
+        <div id="atrasoObsWrap" style="display:none;margin-top:8px"><textarea id="f_atrasoObs" placeholder="Observação sobre o atraso (opcional)…"></textarea></div>
+      </div>
+      <div id="desvioBox" class="motivo-box" style="display:none">
+        <label class="sublabel">⚠ Motivo do desvio de orçamento (total real acima do previsto)</label>
+        <select id="f_desvioMot"><option value="">Selecione…</option><option>Alterações de escopo / cliente</option><option>Erro na elaboração do orçamento</option><option>Aumento de preços de fornecedores</option><option>Retrabalho</option><option>Serviços extras não previstos</option><option>Problemas de projeto</option><option>Outro</option></select>
+        <button type="button" class="relToggle" id="desvioObsBtn" style="margin-top:8px">+ observação</button>
+        <div id="desvioObsWrap" style="display:none;margin-top:8px"><textarea id="f_desvioObs" placeholder="Observação sobre o desvio (opcional)…"></textarea></div>
+      </div>
       <p class="hint">O Total soma Fase Cinza + Acabamentos + Extras + Equipe (o Prazo não entra na soma).</p>
       <div class="fld" style="margin-top:16px"><label>Observações</label><textarea id="f_obs"></textarea></div>
     </div>
@@ -718,12 +736,14 @@ const ENG = [
   {q:"Houveram muitas compras de urgência?",type:"yesno",good:"Não"},
   {q:"Caderno de Notas dos fornecedores gerado e já encaminhado pro cliente?",type:"yesno",good:"Sim",na:true},
   {q:"Feedback do Mestre (suprimentos, gestão de obras e afins)",type:"text",ph:"Feedback do mestre…"},
-  {q:"As Built já iniciado?",type:"yesno",good:"Sim",na:true,prazo:true}
+  {q:"As Built já iniciado?",type:"yesno",good:"Sim",na:true,prazo:true},
+  {q:"Algum problema que você já viu se repetir em outras obras? (padrão recorrente)",type:"text",ph:"Descreva o padrão recorrente, se houver…"}
 ];
 const REL = [
   {q:"Como foi o relacionamento com o cliente?",type:"comment"},
-  {q:"Como foi o relacionamento com a arquitetura / gerenciadora?",type:"comment"},
-  {q:"Como foi o relacionamento interno (Orç + Supri + Eng + ADM)?",type:"group",subs:["Orçamentos","Suprimentos","Engenharia","ADM"]}
+  {q:"Como foi o relacionamento com a arquitetura?",type:"comment"},
+  {q:"Como foi o relacionamento interno (Orç + Supri + Eng + ADM)?",type:"group",subs:["Orçamentos","Suprimentos","Engenharia","ADM"]},
+  {q:"Relacionamento com a gerenciadora",type:"satis",na:true}
 ];
 function buildEng(){
   const box=$('engBlock');
@@ -753,11 +773,21 @@ function buildEng(){
 }
 function buildRel(){
   const box=$('relBlock');
+  const SAT=['Muito satisfeito','Satisfeito','Parcialmente satisfeito','Insatisfeito','Muito insatisfeito'];
   box.innerHTML=REL.map((c,i)=>{
     if(c.type==='comment') return `<div class="qa" data-i="${i}"><div class="q">${c.q}</div><textarea class="relTxt" placeholder="Comentário…"></textarea></div>`;
+    if(c.type==='satis') return `<div class="qa" data-i="${i}"><div class="q">${c.q}</div>
+      <div class="satis-row"><select class="relSatis"><option value="">Nível de satisfação…</option>${SAT.map(s=>`<option>${s}</option>`).join('')}</select>
+      <button type="button" class="relToggle relNa" data-on="0">N/A — sem gerenciadora</button></div>
+      <textarea class="relTxt" placeholder="Comentário…"></textarea></div>`;
     return `<div class="qa" data-i="${i}"><div class="q">${c.q}</div><div class="rel-group">${
       c.subs.map((s,j)=>`<div class="rel-sub" data-j="${j}"><label class="sublabel">${esc(s)}</label><textarea class="relTxt" placeholder="Comentário sobre ${esc(s)}…"></textarea></div>`).join('')}</div></div>`;
   }).join('');
+  box.querySelectorAll('.relNa').forEach(btn=>btn.onclick=()=>{
+    const on=btn.dataset.on!=='1'; btn.dataset.on=on?'1':'0'; btn.classList.toggle('on-na',on);
+    const qa=btn.closest('.qa'); qa.querySelector('.relSatis').disabled=on; qa.querySelector('.relTxt').disabled=on;
+    qa.querySelector('.relSatis').style.opacity=on?.5:1; qa.querySelector('.relTxt').style.opacity=on?.5:1;
+  });
 }
 buildEng(); buildRel();
 
@@ -846,6 +876,7 @@ function addTipo(t){
 }
 $('addForn').onclick=()=>fornRow();
 $('addEq').onclick=()=>equipeRow();
+[['atrasoObsBtn','atrasoObsWrap'],['desvioObsBtn','desvioObsWrap']].forEach(([b,w])=>{const bt=$(b);if(bt)bt.onclick=()=>{const wr=$(w);const show=(wr.style.display==='none'||!wr.style.display);wr.style.display=show?'block':'none';bt.textContent=show?'− observação':'+ observação';};});
 
 /* ---------- prazos calc ---------- */
 function recalc(){
@@ -859,6 +890,10 @@ function recalc(){
   });
   $('t_pv').textContent=money(tp); $('t_rl').textContent=money(tr);
   const td=tp-tr; const e=$('t_dev'); e.textContent=money(td); e.className='dev ro '+(td>0?'pos':td<0?'neg':'');
+  const pr=document.querySelector('#ptable tr[data-k="prazo"]');
+  const atraso = pr && num(pr.querySelector('.rl').value) > num(pr.querySelector('.pv').value);
+  const ab=$('atrasoBox'); if(ab)ab.style.display=atraso?'block':'none';
+  const db=$('desvioBox'); if(db)db.style.display=(tr>tp)?'block':'none';
 }
 document.querySelector('#ptable').addEventListener('input',recalc);
 
@@ -868,6 +903,9 @@ function collect(){
   const o={
     obra:$('f_obra').value.trim(), data:$('f_data').value, arq:$('f_arq').value.trim(), ger:$('f_ger').value.trim(),
     metragem:$('f_metr').value, regime:$('f_regime').value, ano:$('f_ano').value, eng:eqEng(_eqL),
+    complex:$('f_complex')?$('f_complex').value:'',
+    atraso:{motivo:$('f_atrasoMot')?$('f_atrasoMot').value:'',obs:$('f_atrasoObs')?$('f_atrasoObs').value:''},
+    desvio:{motivo:$('f_desvioMot')?$('f_desvioMot').value:'',obs:$('f_desvioObs')?$('f_desvioObs').value:''},
     equipe:_eqL,
     prazos:{}, obs:$('f_obs').value, eng_qa:{}, rel_qa:{}
   };
@@ -880,6 +918,7 @@ function collect(){
     const r={ans:sel?sel.dataset.a:'',txt:ta?ta.value:''}; if(pz)r.prazo=pz.value; return r;});
   o.rel_qa=REL.map((c,i)=>{const bx=$('relBlock').querySelector(`.qa[data-i="${i}"]`);
     if(c.type==='comment')return {txt:bx.querySelector('.relTxt').value};
+    if(c.type==='satis'){const na=bx.querySelector('.relNa').dataset.on==='1';return {satis:bx.querySelector('.relSatis').value,txt:bx.querySelector('.relTxt').value,na};}
     return {subs:[...bx.querySelectorAll('.rel-sub')].map(sb=>({txt:sb.querySelector('.relTxt').value}))};});
   const fs=[];
   document.querySelectorAll('#fornList .forn').forEach(w=>{
@@ -896,6 +935,12 @@ function collect(){
 function populate(o){
   $('f_obra').value=o.obra||'';$('f_data').value=o.data||'';$('f_arq').value=o.arq||'';$('f_ger').value=o.ger||'';
   $('f_metr').value=o.metragem||'';$('f_regime').value=o.regime||'';$('f_ano').value=o.ano||'';
+  if($('f_complex'))$('f_complex').value=o.complex||'';
+  const at=o.atraso||{},dv=o.desvio||{};
+  if($('f_atrasoMot'))$('f_atrasoMot').value=at.motivo||'';
+  if($('f_atrasoObs')){$('f_atrasoObs').value=at.obs||'';if(at.obs){$('atrasoObsWrap').style.display='block';$('atrasoObsBtn').textContent='− observação';}}
+  if($('f_desvioMot'))$('f_desvioMot').value=dv.motivo||'';
+  if($('f_desvioObs')){$('f_desvioObs').value=dv.obs||'';if(dv.obs){$('desvioObsWrap').style.display='block';$('desvioObsBtn').textContent='− observação';}}
   $('eqList').innerHTML='';(Array.isArray(o.equipe)?o.equipe:[]).forEach(p=>equipeRow(p));if(!$('eqList').children.length)equipeRow();
   $('f_obs').value=o.obs||'';
   document.querySelectorAll('#ptable tbody tr[data-k]').forEach(t=>{const p=(o.prazos||{})[t.dataset.k]||{};t.querySelector('.pv').value=p.pv||'';t.querySelector('.rl').value=p.rl||'';});
@@ -911,6 +956,7 @@ function populate(o){
   const RQ=Array.isArray(o.rel_qa)?o.rel_qa:[];
   REL.forEach((c,i)=>{const bx=$('relBlock').querySelector(`.qa[data-i="${i}"]`);const d=RQ[i]||{};
     if(c.type==='comment'){bx.querySelector('.relTxt').value=d.txt||'';}
+    else if(c.type==='satis'){bx.querySelector('.relSatis').value=d.satis||'';bx.querySelector('.relTxt').value=d.txt||'';if(d.na){const b=bx.querySelector('.relNa');b.dataset.on='1';b.classList.add('on-na');bx.querySelector('.relSatis').disabled=true;bx.querySelector('.relTxt').disabled=true;bx.querySelector('.relSatis').style.opacity=.5;bx.querySelector('.relTxt').style.opacity=.5;}}
     else{const subs=d.subs||[];bx.querySelectorAll('.rel-sub').forEach((sb,j)=>{const sd=subs[j]||{};sb.querySelector('.relTxt').value=sd.txt||'';});}});
   $('fornList').innerHTML='';
   let mine=[];
@@ -923,7 +969,9 @@ function populate(o){
   recalc();
 }
 function clearForm(){
-  ['f_obra','f_data','f_arq','f_ger','f_metr','f_regime','f_ano','f_obs'].forEach(i=>$(i).value='');
+  ['f_obra','f_data','f_arq','f_ger','f_metr','f_regime','f_ano','f_obs','f_complex','f_atrasoMot','f_atrasoObs','f_desvioMot','f_desvioObs'].forEach(i=>{if($(i))$(i).value='';});
+  if($('atrasoObsWrap'))$('atrasoObsWrap').style.display='none';if($('atrasoObsBtn'))$('atrasoObsBtn').textContent='+ observação';
+  if($('desvioObsWrap'))$('desvioObsWrap').style.display='none';if($('desvioObsBtn'))$('desvioObsBtn').textContent='+ observação';
   $('eqList').innerHTML='';equipeRow();
   document.querySelectorAll('#ptable input').forEach(i=>i.value='');
   buildEng();buildRel();
@@ -1062,6 +1110,9 @@ window.viewObra=k=>{
     const fmt=v=>isMoney?money(v):v.toLocaleString('pt-BR');const cls=d>0?'pos':d<0?'neg':'';
     prz+=`<tr><td>${PL[key]}</td><td style="text-align:right">${fmt(pv)}</td><td style="text-align:right">${fmt(rl)}</td><td class="dev ${cls}" style="text-align:right">${fmt(d)}</td></tr>`;});
   prz+='</tbody></table>';
+  const at=o.atraso||{},dv=o.desvio||{};
+  if(at.motivo||at.obs)prz+=`<div class="aa" style="margin-top:8px"><b style="color:var(--bad)">Motivo do atraso:</b> ${esc(at.motivo)||'—'}${at.obs?' · '+esc(at.obs):''}</div>`;
+  if(dv.motivo||dv.obs)prz+=`<div class="aa"><b style="color:var(--bad)">Motivo do desvio:</b> ${esc(dv.motivo)||'—'}${dv.obs?' · '+esc(dv.obs):''}</div>`;
   const engView=()=>{const EQ=Array.isArray(o.eng_qa)?o.eng_qa:[];
     const its=ENG.map((c,i)=>{const d=EQ[i]||{};
       if(c.type==='text')return (d.txt&&d.txt.trim())?`<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa">${esc(d.txt)}</div></div>`:'';
@@ -1076,6 +1127,9 @@ window.viewObra=k=>{
   const relView=()=>{const RQ=Array.isArray(o.rel_qa)?o.rel_qa:[];
     const its=REL.map((c,i)=>{const d=RQ[i]||{};
       if(c.type==='comment'){return (d.txt&&d.txt.trim())?`<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa">${esc(d.txt)}</div></div>`:'';}
+      if(c.type==='satis'){ if(d.na)return `<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa">N/A — sem gerenciadora</div></div>`;
+        if(!d.satis && !(d.txt&&d.txt.trim()))return '';
+        return `<div class="qa-v"><div class="qq">${esc(c.q)}</div>${d.satis?`<div class="aa"><b>${esc(d.satis)}</b></div>`:''}${(d.txt&&d.txt.trim())?`<div class="aa">${esc(d.txt)}</div>`:''}</div>`;}
       const subs=d.subs||[];
       const rows=c.subs.map((s,j)=>{const sd=subs[j]||{};return (sd.txt&&sd.txt.trim())?`<div class="aa" style="margin-top:4px"><b>${esc(s)}:</b> ${esc(sd.txt)}</div>`:'';}).filter(Boolean);
       return rows.length?`<div class="qa-v"><div class="qq">${esc(c.q)}</div>${rows.join('')}</div>`:'';
@@ -1089,7 +1143,7 @@ window.viewObra=k=>{
     <button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
     <div class="modal-body">
     <div class="mh">Identificação</div>
-    <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Gerenciadora',esc(o.ger))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}</div>
+    <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Gerenciadora',esc(o.ger))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}${kv('Complexidade',esc(o.complex))}</div>
     <div class="mh">Equipe</div>
     ${eqArr.length?`<div class="dl">${eqItems.map(([l,v])=>kv(l,esc(v))).join('')}</div>`:'<p class="hint">Equipe não informada.</p>'}
     <div class="mh">Prazos e Orçamentos</div>${prz}
