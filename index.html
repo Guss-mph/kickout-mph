@@ -56,6 +56,20 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .sec-done{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap}
 .sec-done input{width:16px;height:16px;accent-color:var(--good);cursor:pointer}
 .rasc-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;background:#fff}
+.lifecycle{display:flex;gap:6px;flex-wrap:wrap}
+.ko-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--mist);color:var(--muted);border:1px solid var(--line);white-space:nowrap;margin-left:8px;vertical-align:middle}
+.ko-badge.on{background:rgba(31,166,90,.14);color:#1a7a45;border-color:rgba(31,166,90,.3)}
+.ko-choice{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.ko-choice button{background:#fff;border:none;border-right:1px solid var(--line);padding:8px 14px;font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer}
+.ko-choice button:last-child{border-right:none}
+.ko-choice button.on{background:var(--clay);color:#fff}
+.ko-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ko-fase{display:grid;grid-template-columns:1.3fr .7fr 1fr;gap:8px;align-items:end;margin-bottom:8px}
+.ko-item{margin-bottom:14px}
+.ko-item>label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.ko-compl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.ko-compl b{min-width:90px;font-size:13px}
+@media(max-width:720px){.ko-grid{grid-template-columns:1fr}}
 .rasc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .rasc-name{font-weight:800;font-size:16px}
 .rasc-sub{font-size:12px;color:var(--muted);margin-top:2px}
@@ -355,6 +369,7 @@ body.setor-mode .sec-done{display:none}
       <button data-v="form" class="active">✎ Preencher</button>
       <button data-v="obras">Obras <span class="pill" id="cObras">0</span></button>
       <button data-v="rascunho">Rascunhos <span class="pill" id="cRasc">0</span></button>
+      <button data-v="kickoff">🚀 Kick Off</button>
       <button data-v="forn">Fornecedores <span class="pill" id="cForn">0</span></button>
       <button data-v="tipos">Tipos</button>
       <button data-v="dash">Dashboard</button>
@@ -500,6 +515,106 @@ body.setor-mode .sec-done{display:none}
 <section class="view" id="v-rascunho">
   <div class="lead"><div><h1>Kickouts em <em>Rascunho</em></h1><p>Cada setor preenche a sua parte e marca "Parte preenchida". Na reunião, abra o rascunho, revise e clique em <b>Validar Kickout</b> para virar obra oficial.</p></div></div>
   <div id="rascList"></div>
+</section>
+
+<section class="view" id="v-kickoff">
+  <div class="lead"><div><h1>Termo de Abertura — <em>Kick Off</em></h1><p>Reunião de abertura, preenchida em conjunto. Só o Gestor preenche. Ao concluir, a obra fica pronta para o Kickout ao final.</p></div></div>
+
+  <div id="koList"></div>
+
+  <div id="koForm" style="display:none">
+    <div class="section"><div class="sh"><span class="num">1</span><h2>Dados da Obra</h2></div><div class="bd">
+      <div class="ko-grid">
+        <div class="fld"><label>Obra</label><input data-ko="obra" placeholder="Nome da obra"></div>
+        <div class="fld"><label>Data do Kick Off</label><input data-ko="dataKo" type="date"></div>
+        <div class="fld"><label>Endereço</label><input data-ko="endereco"></div>
+        <div class="fld"><label>Tipo</label><select data-ko="tipo"><option value="">—</option><option>Apartamento</option><option>Casa</option><option>Comercial</option><option>Outro</option></select></div>
+        <div class="fld"><label>Regime</label><select data-ko="regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
+        <div class="fld"><label>Metragem (m²)</label><input data-ko="metragem" type="number" step="any"></div>
+        <div class="fld"><label>Data Fechamento</label><input data-ko="dataFech" type="date"></div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="ko-fase"><b style="align-self:center;font-size:13px">Fase Cinza</b><div class="fld" style="margin:0"><label>%</label><input data-ko="cinzapct" placeholder="%"></div><div class="fld" style="margin:0"><label>R$</label><input data-ko="cinzaRs" type="number" step="any" placeholder="R$"></div></div>
+        <div class="ko-fase"><b style="align-self:center;font-size:13px">Fase Acabamentos</b><div class="fld" style="margin:0"><label>%</label><input data-ko="acabpct" placeholder="%"></div><div class="fld" style="margin:0"><label>R$</label><input data-ko="acabRs" type="number" step="any" placeholder="R$"></div></div>
+        <div class="ko-fase"><b style="align-self:center;font-size:13px">Itens Diferenciados</b><div class="fld" style="margin:0"><label>%</label><input data-ko="itenspct" placeholder="%"></div><div class="fld" style="margin:0"><label>R$</label><input data-ko="itensRs" type="number" step="any" placeholder="R$"></div></div>
+        <div class="ko-fase"><b style="align-self:center;font-size:13px">Equipe Técnica</b><div class="fld" style="margin:0"><label>%</label><input data-ko="eqtecpct" placeholder="%"></div><div class="fld" style="margin:0"><label>R$</label><input data-ko="eqtecRs" type="number" step="any" placeholder="R$"></div></div>
+      </div>
+    </div></div>
+
+    <div class="section"><div class="sh"><span class="num">2</span><h2>Equipe</h2></div><div class="bd">
+      <div class="ko-grid">
+        <div class="fld"><label>Equipe 1</label><input data-ko="eq1"></div>
+        <div class="fld"><label>Equipe 2</label><input data-ko="eq2"></div>
+        <div class="fld"><label>Equipe 3</label><input data-ko="eq3"></div>
+        <div class="fld"><label>Equipe 4</label><input data-ko="eq4"></div>
+        <div class="fld"><label>Orçamentos</label><input data-ko="eqOrc"></div>
+        <div class="fld"><label>Suprimentos</label><input data-ko="eqSup"></div>
+        <div class="fld"><label>Administrativo</label><input data-ko="eqAdm"></div>
+        <div class="fld"><label>Arquitetura</label><input data-ko="arq"></div>
+        <div class="fld"><label>Arq. Responsável</label><input data-ko="arqResp"></div>
+        <div class="fld"><label>Gerenciadora</label><input data-ko="ger"></div>
+      </div>
+    </div></div>
+
+    <div class="section"><div class="sh"><span class="num">3</span><h2>Prazo</h2></div><div class="bd">
+      <div class="ko-grid">
+        <div class="fld"><label>Início</label><input data-ko="inicio" type="date"></div>
+        <div class="fld"><label>Término</label><input data-ko="termino" type="date"></div>
+        <div class="fld"><label>Prazo (meses)</label><input data-ko="prazoMeses" type="number" step="any"></div>
+      </div>
+    </div></div>
+
+    <div class="section"><div class="sh"><span class="num">4</span><h2>Orçamentos</h2></div><div class="bd">
+      <div class="ko-item"><label>1. Apresentação do Projeto e Escopo e Planilha Orçamentária</label><textarea data-ko="oApresentacao"></textarea></div>
+      <div class="ko-item"><label>2. Perfil da arquitetura</label><textarea data-ko="oPerfilArq"></textarea></div>
+      <div class="ko-item"><label>3. Projetos complementares</label>
+        <div class="ko-compl"><b>Elétrica</b><div class="ko-choice" data-ko="cEletrica"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
+        <div class="ko-compl"><b>Hidráulica</b><div class="ko-choice" data-ko="cHidraulica"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
+        <div class="ko-compl"><b>Estrutura</b><div class="ko-choice" data-ko="cEstrutura"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
+        <div class="ko-compl"><b>Outro</b><div class="ko-choice" data-ko="cOutro"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
+      </div>
+      <div class="ko-item"><label>4. Ferramentas de gestão de equipe (Construct In, Trello, etc.)</label><input data-ko="oFerramentas"></div>
+      <div class="ko-item"><label>5. Itens importantes ou que demandam atenção da obra</label><textarea data-ko="oItens"></textarea></div>
+      <div class="ko-item"><label>6. Lista de Fornecedores da Fase Orçamentos</label><textarea data-ko="oFornecedores"></textarea></div>
+    </div></div>
+
+    <div class="section"><div class="sh"><span class="num">5</span><h2>ADM</h2></div><div class="bd">
+      <div class="ko-item"><label>1. Quais dias do mês para envio de Guia de Envio?</label><input data-ko="admGuia"></div>
+      <div class="ko-item"><label>2. Precisa de Nota Cheia?</label><div class="ko-choice" data-ko="admNotaCheia"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>3. Quais os contatos do cliente para envio de notas?</label><textarea data-ko="admContatos"></textarea></div>
+      <div class="ko-item"><label>4. Horário e dias de trabalho</label>
+        <div class="ko-grid">
+          <div class="fld"><label>Segunda à Quinta</label><input data-ko="admSeg"></div>
+          <div class="fld"><label>Sexta</label><input data-ko="admSex"></div>
+          <div class="fld"><label>Sábado</label><input data-ko="admSab"></div>
+        </div>
+      </div>
+    </div></div>
+
+    <div class="section"><div class="sh"><span class="num">6</span><h2>Engenharia</h2></div><div class="bd">
+      <div class="ko-item"><label>A Obra possuirá CNO (Cadastro Nacional de Obras)?</label><div class="ko-choice" data-ko="engCno"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div>
+        <div style="margin-top:8px"><input data-ko="engCnoObs" placeholder="Observação (RT, matrícula, etc.)"></div></div>
+      <div class="ko-item"><label>RT</label><input data-ko="engRt"></div>
+      <div class="ko-item"><label>Liberação no condomínio?</label><div class="ko-choice" data-ko="engLiberacao"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>Cronograma foi finalizado?</label><div class="ko-choice" data-ko="engCronograma"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>Financeiro foi lançado no sistema?</label><div class="ko-choice" data-ko="engFinanceiro"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>Haverá dias fixos para as reuniões em obra?</label><input data-ko="engReunioes"></div>
+      <div class="ko-item"><label>Reunião de Alinhamento Suprimentos x Engenharia já marcada?</label><div class="ko-choice" data-ko="engAlinhamento"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>Quem aprova os mapas de cotação e quem recebe o relatório financeiro?</label><input data-ko="engAprovacao"></div>
+      <div class="ko-item"><label>Próximos passos para o começo da obra</label><textarea data-ko="engProximos"></textarea></div>
+    </div></div>
+
+    <div class="section"><div class="sh"><span class="num">7</span><h2>Relacionamentos / Comercial</h2></div><div class="bd">
+      <div class="ko-item"><label>1. Perfil do cliente</label><textarea data-ko="relPerfil"></textarea></div>
+      <div class="ko-item"><label>2. Cliente cadastrado no sistema?</label><div class="ko-choice" data-ko="relCadastrado"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+    </div></div>
+
+    <div class="actbar">
+      <span class="sp" id="koFlag"></span>
+      <button class="btn ghost" id="koBack">← Voltar</button>
+      <button class="btn" id="koSave">💾 Salvar Kick Off</button>
+    </div>
+  </div>
 </section>
 
 <!-- ============ FORNECEDORES ============ -->
@@ -1017,7 +1132,7 @@ function renderObras(q=''){
   const tb=$('obraBody');q=norm(q);
   const rows=obras.filter(o=>o.status!=='rascunho').filter(o=>!q||[o.obra,o.arq,o.eng,o.regime,o.ano].some(v=>norm(v).includes(q)));
   if(!rows.length){tb.innerHTML=`<tr><td colspan="5"><div class="empty"><div class="big">Nenhuma obra ${obras.length?'encontrada':'salva ainda'}</div>${obras.length?'Ajuste a busca.':'Preencha o formulário e salve.'}</div></td></tr>`;return;}
-  tb.innerHTML=rows.map(o=>`<tr><td><b>${esc(o.obra)}</b></td><td>${fmtDate(o.data)}</td><td>${esc(o.arq)}</td><td>${esc(o.regime)}</td>
+  tb.innerHTML=rows.map(o=>`<tr><td><b>${esc(o.obra)}</b>${o.kickoffDone?'<span class="ko-badge on">Kick Off ✓</span>':'<span class="ko-badge">Kick Off ⏳</span>'}</td><td>${fmtDate(o.data)}</td><td>${esc(o.arq)}</td><td>${esc(o.regime)}</td>
     <td class="acts"><button onclick="viewObra('${jsq(o.obra)}')">Visualizar</button><button class="del" onclick="delObra('${jsq(o.obra)}')">Excluir</button></td></tr>`).join('');
 }
 function renderForn(q=''){
@@ -1076,7 +1191,7 @@ function renderRascunhos(){
     const chips=SECTIONS.map(s=>`<span class="prog-chip ${done.includes(s.key)?'on':''}">${done.includes(s.key)?'✓':'⏳'} ${s.setor}</span>`).join('');
     return `<div class="rasc-card">
       <div class="rasc-top">
-        <div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div>
+        <div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}${o.kickoffDone?'<span class="ko-badge on">Kick Off ✓</span>':'<span class="ko-badge">Kick Off ⏳</span>'}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div>
         <div class="rasc-pct">${done.length}/${SECTIONS.length}<small>setores</small></div>
       </div>
       <div class="prog-bar"><div style="width:${pct}%"></div></div>
@@ -1235,6 +1350,7 @@ function go(v){document.querySelectorAll('#nav button').forEach(b=>b.classList.t
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='v-'+v));
   if(v==='io'){ if(currentRole==='gestor'){$('ioGate').style.display='block';$('ioLock').style.display='none';} else lockIo(); }
   if(v==='setor')renderSetorList();
+  if(v==='kickoff'){$('koForm').style.display='none';$('koList').style.display='block';renderKoList();}
   if(v!=='form'&&v!=='setor')renderAll();}
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 
@@ -1389,6 +1505,69 @@ $('impFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const rd=
 $('wipe').onclick=()=>{if(confirm('Apagar TODOS os dados salvos?')){commitSynced(()=>{obras=[];forn=[];tipos=[];}).then(()=>toast('Dados apagados','warn'));}};
 
 /* ---------- init ---------- */
+/* ================= KICK OFF ================= */
+function collectKo(){
+  const ko={};
+  document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; ko[el.dataset.ko]=el.value; });
+  document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ const b=g.querySelector('button.on'); ko[g.dataset.ko]=b?b.dataset.val:''; });
+  return ko;
+}
+function populateKo(ko,o){
+  ko=Object.assign({}, o?{obra:o.obra,arq:o.arq,ger:o.ger,metragem:o.metragem,regime:o.regime,tipo:o.tipo}:{}, ko||{});
+  document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; el.value=ko[el.dataset.ko]||''; });
+  document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ g.querySelectorAll('button').forEach(b=>b.classList.toggle('on', !!ko[g.dataset.ko] && b.dataset.val===ko[g.dataset.ko])); });
+}
+let koEditKey=null;
+function renderKoList(){
+  const box=$('koList'); if(!box)return;
+  const rs=obras.slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  let html='<button class="btn" id="koNew" style="margin-bottom:16px">+ Novo Kick Off</button>';
+  if(!rs.length) html+='<p class="hint">Nenhuma obra ainda. Clique em <b>+ Novo Kick Off</b> para abrir a primeira.</p>';
+  else html+=rs.map(o=>{
+    const koOk=!!o.kickoffDone, koutOk=o.status==='validado';
+    return `<div class="rasc-card">
+      <div class="rasc-top">
+        <div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'—'}</div></div>
+        <div class="lifecycle"><span class="prog-chip ${koOk?'on':''}">${koOk?'✓':'⏳'} Kick Off</span><span class="prog-chip ${koutOk?'on':''}">${koutOk?'✓':'⏳'} Kickout</span></div>
+      </div>
+      <div class="rasc-acts"><button class="btn" onclick="openKickoff('${jsq(o.obra)}')">${koOk?'✎ Ver / editar Kick Off':'🚀 Preencher Kick Off'}</button></div>
+    </div>`;
+  }).join('');
+  box.innerHTML=html;
+  if($('koNew'))$('koNew').onclick=()=>openKickoff(null);
+}
+window.openKickoff=k=>{
+  $('koList').style.display='none'; $('koForm').style.display='block';
+  if(k){ const o=obras.find(x=>norm(x.obra)===norm(k)); koEditKey=o?o.obra:null; populateKo(o?o.kickoff:null,o); $('koFlag').textContent='Obra: '+(o?o.obra:''); }
+  else { koEditKey=null; populateKo({},null); $('koFlag').textContent='Novo Kick Off'; }
+  window.scrollTo(0,0);
+};
+function backKoList(){ $('koForm').style.display='none'; $('koList').style.display='block'; renderKoList(); window.scrollTo(0,0); }
+document.querySelectorAll('#koForm .ko-choice').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{ const was=b.classList.contains('on'); g.querySelectorAll('button').forEach(x=>x.classList.remove('on')); if(!was)b.classList.add('on'); }));
+if($('koBack'))$('koBack').onclick=backKoList;
+if($('koSave'))$('koSave').onclick=()=>{
+  const ko=collectKo(); const name=(ko.obra||'').trim();
+  if(!name){ toast('Informe o nome da obra','warn'); return; }
+  commitSynced(()=>{
+    let idx=obras.findIndex(x=>norm(x.obra)===norm(koEditKey||name));
+    let o;
+    if(idx>=0)o=obras[idx]; else { o={obra:name,status:'rascunho',done:[]}; obras.push(o); }
+    o.obra=name; o.kickoff=ko; o.kickoffDone=true;
+    o.arq=ko.arq||o.arq||''; o.ger=ko.ger||o.ger||''; o.metragem=ko.metragem||o.metragem||''; o.regime=ko.regime||o.regime||''; o.tipo=ko.tipo||o.tipo||'';
+    if(!o.data && ko.dataKo)o.data=ko.dataKo;
+    if(!Array.isArray(o.equipe)||!o.equipe.length){
+      const eq=[];
+      if(ko.eqOrc&&ko.eqOrc.trim())eq.push({nome:ko.eqOrc.trim(),funcao:'Orçamentos'});
+      if(ko.eqSup&&ko.eqSup.trim())eq.push({nome:ko.eqSup.trim(),funcao:'Suprimentos'});
+      if(ko.eqAdm&&ko.eqAdm.trim())eq.push({nome:ko.eqAdm.trim(),funcao:'ADM'});
+      [ko.eq1,ko.eq2,ko.eq3,ko.eq4].forEach((nm,i)=>{if(nm&&nm.trim())eq.push({nome:nm.trim(),funcao:'Engenheiro '+(i+1)});});
+      if(eq.length){o.equipe=eq; o.eng=eqEng(eq);}
+    }
+    if(ko.prazoMeses){ o.prazos=o.prazos||{}; if(!o.prazos.prazo||!o.prazos.prazo.pv){o.prazos.prazo={pv:num(ko.prazoMeses),rl:(o.prazos.prazo||{}).rl||0};} }
+    koEditKey=o.obra;
+  }).then(()=>{ toast('Kick Off salvo! ✓','ok'); backKoList(); });
+};
+
 migrate();
 fornRow();equipeRow();recalc();renderAll();persistLocal();
 
