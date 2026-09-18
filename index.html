@@ -57,6 +57,20 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .sec-done input{width:16px;height:16px;accent-color:var(--good);cursor:pointer}
 .rasc-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;background:#fff}
 .lifecycle{display:flex;gap:6px;flex-wrap:wrap}
+.pn-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.pn-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
+.pn-num{font-size:32px;font-weight:800;color:var(--clay);line-height:1}
+.pn-lbl{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px}
+.pnrow{cursor:pointer}
+.pnrow:hover{background:var(--mist)}
+.sit{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.sit-ok{background:rgba(31,166,90,.14);color:#1a7a45}
+.sit-run{background:rgba(224,138,30,.16);color:#a86414}
+.sit-wait{background:var(--mist);color:var(--muted)}
+.pnflag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;white-space:nowrap}
+.pnflag.soon{background:rgba(224,138,30,.16);color:#a86414}
+.pnflag.late{background:rgba(239,50,54,.14);color:var(--bad)}
+@media(max-width:720px){.pn-cards{grid-template-columns:1fr}}
 .ko-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--mist);color:var(--muted);border:1px solid var(--line);white-space:nowrap;margin-left:8px;vertical-align:middle}
 .ko-badge.on{background:rgba(31,166,90,.14);color:#1a7a45;border-color:rgba(31,166,90,.3)}
 .ko-choice{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
@@ -366,10 +380,11 @@ body.setor-mode .sec-done{display:none}
   <div class="head-in">
     <div class="brand"><span class="mk">Kick<em>|</em>Out</span><small>Gestão de Obras</small><span id="sbStatus" class="sbdot off">● Local</span></div>
     <nav id="nav">
-      <button data-v="form" class="active">✎ Preencher</button>
-      <button data-v="obras">Obras <span class="pill" id="cObras">0</span></button>
-      <button data-v="rascunho">Rascunhos <span class="pill" id="cRasc">0</span></button>
+      <button data-v="painel" class="active">🏗 Painel</button>
       <button data-v="kickoff">🚀 Kick Off</button>
+      <button data-v="form">✎ Kickout</button>
+      <button data-v="rascunho">Rascunhos <span class="pill" id="cRasc">0</span></button>
+      <button data-v="obras">Obras <span class="pill" id="cObras">0</span></button>
       <button data-v="forn">Fornecedores <span class="pill" id="cForn">0</span></button>
       <button data-v="tipos">Tipos</button>
       <button data-v="dash">Dashboard</button>
@@ -515,6 +530,16 @@ body.setor-mode .sec-done{display:none}
 <section class="view" id="v-rascunho">
   <div class="lead"><div><h1>Kickouts em <em>Rascunho</em></h1><p>Cada setor preenche a sua parte e marca "Parte preenchida". Na reunião, abra o rascunho, revise e clique em <b>Validar Kickout</b> para virar obra oficial.</p></div></div>
   <div id="rascList"></div>
+</section>
+
+<section class="view" id="v-painel">
+  <div class="lead"><div><h1>Painel de <em>Gestão de Obra</em></h1><p>Situação geral do ciclo — Kick Off (abertura) e Kickout (encerramento) de cada obra. Clique numa obra para abrir o Kick Off.</p></div></div>
+  <div class="pn-cards">
+    <div class="pn-card"><div class="pn-num" id="pnAguard">0</div><div class="pn-lbl">Aguardando Kick Off</div></div>
+    <div class="pn-card"><div class="pn-num" id="pnAnda">0</div><div class="pn-lbl">Em andamento</div></div>
+    <div class="pn-card"><div class="pn-num" id="pnConcl">0</div><div class="pn-lbl">Concluídas</div></div>
+  </div>
+  <div class="htable-wrap"><table class="htable"><thead><tr><th>Obra</th><th>Kick Off</th><th>Kickout</th><th>Início</th><th>Término (prev.)</th><th>Situação</th></tr></thead><tbody id="painelBody"></tbody></table></div>
 </section>
 
 <section class="view" id="v-kickoff">
@@ -1333,7 +1358,7 @@ function renderDash(){
   $('dashAno').innerHTML=anos.length?anos.map(a=>`<div class="rank clickable" onclick="viewAno('${jsq(a)}')"><span class="nm">${a}</span><div class="minibar"><div style="width:${byAno[a]/maxA*100}%"></div></div><span class="vv">${byAno[a]}<small>obra(s)</small></span><span class="chev">›</span></div>`).join(''):'<p class="hint">Sem obras.</p>';
 }
 function refreshCounts(){$('cObras').textContent=obras.filter(o=>o.status!=='rascunho').length;const cr=$('cRasc');if(cr)cr.textContent=obras.filter(o=>o.status==='rascunho').length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
-function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();renderRascunhos();refreshCounts();if(currentRole&&ROLES[currentRole]&&!ROLES[currentRole].full)renderSetorList();}
+function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();renderRascunhos();refreshCounts();renderPainel();if(currentRole&&ROLES[currentRole]&&!ROLES[currentRole].full)renderSetorList();}
 $('srcObra').oninput=e=>renderObras(e.target.value);
 $('srcForn').oninput=e=>renderForn(e.target.value);
 $('filtForn').onchange=()=>renderForn($('srcForn').value);
@@ -1351,6 +1376,7 @@ function go(v){document.querySelectorAll('#nav button').forEach(b=>b.classList.t
   if(v==='io'){ if(currentRole==='gestor'){$('ioGate').style.display='block';$('ioLock').style.display='none';} else lockIo(); }
   if(v==='setor')renderSetorList();
   if(v==='kickoff'){$('koForm').style.display='none';$('koList').style.display='block';renderKoList();}
+  if(v==='painel')renderPainel();
   if(v!=='form'&&v!=='setor')renderAll();}
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 
@@ -1387,7 +1413,7 @@ function enterApp(role){
   $('logoutBtn').style.display='';
   if(ROLES[role].full){
     document.body.classList.remove('setor-mode');
-    $('nav').style.display=''; restoreFullForm(); clearForm(); go('kickoff');
+    $('nav').style.display=''; restoreFullForm(); clearForm(); go('painel');
   } else {
     document.body.classList.add('setor-mode');
     $('nav').style.display='none'; renderSetorList(); go('setor');
@@ -1567,6 +1593,40 @@ if($('koSave'))$('koSave').onclick=()=>{
     koEditKey=o.obra;
   }).then(()=>{ toast('Kick Off salvo! ✓','ok'); backKoList(); });
 };
+
+/* ================= PAINEL (Gestão de Obra) ================= */
+function renderPainel(){
+  const box=$('painelBody'); if(!box)return;
+  if($('pnAguard'))$('pnAguard').textContent=obras.filter(o=>!o.kickoffDone).length;
+  if($('pnAnda'))$('pnAnda').textContent=obras.filter(o=>o.kickoffDone && o.status!=='validado').length;
+  if($('pnConcl'))$('pnConcl').textContent=obras.filter(o=>o.status==='validado').length;
+  const rows=obras.slice().sort((a,b)=>(((a.kickoff&&a.kickoff.termino)||'zzzz').localeCompare((b.kickoff&&b.kickoff.termino)||'zzzz')));
+  if(!rows.length){ box.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">Nenhuma obra ainda. Vá em <b>Kick Off</b> para abrir a primeira.</td></tr>'; return; }
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  box.innerHTML=rows.map(o=>{
+    const ko=o.kickoff||{}, koOk=!!o.kickoffDone, koutOk=o.status==='validado';
+    const done=Array.isArray(o.done)?o.done:[];
+    let sit,sc;
+    if(koutOk){sit='Concluída';sc='sit-ok';}
+    else if(!koOk){sit='Aguardando Kick Off';sc='sit-wait';}
+    else {sit='Em andamento';sc='sit-run';}
+    let flag='';
+    if(!koutOk && ko.termino){
+      const t=new Date(ko.termino+'T00:00:00'); const dias=Math.round((t-hoje)/86400000);
+      if(dias<0)flag='<span class="pnflag late">🏁 prazo vencido</span>';
+      else if(dias<=30)flag=`<span class="pnflag soon">🏁 ${dias}d p/ término</span>`;
+    }
+    const koutCell = koutOk?'<span class="prog-chip on">✓ concluído</span>':(koOk?`<span class="prog-chip">${done.length}/6 setores</span>`:'<span class="prog-chip">—</span>');
+    return `<tr class="pnrow" onclick="abrirKO('${jsq(o.obra)}')">
+      <td><b>${esc(o.obra)||'(sem nome)'}</b>${flag}</td>
+      <td><span class="prog-chip ${koOk?'on':''}">${koOk?'✓':'⏳'}</span></td>
+      <td>${koutCell}</td>
+      <td>${fmtDate(ko.inicio)||'—'}</td>
+      <td>${fmtDate(ko.termino)||'—'}</td>
+      <td><span class="sit ${sc}">${sit}</span></td></tr>`;
+  }).join('');
+}
+window.abrirKO=k=>{ go('kickoff'); openKickoff(k); };
 
 migrate();
 fornRow();equipeRow();recalc();renderAll();persistLocal();
