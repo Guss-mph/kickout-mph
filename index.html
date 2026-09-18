@@ -1387,7 +1387,7 @@ function enterApp(role){
   $('logoutBtn').style.display='';
   if(ROLES[role].full){
     document.body.classList.remove('setor-mode');
-    $('nav').style.display=''; restoreFullForm(); clearForm(); go('form');
+    $('nav').style.display=''; restoreFullForm(); clearForm(); go('kickoff');
   } else {
     document.body.classList.add('setor-mode');
     $('nav').style.display='none'; renderSetorList(); go('setor');
