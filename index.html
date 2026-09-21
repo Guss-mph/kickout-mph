@@ -57,6 +57,17 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .sec-done input{width:16px;height:16px;accent-color:var(--good);cursor:pointer}
 .rasc-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;background:#fff}
 .lifecycle{display:flex;gap:6px;flex-wrap:wrap}
+.rasc-h{font-size:15px;margin:0 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.rex-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.rex-card{border:1px solid var(--line);border-radius:12px;padding:14px}
+.rex-t{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.rex-chip{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px}
+.rex-chip.good{background:rgba(31,166,90,.14);color:#1a7a45}
+.rex-chip.bad{background:rgba(239,50,54,.14);color:var(--bad)}
+.rex-chip.muted{background:var(--mist);color:var(--muted)}
+.rex-d{font-size:12px;color:var(--muted);margin-top:8px}
+.rex-cause{font-size:13px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+@media(max-width:720px){.rex-grid{grid-template-columns:1fr}}
 .pn-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
 .pn-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
 .pn-num{font-size:32px;font-weight:800;color:var(--clay);line-height:1}
@@ -394,6 +405,7 @@ body.setor-mode .sec-done{display:none}
     <button id="logoutBtn" class="logout-btn" style="display:none">⇄ Trocar acesso</button>
   </div>
 </header>
+<datalist id="dlArq"></datalist><datalist id="dlGer"></datalist><datalist id="dlForn"></datalist>
 
 <main>
 <!-- ============ FORM ============ -->
@@ -420,8 +432,8 @@ body.setor-mode .sec-done{display:none}
       <div class="grid g3">
         <div class="fld"><label>Nome da Obra *</label><input id="f_obra" placeholder="Ex.: Aluízio e Cristina"></div>
         <div class="fld"><label>Data da Reunião</label><input id="f_data" type="date"></div>
-        <div class="fld"><label>Arquitetura</label><input id="f_arq" placeholder="Ex.: Bruno Rubiano"></div>
-        <div class="fld"><label>Gerenciadora</label><input id="f_ger" placeholder="Ex.: nome da gerenciadora"></div>
+        <div class="fld"><label>Arquitetura</label><input id="f_arq" list="dlArq" placeholder="Ex.: Bruno Rubiano"></div>
+        <div class="fld"><label>Gerenciadora</label><input id="f_ger" list="dlGer" placeholder="Ex.: nome da gerenciadora"></div>
         <div class="fld"><label>Regime de Contratação</label>
           <select id="f_regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
         <div class="fld"><label>Metragem (m²)</label><input id="f_metr" type="number" step="any" placeholder="300"></div>
@@ -575,9 +587,9 @@ body.setor-mode .sec-done{display:none}
         <div class="fld"><label>Orçamentos</label><input data-ko="eqOrc"></div>
         <div class="fld"><label>Suprimentos</label><input data-ko="eqSup"></div>
         <div class="fld"><label>Administrativo</label><input data-ko="eqAdm"></div>
-        <div class="fld"><label>Arquitetura</label><input data-ko="arq"></div>
+        <div class="fld"><label>Arquitetura</label><input data-ko="arq" list="dlArq"></div>
         <div class="fld"><label>Arq. Responsável</label><input data-ko="arqResp"></div>
-        <div class="fld"><label>Gerenciadora</label><input data-ko="ger"></div>
+        <div class="fld"><label>Gerenciadora</label><input data-ko="ger" list="dlGer"></div>
       </div>
     </div></div>
 
@@ -637,7 +649,8 @@ body.setor-mode .sec-done{display:none}
     <div class="actbar">
       <span class="sp" id="koFlag"></span>
       <button class="btn ghost" id="koBack">← Voltar</button>
-      <button class="btn" id="koSave">💾 Salvar Kick Off</button>
+      <button class="btn ghost" id="koSaveDraft">💾 Salvar rascunho</button>
+      <button class="btn" id="koSave">✓ Concluir Kick Off</button>
     </div>
   </div>
 </section>
@@ -688,6 +701,8 @@ body.setor-mode .sec-done{display:none}
   <div class="section"><div class="sh"><span class="num">★</span><h2>Arquiteturas — mais obras</h2></div><div class="bd"><div id="dashArq"></div></div></div>
   <div class="section"><div class="sh"><span class="num">↗</span><h2>Fornecedores mais citados</h2></div><div class="bd"><div id="dashForn"></div></div></div>
   <div class="section"><div class="sh"><span class="num">⌖</span><h2>Obras fechadas por ano</h2></div><div class="bd"><div id="dashAno"></div></div></div>
+  <div class="section"><div class="sh"><span class="num">⚠</span><h2>Causas de atraso</h2></div><div class="bd"><div id="dashAtraso"></div></div></div>
+  <div class="section"><div class="sh"><span class="num">⚠</span><h2>Causas de desvio de orçamento</h2></div><div class="bd"><div id="dashDesvio"></div></div></div>
 </section>
 
 <!-- ============ DADOS ============ -->
@@ -860,7 +875,7 @@ function migrate(){
     }
     if(!Array.isArray(o.equipe))o.equipe=[];
   });
-  obras.forEach(o=>{ if(!o.status)o.status='validado'; });
+  obras.forEach(o=>{ if(!o.status)o.status='validado'; if(!o.koStatus)o.koStatus=o.kickoffDone?'concluido':''; });
 }
 function addTipoSilent(t){ t=(t||'').trim(); if(!t)return; if(!tipos.some(x=>stripAcc(x)===stripAcc(t)))tipos.push(t); }
 const $ = id => document.getElementById(id);
@@ -950,7 +965,7 @@ function fornRow(d={}){
     <button class="rm" title="Remover">×</button>
     <div class="topline">
       <div class="fld"><label>Tipo / Departamento</label><select class="fTipo">${tipoOptions(d.tipo)}</select></div>
-      <div class="fld"><label>Empresa</label><input class="fEmp" placeholder="Nome do fornecedor" value="${esc(d.empresa)}"></div>
+      <div class="fld"><label>Empresa</label><input class="fEmp" list="dlForn" placeholder="Nome do fornecedor" value="${esc(d.empresa)}"></div>
     </div>
     <div class="rateline">
       <div class="fld"><label>Técnico (0–5)</label><input class="fTec" type="number" min="0" max="5" step="1" value="${d.notaTec??d.nota??''}"></div>
@@ -1208,24 +1223,27 @@ const SECTIONS=[
 ];
 function renderRascunhos(){
   const box=$('rascList'); if(!box)return;
-  const rs=obras.filter(o=>o.status==='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
-  if(!rs.length){box.innerHTML='<p class="hint">Nenhum rascunho em andamento. Preencha o formulário e clique em <b>Salvar rascunho</b>.</p>';return;}
-  box.innerHTML=rs.map(o=>{
+  const koR=obras.filter(o=>o.koStatus==='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  const koutR=obras.filter(o=>o.status==='rascunho' && o.koStatus!=='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  let html='<h2 class="rasc-h">🚀 Rascunhos de Kick Off</h2>';
+  if(!koR.length) html+='<p class="hint">Nenhum Kick Off em rascunho.</p>';
+  else html+=koR.map(o=>`<div class="rasc-card">
+      <div class="rasc-top"><div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}<span class="ko-badge">✏️ Kick Off em rascunho</span></div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div></div>
+      <div class="rasc-acts"><button class="btn" onclick="abrirKO('${jsq(o.obra)}')">✎ Continuar Kick Off</button><button class="btn ghost del-btn" onclick="delRascunho('${jsq(o.obra)}')">Excluir</button></div></div>`).join('');
+  html+='<h2 class="rasc-h" style="margin-top:26px">✎ Rascunhos de Kickout</h2>';
+  if(!koutR.length) html+='<p class="hint">Nenhum Kickout em rascunho. Ao concluir um Kick Off, a obra aparece aqui para os setores preencherem.</p>';
+  else html+=koutR.map(o=>{
     const done=Array.isArray(o.done)?o.done:[];
     const pct=Math.round(done.length/SECTIONS.length*100);
     const chips=SECTIONS.map(s=>`<span class="prog-chip ${done.includes(s.key)?'on':''}">${done.includes(s.key)?'✓':'⏳'} ${s.setor}</span>`).join('');
     return `<div class="rasc-card">
-      <div class="rasc-top">
-        <div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}${o.kickoffDone?'<span class="ko-badge on">Kick Off ✓</span>':'<span class="ko-badge">Kick Off ⏳</span>'}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div>
-        <div class="rasc-pct">${done.length}/${SECTIONS.length}<small>setores</small></div>
-      </div>
+      <div class="rasc-top"><div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}${o.kickoffDone?'<span class="ko-badge on">Kick Off ✓</span>':''}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div>
+        <div class="rasc-pct">${done.length}/${SECTIONS.length}<small>setores</small></div></div>
       <div class="prog-bar"><div style="width:${pct}%"></div></div>
       <div class="prog-chips">${chips}</div>
-      <div class="rasc-acts">
-        <button class="btn" onclick="abrirRascunho('${jsq(o.obra)}')">✎ Abrir / continuar</button>
-        <button class="btn ghost del-btn" onclick="delRascunho('${jsq(o.obra)}')">Excluir</button>
-      </div></div>`;
+      <div class="rasc-acts"><button class="btn" onclick="abrirRascunho('${jsq(o.obra)}')">✎ Abrir / continuar</button><button class="btn ghost del-btn" onclick="delRascunho('${jsq(o.obra)}')">Excluir</button></div></div>`;
   }).join('');
+  box.innerHTML=html;
 }
 window.abrirRascunho=k=>{const o=obras.find(x=>norm(x.obra)===norm(k)&&x.status==='rascunho');if(!o)return;populate(o);editKey=o.obra;$('editFlag').textContent='Rascunho: '+o.obra;go('form');window.scrollTo(0,0);};
 window.delRascunho=k=>{if(confirm('Excluir este rascunho? (não afeta o histórico oficial)')){commitSynced(()=>{obras=obras.filter(x=>!(norm(x.obra)===norm(k)&&x.status==='rascunho'));}).then(()=>toast('Rascunho excluído','warn'));}};
@@ -1280,7 +1298,7 @@ window.viewObra=k=>{
   let html=`<div class="print-only print-brand"><b>Kick|Out</b> · Documento de Kickout — MpH Engenharia</div>
     <div class="modal-head"><div class="eyebrow-l">Obra</div><h3>${esc(o.obra)}</h3>
     <div class="sub">${fmtDate(o.data)||'sem data'} · ${esc(o.regime)||'regime —'}</div>
-    <button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
+    <button class="btn ghost print-btn" onclick="resumoObra('${jsq(o.obra)}')" style="margin-top:14px;margin-right:8px">📄 Resumo executivo</button><button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
     <div class="modal-body">
     <div class="mh">Identificação</div>
     <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Gerenciadora',esc(o.ger))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}${kv('Complexidade',esc(o.complex))}</div>
@@ -1302,6 +1320,33 @@ window.viewAno=ano=>{
       <div class="top"><span class="ob">${esc(o.obra)}</span><span class="dt">${fmtDate(o.data)||''}</span></div>
       <div class="meta"><span>${esc(o.arq)||'—'}</span><span>${esc(o.regime)||''}</span><span>Eng.: ${esc(o.eng)||'—'}</span></div></div>`).join('') : '<p class="hint">Nenhuma obra neste ano.</p>';
   openModal(html+'</div>');
+};
+window.resumoObra=k=>{
+  const o=obras.find(x=>norm(x.obra)===norm(k));if(!o)return;
+  const ko=o.kickoff||{};
+  const p=o.prazos||{}; const pr=p.prazo||{}; const pv=pr.pv||0, rl=pr.rl||0; const atraso=rl>pv; const at=o.atraso||{};
+  const t=obraTotals(o); const desvio=t.tr>t.tp; const dv=o.desvio||{};
+  const EQ=Array.isArray(o.eng_qa)?o.eng_qa:[]; const pat=EQ[0]||{}; const rec=(EQ[7]||{}).txt||'';
+  const RQ=Array.isArray(o.rel_qa)?o.rel_qa:[]; const ger=RQ[3]||{};
+  const daObra=[];forn.forEach(f=>(f.hist||[]).forEach(h=>{if(norm(h.obra)===norm(o.obra))daObra.push({empresa:f.empresa,...h});}));
+  const chip=(txt,cls)=>`<span class="rex-chip ${cls}">${txt}</span>`;
+  const fornHtml=daObra.length?daObra.map(f=>{const tc=pick(f.notaTec,f.nota),pc=pick(f.notaParc,f.nota);return `<tr><td><b>${esc(f.empresa)}</b> <small style="color:var(--muted)">${esc(f.tipo)||''}</small></td><td>${tc!=null?`<b style="color:${notaColor(tc)}">★ ${tc}</b>`:'—'}</td><td>${pc!=null?`<b style="color:${notaColor(pc)}">★ ${pc}</b>`:'—'}</td></tr>`;}).join(''):'<tr><td colspan="3" style="color:var(--muted)">Nenhum fornecedor registrado.</td></tr>';
+  const html=`<div class="print-only print-brand"><b>Kick|Out</b> · Resumo Executivo — MpH Engenharia</div>
+    <div class="modal-head"><div class="eyebrow-l">Resumo executivo</div><h3>${esc(o.obra)}</h3>
+      <div class="sub">${esc(o.arq)||'arquitetura —'}${(ko.inicio||ko.termino)?` · ${fmtDate(ko.inicio)||'?'} → ${fmtDate(ko.termino)||'?'}`:''}${o.complex?' · Complexidade '+esc(o.complex):''}</div>
+      <button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
+    <div class="modal-body">
+      <div class="rex-grid">
+        <div class="rex-card"><div class="rex-t">Prazo</div>${atraso?chip('Atraso de '+(rl-pv)+' mes(es)','bad'):chip('Dentro do prazo','good')}<div class="rex-d">Previsto ${pv} · Real ${rl} meses</div>${atraso&&(at.motivo||at.obs)?`<div class="rex-cause"><b>Motivo:</b> ${esc(at.motivo)||'—'}${at.obs?' · '+esc(at.obs):''}</div>`:''}</div>
+        <div class="rex-card"><div class="rex-t">Orçamento</div>${desvio?chip('Estourou','bad'):chip('Dentro do orçamento','good')}<div class="rex-d">Previsto ${money(t.tp)} · Real ${money(t.tr)}</div>${desvio&&(dv.motivo||dv.obs)?`<div class="rex-cause"><b>Motivo:</b> ${esc(dv.motivo)||'—'}${dv.obs?' · '+esc(dv.obs):''}</div>`:''}</div>
+        <div class="rex-card"><div class="rex-t">Patologias</div>${pat.ans==='Sim'?chip('Sim','bad'):(pat.ans==='Não'?chip('Não','good'):chip('—','muted'))}${pat.txt?`<div class="rex-cause">${esc(pat.txt)}</div>`:''}</div>
+        <div class="rex-card"><div class="rex-t">Gerenciadora</div>${ger.na?chip('N/A — sem gerenciadora','muted'):(ger.satis?chip(esc(ger.satis),/insatisf/i.test(ger.satis)?'bad':'good'):chip('—','muted'))}${(ger.txt&&!ger.na)?`<div class="rex-cause">${esc(ger.txt)}</div>`:''}</div>
+      </div>
+      ${rec?`<div class="mh">Problema recorrente</div><div class="aa">${esc(rec)}</div>`:''}
+      <div class="mh">Fornecedores</div>
+      <table class="ptable"><thead><tr><th>Empresa</th><th>Técnico</th><th>Parceria</th></tr></thead><tbody>${fornHtml}</tbody></table>
+    </div>`;
+  openModal(html);
 };
 window.viewForn=k=>{
   const f=forn.find(x=>norm(x.empresa)===norm(k));if(!f)return;
@@ -1356,9 +1401,25 @@ function renderDash(){
   const byAno={};dObras.forEach(o=>{const a=(o.ano||'—');byAno[a]=(byAno[a]||0)+1;});
   const anos=Object.keys(byAno).sort();const maxA=Math.max(1,...Object.values(byAno));
   $('dashAno').innerHTML=anos.length?anos.map(a=>`<div class="rank clickable" onclick="viewAno('${jsq(a)}')"><span class="nm">${a}</span><div class="minibar"><div style="width:${byAno[a]/maxA*100}%"></div></div><span class="vv">${byAno[a]}<small>obra(s)</small></span><span class="chev">›</span></div>`).join(''):'<p class="hint">Sem obras.</p>';
+  // 4) Causas de atraso e de desvio
+  const rankCausa=(getMot,elId,unidade)=>{
+    const m={}; dObras.forEach(o=>{const mv=(getMot(o)||'').trim();if(mv)m[mv]=(m[mv]||0)+1;});
+    const arr=Object.entries(m).map(([nome,n])=>({nome,n})).sort((a,b)=>b.n-a.n);
+    const mx=Math.max(1,...arr.map(x=>x.n));
+    $(elId).innerHTML=arr.length?arr.map((c,i)=>`<div class="rank"><span class="pos">${i+1}</span><span class="nm">${esc(c.nome)}</span><div class="minibar"><div style="width:${c.n/mx*100}%"></div></div><span class="vv">${c.n}<small>${unidade}</small></span></div>`).join(''):'<p class="hint">Nenhuma causa registrada.</p>';
+  };
+  rankCausa(o=>(o.atraso||{}).motivo,'dashAtraso','obra(s)');
+  rankCausa(o=>(o.desvio||{}).motivo,'dashDesvio','obra(s)');
 }
-function refreshCounts(){$('cObras').textContent=obras.filter(o=>o.status!=='rascunho').length;const cr=$('cRasc');if(cr)cr.textContent=obras.filter(o=>o.status==='rascunho').length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
-function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();renderRascunhos();refreshCounts();renderPainel();if(currentRole&&ROLES[currentRole]&&!ROLES[currentRole].full)renderSetorList();}
+function refreshCounts(){$('cObras').textContent=obras.filter(o=>o.status!=='rascunho').length;const cr=$('cRasc');if(cr)cr.textContent=obras.filter(o=>o.koStatus==='rascunho'||(o.status==='rascunho'&&o.koStatus!=='rascunho')).length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
+function refreshDatalists(){
+  const uniq=arr=>[...new Set(arr.filter(v=>v&&v.trim()).map(v=>v.trim()))].sort((a,b)=>a.localeCompare(b,'pt'));
+  const fill=(id,vals)=>{const dl=$(id);if(dl)dl.innerHTML=vals.map(v=>`<option value="${esc(v)}">`).join('');};
+  fill('dlArq',uniq(obras.map(o=>o.arq)));
+  fill('dlGer',uniq(obras.map(o=>o.ger)));
+  fill('dlForn',uniq(forn.map(f=>f.empresa)));
+}
+function renderAll(){renderObras($('srcObra').value);renderForn($('srcForn').value);renderTipos();renderDash();renderRascunhos();refreshCounts();renderPainel();refreshDatalists();if(currentRole&&ROLES[currentRole]&&!ROLES[currentRole].full)renderSetorList();}
 $('srcObra').oninput=e=>renderObras(e.target.value);
 $('srcForn').oninput=e=>renderForn(e.target.value);
 $('filtForn').onchange=()=>renderForn($('srcForn').value);
@@ -1432,7 +1493,7 @@ function renderSetorList(){
   const box=$('setorList'); if(!box)return;
   const r=ROLES[currentRole]; if(!r||r.full)return;
   $('setorTitle').innerHTML='Obras aguardando <em>'+esc(r.nome)+'</em>';
-  const rs=obras.filter(o=>o.status==='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  const rs=obras.filter(o=>o.status==='rascunho'&&o.koStatus!=='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   if(!rs.length){box.innerHTML='<p class="hint">Nenhuma obra aberta no momento. Aguarde o Gestor criar uma obra em rascunho.</p>';return;}
   box.innerHTML=rs.map(o=>{
     const done=Array.isArray(o.done)?o.done:[];
@@ -1554,9 +1615,9 @@ function renderKoList(){
     return `<div class="rasc-card">
       <div class="rasc-top">
         <div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'—'}</div></div>
-        <div class="lifecycle"><span class="prog-chip ${koOk?'on':''}">${koOk?'✓':'⏳'} Kick Off</span><span class="prog-chip ${koutOk?'on':''}">${koutOk?'✓':'⏳'} Kickout</span></div>
+        <div class="lifecycle"><span class="prog-chip ${o.koStatus==='concluido'?'on':''}">${o.koStatus==='concluido'?'✓':(o.koStatus==='rascunho'?'✏️':'⏳')} Kick Off</span><span class="prog-chip ${koutOk?'on':''}">${koutOk?'✓':'⏳'} Kickout</span></div>
       </div>
-      <div class="rasc-acts"><button class="btn" onclick="openKickoff('${jsq(o.obra)}')">${koOk?'✎ Ver / editar Kick Off':'🚀 Preencher Kick Off'}</button></div>
+      <div class="rasc-acts"><button class="btn" onclick="openKickoff('${jsq(o.obra)}')">${o.koStatus==='concluido'?'✎ Ver / editar Kick Off':(o.koStatus==='rascunho'?'✎ Continuar Kick Off':'🚀 Preencher Kick Off')}</button></div>
     </div>`;
   }).join('');
   box.innerHTML=html;
@@ -1571,14 +1632,14 @@ window.openKickoff=k=>{
 function backKoList(){ $('koForm').style.display='none'; $('koList').style.display='block'; renderKoList(); window.scrollTo(0,0); }
 document.querySelectorAll('#koForm .ko-choice').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{ const was=b.classList.contains('on'); g.querySelectorAll('button').forEach(x=>x.classList.remove('on')); if(!was)b.classList.add('on'); }));
 if($('koBack'))$('koBack').onclick=backKoList;
-if($('koSave'))$('koSave').onclick=()=>{
+function saveKO(koStatus){
   const ko=collectKo(); const name=(ko.obra||'').trim();
   if(!name){ toast('Informe o nome da obra','warn'); return; }
   commitSynced(()=>{
     let idx=obras.findIndex(x=>norm(x.obra)===norm(koEditKey||name));
     let o;
     if(idx>=0)o=obras[idx]; else { o={obra:name,status:'rascunho',done:[]}; obras.push(o); }
-    o.obra=name; o.kickoff=ko; o.kickoffDone=true;
+    o.obra=name; o.kickoff=ko; o.koStatus=koStatus; o.kickoffDone=(koStatus==='concluido');
     o.arq=ko.arq||o.arq||''; o.ger=ko.ger||o.ger||''; o.metragem=ko.metragem||o.metragem||''; o.regime=ko.regime||o.regime||''; o.tipo=ko.tipo||o.tipo||'';
     if(!o.data && ko.dataKo)o.data=ko.dataKo;
     if(!Array.isArray(o.equipe)||!o.equipe.length){
@@ -1591,8 +1652,10 @@ if($('koSave'))$('koSave').onclick=()=>{
     }
     if(ko.prazoMeses){ o.prazos=o.prazos||{}; if(!o.prazos.prazo||!o.prazos.prazo.pv){o.prazos.prazo={pv:num(ko.prazoMeses),rl:(o.prazos.prazo||{}).rl||0};} }
     koEditKey=o.obra;
-  }).then(()=>{ toast('Kick Off salvo! ✓','ok'); backKoList(); });
-};
+  }).then(()=>{ toast(koStatus==='concluido'?'Kick Off concluído! ✓':'Rascunho de Kick Off salvo.','ok'); backKoList(); });
+}
+if($('koSave'))$('koSave').onclick=()=>saveKO('concluido');
+if($('koSaveDraft'))$('koSaveDraft').onclick=()=>saveKO('rascunho');
 
 /* ================= PAINEL (Gestão de Obra) ================= */
 function renderPainel(){
@@ -1619,7 +1682,7 @@ function renderPainel(){
     const koutCell = koutOk?'<span class="prog-chip on">✓ concluído</span>':(koOk?`<span class="prog-chip">${done.length}/6 setores</span>`:'<span class="prog-chip">—</span>');
     return `<tr class="pnrow" onclick="abrirKO('${jsq(o.obra)}')">
       <td><b>${esc(o.obra)||'(sem nome)'}</b>${flag}</td>
-      <td><span class="prog-chip ${koOk?'on':''}">${koOk?'✓':'⏳'}</span></td>
+      <td>${o.koStatus==='concluido'?'<span class="prog-chip on">✓</span>':(o.koStatus==='rascunho'?'<span class="prog-chip">✏️ rascunho</span>':'<span class="prog-chip">⏳</span>')}</td>
       <td>${koutCell}</td>
       <td>${fmtDate(ko.inicio)||'—'}</td>
       <td>${fmtDate(ko.termino)||'—'}</td>
