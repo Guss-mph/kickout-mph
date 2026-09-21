@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestão Kick-Out</title>
+<title>Gestão de Obra · MpH Engenharia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
@@ -384,7 +384,7 @@ body.setor-mode .sec-done{display:none}
     <div class="login-logo"><span class="mk">Kick<em>|</em>Out</span></div>
     <p class="login-sub">Selecione seu acesso para continuar</p>
     <div class="login-roles" id="loginRoles">
-      <button class="role-btn" data-role="gestor">👤 Gestor <small>Cria e valida os kickouts — requer senha</small></button>
+      <button class="role-btn" data-role="gestor">👤 Gestor <small>Cria o Kick Off e valida os Kickouts — requer senha</small></button>
       <button class="role-btn" data-role="suprimentos">📦 Suprimentos <small>Preenche a Avaliação de Fornecedores</small></button>
       <button class="role-btn" data-role="orcamentos">💰 Orçamentos <small>Preenche os Prazos e Orçamentos</small></button>
       <button class="role-btn" data-role="engenharia">🏗️ Engenharia <small>Preenche a seção de Engenharia</small></button>
@@ -425,8 +425,8 @@ body.setor-mode .sec-done{display:none}
 <section class="view active" id="v-form">
   <div class="lead">
     <div>
-      <h1>Formulário de <em>Reunião Kick-Out</em></h1>
-      <p>Preencha os dados da reunião. Ao salvar, a obra e os fornecedores vão para o histórico — <b>sem duplicar</b>: se a obra ou a empresa já existir, o registro é atualizado.</p>
+      <h1><em>Kickout</em> — Encerramento da Obra</h1>
+      <p>Etapa final do ciclo. Cada setor preenche a sua parte; na reunião o Gestor revisa e valida. Ao validar, a obra e os fornecedores vão para o histórico (sem duplicar).</p>
     </div>
     <div class="howto">
       <b>Como funciona</b>
@@ -553,7 +553,7 @@ body.setor-mode .sec-done{display:none}
 
 <!-- ============ RASCUNHOS ============ -->
 <section class="view" id="v-rascunho">
-  <div class="lead"><div><h1>Kickouts em <em>Rascunho</em></h1><p>Cada setor preenche a sua parte e marca "Parte preenchida". Na reunião, abra o rascunho, revise e clique em <b>Validar Kickout</b> para virar obra oficial.</p></div></div>
+  <div class="lead"><div><h1><em>Rascunhos</em> em andamento</h1><p>Kick Offs e Kickouts que ainda estão sendo preenchidos. Continue de onde parou e conclua quando estiver pronto.</p></div></div>
   <div id="rascList"></div>
 </section>
 
@@ -766,7 +766,7 @@ body.setor-mode .sec-done{display:none}
 
 <div id="modal" class="modal"><div class="modal-card"><button class="modal-x" id="modalX">×</button><div id="modalBody"></div></div></div>
 
-<footer>Gestão Kick-Out · dados salvos localmente neste dispositivo (localStorage)</footer>
+<footer>Gestão de Obra · MpH Engenharia · sincronizado online quando conectado (indicador no topo)</footer>
 <div id="toast"><span class="dot"></span><span id="toastMsg"></span></div>
 
 <script>
