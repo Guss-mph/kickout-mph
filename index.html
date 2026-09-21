@@ -102,6 +102,11 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .ko-proj-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .ko-proj-top .kpTipo{min-width:150px}
 .ko-proj-top .kpNome{flex:1;min-width:160px}
+.ko-cmt-btn{background:none;border:none;color:var(--clay);font-weight:600;font-size:13px;cursor:pointer;padding:6px 0;font-family:inherit}
+.ko-dia-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.ko-dia-wrap select{min-width:180px}
+.ko-check{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink)}
+.ko-check input{width:16px;height:16px;accent-color:var(--muted)}
 @media(max-width:720px){.ko-grid{grid-template-columns:1fr}}
 .rasc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .rasc-name{font-weight:800;font-size:16px}
@@ -636,19 +641,18 @@ body.setor-mode .sec-done{display:none}
     </div></div>
 
     <div class="section"><div class="sh"><span class="num">6</span><h2>Engenharia</h2></div><div class="bd">
-      <div class="ko-item"><label>A Obra possuirá CNO (Cadastro Nacional de Obras)?</label><div class="ko-choice" data-ko="engCno"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div>
-        <div style="margin-top:8px"><input data-ko="engCnoObs" placeholder="Observação (RT, matrícula, etc.)"></div></div>
-      <div class="ko-item"><label>RT</label><input data-ko="engRt"></div>
-      <div class="ko-item"><label>Liberação no condomínio?</label><div class="ko-choice" data-ko="engLiberacao"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
-      <div class="ko-item"><label>Cronograma foi finalizado?</label><div class="ko-choice" data-ko="engCronograma"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
-      <div class="ko-item"><label>Financeiro foi lançado no sistema?</label><div class="ko-choice" data-ko="engFinanceiro"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
-      <div class="ko-item"><label>Haverá dias fixos para as reuniões em obra?</label><input data-ko="engReunioes"></div>
-      <div class="ko-item"><label>Reunião de Alinhamento Suprimentos x Engenharia já marcada?</label><div class="ko-choice" data-ko="engAlinhamento"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>A Obra possuirá CNO (Cadastro Nacional de Obras)?</label><div class="ko-choice" data-ko="engCno"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engCnoObs" placeholder="Comentário (opcional)…"></textarea></div></div>
+      <div class="ko-item"><label>RT (Registro Técnico)</label><div class="ko-choice" data-ko="engRt"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><div class="ko-cond" data-cond="engRt" data-when="Sim" style="display:none;margin-top:8px"><input data-ko="engRtNum" placeholder="Número do RT"></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engRtObs" placeholder="Comentário (opcional)…"></textarea></div></div>
+      <div class="ko-item"><label>Liberação no condomínio?</label><div class="ko-choice" data-ko="engLiberacao"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engLiberacaoObs" placeholder="Comentário (opcional)…"></textarea></div></div>
+      <div class="ko-item"><label>Cronograma foi finalizado?</label><div class="ko-choice" data-ko="engCronograma"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engCronogramaObs" placeholder="Comentário (opcional)…"></textarea></div></div>
+      <div class="ko-item"><label>Financeiro foi lançado no sistema?</label><div class="ko-choice" data-ko="engFinanceiro"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engFinanceiroObs" placeholder="Comentário (opcional)…"></textarea></div></div>
+      <div class="ko-item"><label>Haverá dias fixos para as reuniões em obra?</label><div class="ko-choice" data-ko="engReunioes"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><div class="ko-cond" data-cond="engReunioes" data-when="Sim" style="display:none;margin-top:8px"><div class="ko-dia-wrap"><select data-ko="engReuniaoDia"><option value="">Dia da semana…</option><option>Segunda</option><option>Terça</option><option>Quarta</option><option>Quinta</option><option>Sexta</option><option>Sábado</option></select><label class="ko-check"><input type="checkbox" data-ko="engReuniaoIndef" class="ko-indef"> Ainda não definido</label></div></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engReunioesObs" placeholder="Comentário (opcional)…"></textarea></div></div>
+      <div class="ko-item"><label>Reunião de Alinhamento Suprimentos x Engenharia já marcada?</label><div class="ko-choice" data-ko="engAlinhamento"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engAlinhamentoObs" placeholder="Comentário (opcional)…"></textarea></div></div>
       <div class="ko-item"><label>Quem aprova os mapas de cotação e quem recebe o relatório financeiro?</label><input data-ko="engAprovacao"></div>
       <div class="ko-item"><label>Próximos passos para o começo da obra</label><textarea data-ko="engProximos"></textarea></div>
     </div></div>
 
-    <div class="section"><div class="sh"><span class="num">7</span><h2>Relacionamentos / Comercial</h2></div><div class="bd">
+    <div class="section"><div class="sh"><span class="num">7</span><h2>Relacionamentos / Comercial / ADM</h2></div><div class="bd">
       <div class="ko-item"><label>1. Perfil do cliente</label><textarea data-ko="relPerfil"></textarea></div>
       <div class="ko-item"><label>2. Cliente cadastrado no sistema?</label><div class="ko-choice" data-ko="relCadastrado"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
     </div></div>
@@ -1607,7 +1611,7 @@ function koFerrRow(d={}){const w=document.createElement('div');w.className='eqro
 function koProjRow(d={}){const w=document.createElement('div');w.className='ko-proj-row';w.innerHTML=`<div class="ko-proj-top"><select class="kpTipo"><option value="">Tipo de projeto…</option><option>Elétrico</option><option>Hidráulico</option><option>Estrutural</option><option>Outros</option></select><input class="kpNome" placeholder="Nome do projeto" style="display:none"><button class="eqrm" type="button" title="Remover">×</button></div><div class="ko-choice kpStatus" style="margin-top:10px"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div>`;const tp=w.querySelector('.kpTipo'),nm=w.querySelector('.kpNome');const upd=()=>nm.style.display=tp.value==='Outros'?'':'none';tp.onchange=upd;tp.value=d.tipo||'';nm.value=d.nome||'';upd();w.querySelectorAll('.kpStatus button').forEach(b=>{b.onclick=()=>{const was=b.classList.contains('on');w.querySelectorAll('.kpStatus button').forEach(x=>x.classList.remove('on'));if(!was)b.classList.add('on');};if(b.dataset.val===d.status)b.classList.add('on');});w.querySelector('.eqrm').onclick=()=>w.remove();$('koProjList').appendChild(w);return w;}
 function collectKo(){
   const ko={};
-  document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; ko[el.dataset.ko]=el.value; });
+  document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; ko[el.dataset.ko]=(el.type==='checkbox')?el.checked:el.value; });
   document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ const b=g.querySelector('button.on'); ko[g.dataset.ko]=b?b.dataset.val:''; });
   ko.eqExtras=[...document.querySelectorAll('#koEqExtras .eqrow')].map(r=>({nome:r.querySelector('.keNome').value.trim(),funcao:r.querySelector('.keFunc').value.trim()})).filter(x=>x.nome||x.funcao);
   ko.fornecedores=[...document.querySelectorAll('#koFornList .eqrow')].map(r=>({empresa:r.querySelector('.kfEmp').value.trim(),tipo:r.querySelector('.kfTipo').value.trim()})).filter(x=>x.empresa||x.tipo);
@@ -1618,8 +1622,11 @@ function collectKo(){
 }
 function populateKo(ko,o){
   ko=Object.assign({}, o?{obra:o.obra,arq:o.arq,ger:o.ger,metragem:o.metragem,regime:o.regime,tipo:o.tipo}:{}, ko||{});
-  document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; el.value=ko[el.dataset.ko]||''; });
+  document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; if(el.type==='checkbox')el.checked=!!ko[el.dataset.ko]; else el.value=ko[el.dataset.ko]||''; });
   document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ g.querySelectorAll('button').forEach(b=>b.classList.toggle('on', !!ko[g.dataset.ko] && b.dataset.val===ko[g.dataset.ko])); });
+  document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>updateKoCond(g.dataset.ko));
+  document.querySelectorAll('#koForm .ko-cmt').forEach(box=>{ const ta=box.querySelector('textarea'); const btn=box.previousElementSibling; const has=ta&&ta.value&&ta.value.trim(); box.style.display=has?'':'none'; if(btn&&btn.classList&&btn.classList.contains('ko-cmt-btn'))btn.textContent=has?'− comentário':'+ comentário'; });
+  document.querySelectorAll('#koForm .ko-indef').forEach(cb=>{ const wr=cb.closest('.ko-dia-wrap'); const sel=wr&&wr.querySelector('select'); if(sel){sel.disabled=cb.checked;sel.style.opacity=cb.checked?.5:1;} });
   $('koEqExtras').innerHTML=''; (Array.isArray(ko.eqExtras)?ko.eqExtras:[]).forEach(x=>koEqRow(x));
   $('koFornList').innerHTML=''; (Array.isArray(ko.fornecedores)?ko.fornecedores:[]).forEach(f=>koFornRow(f));
   $('koGuiaList').innerHTML=''; (Array.isArray(ko.admGuiaDias)?ko.admGuiaDias:[]).forEach(d=>koGuiaRow(d));
@@ -1652,7 +1659,14 @@ window.openKickoff=k=>{
   window.scrollTo(0,0);
 };
 function backKoList(){ $('koForm').style.display='none'; $('koList').style.display='block'; renderKoList(); window.scrollTo(0,0); }
-document.querySelectorAll('#koForm .ko-choice').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{ const was=b.classList.contains('on'); g.querySelectorAll('button').forEach(x=>x.classList.remove('on')); if(!was)b.classList.add('on'); }));
+function updateKoCond(key){
+  const g=document.querySelector('#koForm .ko-choice[data-ko="'+key+'"]'); if(!g)return;
+  const sel=g.querySelector('button.on'); const val=sel?sel.dataset.val:'';
+  document.querySelectorAll('#koForm .ko-cond[data-cond="'+key+'"]').forEach(c=>{ c.style.display=(c.dataset.when===val)?'':'none'; });
+}
+document.querySelectorAll('#koForm .ko-choice').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{ const was=b.classList.contains('on'); g.querySelectorAll('button').forEach(x=>x.classList.remove('on')); if(!was)b.classList.add('on'); if(g.dataset.ko)updateKoCond(g.dataset.ko); }));
+document.querySelectorAll('#koForm .ko-cmt-btn').forEach(btn=>btn.onclick=()=>{ const box=btn.nextElementSibling; const show=(box.style.display==='none'||!box.style.display); box.style.display=show?'':'none'; btn.textContent=show?'− comentário':'+ comentário'; });
+document.querySelectorAll('#koForm .ko-indef').forEach(cb=>cb.onchange=()=>{ const wr=cb.closest('.ko-dia-wrap'); const sel=wr&&wr.querySelector('select'); if(sel){sel.disabled=cb.checked;sel.style.opacity=cb.checked?.5:1;} });
 if($('koBack'))$('koBack').onclick=backKoList;
 if($('koAddEq'))$('koAddEq').onclick=()=>koEqRow();
 if($('koAddForn'))$('koAddForn').onclick=()=>koFornRow();
