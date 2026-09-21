@@ -565,54 +565,61 @@ body.setor-mode .sec-done{display:none}
         <div class="fld"><label>Obra</label><input data-ko="obra" placeholder="Nome da obra"></div>
         <div class="fld"><label>Data do Kick Off</label><input data-ko="dataKo" type="date"></div>
         <div class="fld"><label>Endereço</label><input data-ko="endereco"></div>
+        <div class="fld"><label>Arquitetura</label><input data-ko="arq" list="dlArq"></div>
         <div class="fld"><label>Tipo</label><select data-ko="tipo"><option value="">—</option><option>Apartamento</option><option>Casa</option><option>Comercial</option><option>Outro</option></select></div>
+        <div class="fld"><label>Arq. Responsável</label><input data-ko="arqResp"></div>
         <div class="fld"><label>Regime</label><select data-ko="regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
+        <div class="fld"><label>Gerenciadora</label><input data-ko="ger" list="dlGer"></div>
         <div class="fld"><label>Metragem (m²)</label><input data-ko="metragem" type="number" step="any"></div>
         <div class="fld"><label>Data Fechamento</label><input data-ko="dataFech" type="date"></div>
-      </div>
-      <div style="margin-top:14px">
-        <div class="ko-fase"><b style="align-self:center;font-size:13px">Fase Cinza</b><div class="fld" style="margin:0"><label>%</label><input data-ko="cinzapct" placeholder="%"></div><div class="fld" style="margin:0"><label>R$</label><input data-ko="cinzaRs" type="number" step="any" placeholder="R$"></div></div>
-        <div class="ko-fase"><b style="align-self:center;font-size:13px">Fase Acabamentos</b><div class="fld" style="margin:0"><label>%</label><input data-ko="acabpct" placeholder="%"></div><div class="fld" style="margin:0"><label>R$</label><input data-ko="acabRs" type="number" step="any" placeholder="R$"></div></div>
-        <div class="ko-fase"><b style="align-self:center;font-size:13px">Itens Diferenciados</b><div class="fld" style="margin:0"><label>%</label><input data-ko="itenspct" placeholder="%"></div><div class="fld" style="margin:0"><label>R$</label><input data-ko="itensRs" type="number" step="any" placeholder="R$"></div></div>
-        <div class="ko-fase"><b style="align-self:center;font-size:13px">Equipe Técnica</b><div class="fld" style="margin:0"><label>%</label><input data-ko="eqtecpct" placeholder="%"></div><div class="fld" style="margin:0"><label>R$</label><input data-ko="eqtecRs" type="number" step="any" placeholder="R$"></div></div>
+        <div class="fld"><label>Fase da obra</label><select data-ko="faseTipo"><option value="">—</option><option>Cinza</option><option>Azul</option></select></div>
       </div>
     </div></div>
 
     <div class="section"><div class="sh"><span class="num">2</span><h2>Equipe</h2></div><div class="bd">
       <div class="ko-grid">
         <div class="fld"><label>Equipe 1</label><input data-ko="eq1"></div>
-        <div class="fld"><label>Equipe 2</label><input data-ko="eq2"></div>
-        <div class="fld"><label>Equipe 3</label><input data-ko="eq3"></div>
-        <div class="fld"><label>Equipe 4</label><input data-ko="eq4"></div>
         <div class="fld"><label>Orçamentos</label><input data-ko="eqOrc"></div>
+        <div class="fld"><label>Equipe 2</label><input data-ko="eq2"></div>
         <div class="fld"><label>Suprimentos</label><input data-ko="eqSup"></div>
+        <div class="fld"><label>Equipe 3</label><input data-ko="eq3"></div>
         <div class="fld"><label>Administrativo</label><input data-ko="eqAdm"></div>
-        <div class="fld"><label>Arquitetura</label><input data-ko="arq" list="dlArq"></div>
-        <div class="fld"><label>Arq. Responsável</label><input data-ko="arqResp"></div>
-        <div class="fld"><label>Gerenciadora</label><input data-ko="ger" list="dlGer"></div>
+        <div class="fld"><label>Mestre</label><input data-ko="eqMestre"></div>
+        <div class="fld"></div>
       </div>
+      <div id="koEqExtras"></div>
+      <button class="btn add" id="koAddEq" type="button" style="margin-top:6px">+ Adicionar pessoa</button>
+      <datalist id="eqFuncList2"><option value="Engenheiro"><option value="Estagiário"><option value="Comprador"><option value="Financeiro"><option value="Mestre"></datalist>
     </div></div>
 
-    <div class="section"><div class="sh"><span class="num">3</span><h2>Prazo</h2></div><div class="bd">
+    <div class="section"><div class="sh"><span class="num">3</span><h2>Prazos e Orçamentos</h2></div><div class="bd">
       <div class="ko-grid">
         <div class="fld"><label>Início</label><input data-ko="inicio" type="date"></div>
         <div class="fld"><label>Término</label><input data-ko="termino" type="date"></div>
         <div class="fld"><label>Prazo (meses)</label><input data-ko="prazoMeses" type="number" step="any"></div>
       </div>
+      <table class="ptable" style="margin-top:14px"><thead><tr><th>Fase</th><th style="text-align:right;width:130px">%</th><th style="text-align:right;width:190px">R$</th></tr></thead><tbody>
+        <tr><td><b>Fase Cinza</b></td><td><input data-ko="cinzapct" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="cinzaRs" type="number" step="any" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Fase Acabamentos</b></td><td><input data-ko="acabpct" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="acabRs" type="number" step="any" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Itens Diferenciados</b></td><td><input data-ko="itenspct" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="itensRs" type="number" step="any" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Equipe Técnica</b></td><td><input data-ko="eqtecpct" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="eqtecRs" type="number" step="any" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+      </tbody></table>
     </div></div>
 
     <div class="section"><div class="sh"><span class="num">4</span><h2>Orçamentos</h2></div><div class="bd">
-      <div class="ko-item"><label>1. Apresentação do Projeto e Escopo e Planilha Orçamentária</label><textarea data-ko="oApresentacao"></textarea></div>
-      <div class="ko-item"><label>2. Perfil da arquitetura</label><textarea data-ko="oPerfilArq"></textarea></div>
-      <div class="ko-item"><label>3. Projetos complementares</label>
+      <div class="ko-item"><label>1. Perfil da arquitetura</label><textarea data-ko="oPerfilArq"></textarea></div>
+      <div class="ko-item"><label>2. Projetos complementares</label>
         <div class="ko-compl"><b>Elétrica</b><div class="ko-choice" data-ko="cEletrica"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
         <div class="ko-compl"><b>Hidráulica</b><div class="ko-choice" data-ko="cHidraulica"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
         <div class="ko-compl"><b>Estrutura</b><div class="ko-choice" data-ko="cEstrutura"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
         <div class="ko-compl"><b>Outro</b><div class="ko-choice" data-ko="cOutro"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
       </div>
-      <div class="ko-item"><label>4. Ferramentas de gestão de equipe (Construct In, Trello, etc.)</label><input data-ko="oFerramentas"></div>
-      <div class="ko-item"><label>5. Itens importantes ou que demandam atenção da obra</label><textarea data-ko="oItens"></textarea></div>
-      <div class="ko-item"><label>6. Lista de Fornecedores da Fase Orçamentos</label><textarea data-ko="oFornecedores"></textarea></div>
+      <div class="ko-item"><label>3. Ferramentas de gestão de equipe (Construct In, Trello, etc.)</label>
+        <div class="ko-choice" data-ko="oFerramentas"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>4. Itens importantes ou que demandam atenção da obra</label><textarea data-ko="oItens"></textarea></div>
+      <div class="ko-item"><label>5. Lista de Fornecedores da Fase Orçamentos</label>
+        <div id="koFornList"></div>
+        <button class="btn add" id="koAddForn" type="button" style="margin-top:6px">+ Adicionar fornecedor</button></div>
     </div></div>
 
     <div class="section"><div class="sh"><span class="num">5</span><h2>ADM</h2></div><div class="bd">
@@ -875,7 +882,7 @@ function migrate(){
     }
     if(!Array.isArray(o.equipe))o.equipe=[];
   });
-  obras.forEach(o=>{ if(!o.status)o.status='validado'; if(!o.koStatus)o.koStatus=o.kickoffDone?'concluido':''; });
+  obras.forEach(o=>{ if(!o.status)o.status='validado'; if(!o.koStatus)o.koStatus=o.kickoffDone?'concluido':''; if(o.kickoutReleased===undefined)o.kickoutReleased=(o.status==='rascunho'&&o.koStatus!=='rascunho'); });
 }
 function addTipoSilent(t){ t=(t||'').trim(); if(!t)return; if(!tipos.some(x=>stripAcc(x)===stripAcc(t)))tipos.push(t); }
 const $ = id => document.getElementById(id);
@@ -1224,7 +1231,7 @@ const SECTIONS=[
 function renderRascunhos(){
   const box=$('rascList'); if(!box)return;
   const koR=obras.filter(o=>o.koStatus==='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
-  const koutR=obras.filter(o=>o.status==='rascunho' && o.koStatus!=='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  const koutR=obras.filter(o=>o.status==='rascunho' && o.kickoutReleased).slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   let html='<h2 class="rasc-h">🚀 Rascunhos de Kick Off</h2>';
   if(!koR.length) html+='<p class="hint">Nenhum Kick Off em rascunho.</p>';
   else html+=koR.map(o=>`<div class="rasc-card">
@@ -1411,7 +1418,7 @@ function renderDash(){
   rankCausa(o=>(o.atraso||{}).motivo,'dashAtraso','obra(s)');
   rankCausa(o=>(o.desvio||{}).motivo,'dashDesvio','obra(s)');
 }
-function refreshCounts(){$('cObras').textContent=obras.filter(o=>o.status!=='rascunho').length;const cr=$('cRasc');if(cr)cr.textContent=obras.filter(o=>o.koStatus==='rascunho'||(o.status==='rascunho'&&o.koStatus!=='rascunho')).length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
+function refreshCounts(){$('cObras').textContent=obras.filter(o=>o.status!=='rascunho').length;const cr=$('cRasc');if(cr)cr.textContent=obras.filter(o=>o.koStatus==='rascunho'||(o.status==='rascunho'&&o.kickoutReleased)).length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
 function refreshDatalists(){
   const uniq=arr=>[...new Set(arr.filter(v=>v&&v.trim()).map(v=>v.trim()))].sort((a,b)=>a.localeCompare(b,'pt'));
   const fill=(id,vals)=>{const dl=$(id);if(dl)dl.innerHTML=vals.map(v=>`<option value="${esc(v)}">`).join('');};
@@ -1493,7 +1500,7 @@ function renderSetorList(){
   const box=$('setorList'); if(!box)return;
   const r=ROLES[currentRole]; if(!r||r.full)return;
   $('setorTitle').innerHTML='Obras aguardando <em>'+esc(r.nome)+'</em>';
-  const rs=obras.filter(o=>o.status==='rascunho'&&o.koStatus!=='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  const rs=obras.filter(o=>o.status==='rascunho'&&o.kickoutReleased).slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   if(!rs.length){box.innerHTML='<p class="hint">Nenhuma obra aberta no momento. Aguarde o Gestor criar uma obra em rascunho.</p>';return;}
   box.innerHTML=rs.map(o=>{
     const done=Array.isArray(o.done)?o.done:[];
@@ -1593,16 +1600,22 @@ $('wipe').onclick=()=>{if(confirm('Apagar TODOS os dados salvos?')){commitSynced
 
 /* ---------- init ---------- */
 /* ================= KICK OFF ================= */
+function koEqRow(d={}){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Nome</label><input class="keNome" placeholder="Nome" value="${esc(d.nome)}"></div><div class="fld"><label>Função</label><input class="keFunc" list="eqFuncList2" placeholder="Função" value="${esc(d.funcao)}"></div><button class="eqrm" type="button" title="Remover">×</button>`;w.querySelector('.eqrm').onclick=()=>w.remove();$('koEqExtras').appendChild(w);return w;}
+function koFornRow(d={}){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Empresa</label><input class="kfEmp" list="dlForn" placeholder="Nome do fornecedor" value="${esc(d.empresa)}"></div><div class="fld"><label>Tipo</label><select class="kfTipo">${tipoOptions(d.tipo)}</select></div><button class="eqrm" type="button" title="Remover">×</button>`;w.querySelector('.eqrm').onclick=()=>w.remove();$('koFornList').appendChild(w);return w;}
 function collectKo(){
   const ko={};
   document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; ko[el.dataset.ko]=el.value; });
   document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ const b=g.querySelector('button.on'); ko[g.dataset.ko]=b?b.dataset.val:''; });
+  ko.eqExtras=[...document.querySelectorAll('#koEqExtras .eqrow')].map(r=>({nome:r.querySelector('.keNome').value.trim(),funcao:r.querySelector('.keFunc').value.trim()})).filter(x=>x.nome||x.funcao);
+  ko.fornecedores=[...document.querySelectorAll('#koFornList .eqrow')].map(r=>({empresa:r.querySelector('.kfEmp').value.trim(),tipo:r.querySelector('.kfTipo').value.trim()})).filter(x=>x.empresa||x.tipo);
   return ko;
 }
 function populateKo(ko,o){
   ko=Object.assign({}, o?{obra:o.obra,arq:o.arq,ger:o.ger,metragem:o.metragem,regime:o.regime,tipo:o.tipo}:{}, ko||{});
   document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; el.value=ko[el.dataset.ko]||''; });
   document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ g.querySelectorAll('button').forEach(b=>b.classList.toggle('on', !!ko[g.dataset.ko] && b.dataset.val===ko[g.dataset.ko])); });
+  $('koEqExtras').innerHTML=''; (Array.isArray(ko.eqExtras)?ko.eqExtras:[]).forEach(x=>koEqRow(x));
+  $('koFornList').innerHTML=''; (Array.isArray(ko.fornecedores)?ko.fornecedores:[]).forEach(f=>koFornRow(f));
 }
 let koEditKey=null;
 function renderKoList(){
@@ -1632,6 +1645,8 @@ window.openKickoff=k=>{
 function backKoList(){ $('koForm').style.display='none'; $('koList').style.display='block'; renderKoList(); window.scrollTo(0,0); }
 document.querySelectorAll('#koForm .ko-choice').forEach(g=>g.querySelectorAll('button').forEach(b=>b.onclick=()=>{ const was=b.classList.contains('on'); g.querySelectorAll('button').forEach(x=>x.classList.remove('on')); if(!was)b.classList.add('on'); }));
 if($('koBack'))$('koBack').onclick=backKoList;
+if($('koAddEq'))$('koAddEq').onclick=()=>koEqRow();
+if($('koAddForn'))$('koAddForn').onclick=()=>koFornRow();
 function saveKO(koStatus){
   const ko=collectKo(); const name=(ko.obra||'').trim();
   if(!name){ toast('Informe o nome da obra','warn'); return; }
@@ -1647,7 +1662,9 @@ function saveKO(koStatus){
       if(ko.eqOrc&&ko.eqOrc.trim())eq.push({nome:ko.eqOrc.trim(),funcao:'Orçamentos'});
       if(ko.eqSup&&ko.eqSup.trim())eq.push({nome:ko.eqSup.trim(),funcao:'Suprimentos'});
       if(ko.eqAdm&&ko.eqAdm.trim())eq.push({nome:ko.eqAdm.trim(),funcao:'ADM'});
-      [ko.eq1,ko.eq2,ko.eq3,ko.eq4].forEach((nm,i)=>{if(nm&&nm.trim())eq.push({nome:nm.trim(),funcao:'Engenheiro '+(i+1)});});
+      [ko.eq1,ko.eq2,ko.eq3].forEach((nm,i)=>{if(nm&&nm.trim())eq.push({nome:nm.trim(),funcao:'Engenheiro '+(i+1)});});
+      if(ko.eqMestre&&ko.eqMestre.trim())eq.push({nome:ko.eqMestre.trim(),funcao:'Mestre'});
+      (ko.eqExtras||[]).forEach(x=>{if(x.nome&&x.nome.trim())eq.push({nome:x.nome.trim(),funcao:x.funcao||'Equipe'});});
       if(eq.length){o.equipe=eq; o.eng=eqEng(eq);}
     }
     if(ko.prazoMeses){ o.prazos=o.prazos||{}; if(!o.prazos.prazo||!o.prazos.prazo.pv){o.prazos.prazo={pv:num(ko.prazoMeses),rl:(o.prazos.prazo||{}).rl||0};} }
@@ -1669,17 +1686,19 @@ function renderPainel(){
   box.innerHTML=rows.map(o=>{
     const ko=o.kickoff||{}, koOk=!!o.kickoffDone, koutOk=o.status==='validado';
     const done=Array.isArray(o.done)?o.done:[];
+    const liberado=!!o.kickoutReleased;
     let sit,sc;
     if(koutOk){sit='Concluída';sc='sit-ok';}
     else if(!koOk){sit='Aguardando Kick Off';sc='sit-wait';}
-    else {sit='Em andamento';sc='sit-run';}
+    else if(!liberado){sit='Kick Off ok — liberar Kickout';sc='sit-wait';}
+    else {sit='Kickout em andamento';sc='sit-run';}
     let flag='';
     if(!koutOk && ko.termino){
       const t=new Date(ko.termino+'T00:00:00'); const dias=Math.round((t-hoje)/86400000);
       if(dias<0)flag='<span class="pnflag late">🏁 prazo vencido</span>';
       else if(dias<=30)flag=`<span class="pnflag soon">🏁 ${dias}d p/ término</span>`;
     }
-    const koutCell = koutOk?'<span class="prog-chip on">✓ concluído</span>':(koOk?`<span class="prog-chip">${done.length}/6 setores</span>`:'<span class="prog-chip">—</span>');
+    const koutCell = koutOk?'<span class="prog-chip on">✓ concluído</span>':(liberado?`<span class="prog-chip">${done.length}/6 setores</span>`:(koOk?'<button class="btn" style="padding:5px 10px;font-size:12px" onclick="event.stopPropagation();liberarKickout(\''+jsq(o.obra)+'\')">🔓 Liberar Kickout</button>':'<span class="prog-chip">—</span>'));
     return `<tr class="pnrow" onclick="abrirKO('${jsq(o.obra)}')">
       <td><b>${esc(o.obra)||'(sem nome)'}</b>${flag}</td>
       <td>${o.koStatus==='concluido'?'<span class="prog-chip on">✓</span>':(o.koStatus==='rascunho'?'<span class="prog-chip">✏️ rascunho</span>':'<span class="prog-chip">⏳</span>')}</td>
@@ -1689,6 +1708,11 @@ function renderPainel(){
       <td><span class="sit ${sc}">${sit}</span></td></tr>`;
   }).join('');
 }
+window.liberarKickout=k=>{
+  const o=obras.find(x=>norm(x.obra)===norm(k)); if(!o)return;
+  if(!confirm('Liberar o Kickout de "'+o.obra+'"? A obra passa a aparecer para os setores preencherem.'))return;
+  commitSynced(()=>{ const ob=obras.find(x=>norm(x.obra)===norm(k)); if(ob)ob.kickoutReleased=true; }).then(()=>toast('Kickout liberado para os setores ✓','ok'));
+};
 window.abrirKO=k=>{ go('kickoff'); openKickoff(k); };
 
 migrate();
