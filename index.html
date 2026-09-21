@@ -94,6 +94,14 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .ko-item>label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
 .ko-compl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
 .ko-compl b{min-width:90px;font-size:13px}
+.ko-hor{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.ko-hor b{min-width:130px;font-size:13px}
+.ko-hor span{font-size:12px;color:var(--muted)}
+.ko-hor input{width:120px}
+.ko-proj-row{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
+.ko-proj-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ko-proj-top .kpTipo{min-width:150px}
+.ko-proj-top .kpNome{flex:1;min-width:160px}
 @media(max-width:720px){.ko-grid{grid-template-columns:1fr}}
 .rasc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .rasc-name{font-weight:800;font-size:16px}
@@ -608,14 +616,8 @@ body.setor-mode .sec-done{display:none}
 
     <div class="section"><div class="sh"><span class="num">4</span><h2>Orçamentos</h2></div><div class="bd">
       <div class="ko-item"><label>1. Perfil da arquitetura</label><textarea data-ko="oPerfilArq"></textarea></div>
-      <div class="ko-item"><label>2. Projetos complementares</label>
-        <div class="ko-compl"><b>Elétrica</b><div class="ko-choice" data-ko="cEletrica"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
-        <div class="ko-compl"><b>Hidráulica</b><div class="ko-choice" data-ko="cHidraulica"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
-        <div class="ko-compl"><b>Estrutura</b><div class="ko-choice" data-ko="cEstrutura"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
-        <div class="ko-compl"><b>Outro</b><div class="ko-choice" data-ko="cOutro"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div></div>
-      </div>
-      <div class="ko-item"><label>3. Ferramentas de gestão de equipe (Construct In, Trello, etc.)</label>
-        <div class="ko-choice" data-ko="oFerramentas"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>2. Projetos complementares</label><div id="koProjList"></div><button class="btn add" id="koAddProj" type="button" style="margin-top:6px">+ Adicionar projeto</button></div>
+      <div class="ko-item"><label>3. Ferramentas de gestão de equipe (Construct In, Trello, etc.)</label><div id="koFerrList"></div><button class="btn add" id="koAddFerr" type="button" style="margin-top:6px">+ Adicionar ferramenta</button></div>
       <div class="ko-item"><label>4. Itens importantes ou que demandam atenção da obra</label><textarea data-ko="oItens"></textarea></div>
       <div class="ko-item"><label>5. Lista de Fornecedores da Fase Orçamentos</label>
         <div id="koFornList"></div>
@@ -623,15 +625,13 @@ body.setor-mode .sec-done{display:none}
     </div></div>
 
     <div class="section"><div class="sh"><span class="num">5</span><h2>ADM</h2></div><div class="bd">
-      <div class="ko-item"><label>1. Quais dias do mês para envio de Guia de Envio?</label><input data-ko="admGuia"></div>
+      <div class="ko-item"><label>1. Quais dias do mês para envio de Guia de Envio?</label><div id="koGuiaList"></div><button class="btn add" id="koAddGuia" type="button" style="margin-top:6px">+ Adicionar dia</button></div>
       <div class="ko-item"><label>2. Precisa de Nota Cheia?</label><div class="ko-choice" data-ko="admNotaCheia"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
       <div class="ko-item"><label>3. Quais os contatos do cliente para envio de notas?</label><textarea data-ko="admContatos"></textarea></div>
       <div class="ko-item"><label>4. Horário e dias de trabalho</label>
-        <div class="ko-grid">
-          <div class="fld"><label>Segunda à Quinta</label><input data-ko="admSeg"></div>
-          <div class="fld"><label>Sexta</label><input data-ko="admSex"></div>
-          <div class="fld"><label>Sábado</label><input data-ko="admSab"></div>
-        </div>
+        <div class="ko-hor"><b>Segunda à Quinta</b><span>das</span><input data-ko="admSegIni" type="time"><span>às</span><input data-ko="admSegFim" type="time"></div>
+        <div class="ko-hor"><b>Sexta</b><span>das</span><input data-ko="admSexIni" type="time"><span>às</span><input data-ko="admSexFim" type="time"></div>
+        <div class="ko-hor"><b>Sábado</b><span>das</span><input data-ko="admSabIni" type="time"><span>às</span><input data-ko="admSabFim" type="time"></div>
       </div>
     </div></div>
 
@@ -1602,12 +1602,18 @@ $('wipe').onclick=()=>{if(confirm('Apagar TODOS os dados salvos?')){commitSynced
 /* ================= KICK OFF ================= */
 function koEqRow(d={}){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Nome</label><input class="keNome" placeholder="Nome" value="${esc(d.nome)}"></div><div class="fld"><label>Função</label><input class="keFunc" list="eqFuncList2" placeholder="Função" value="${esc(d.funcao)}"></div><button class="eqrm" type="button" title="Remover">×</button>`;w.querySelector('.eqrm').onclick=()=>w.remove();$('koEqExtras').appendChild(w);return w;}
 function koFornRow(d={}){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Empresa</label><input class="kfEmp" list="dlForn" placeholder="Nome do fornecedor" value="${esc(d.empresa)}"></div><div class="fld"><label>Tipo</label><select class="kfTipo">${tipoOptions(d.tipo)}</select></div><button class="eqrm" type="button" title="Remover">×</button>`;w.querySelector('.eqrm').onclick=()=>w.remove();$('koFornList').appendChild(w);return w;}
+function koGuiaRow(d=''){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Dia do mês</label><select class="kgDia"><option value="">—</option>${Array.from({length:31},(_,i)=>`<option value="${i+1}"${String(i+1)===String(d)?' selected':''}>Dia ${i+1}</option>`).join('')}</select></div><button class="eqrm" type="button" title="Remover">×</button>`;w.querySelector('.eqrm').onclick=()=>w.remove();$('koGuiaList').appendChild(w);return w;}
+function koFerrRow(d={}){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Ferramenta</label><select class="kwTipo"><option value="">Escolha…</option><option>Construct In</option><option>Trello</option><option>Outros</option></select></div><div class="fld"><label>Nome (se Outros)</label><input class="kwNome" placeholder="Nome da ferramenta" style="display:none"></div><button class="eqrm" type="button" title="Remover">×</button>`;const tp=w.querySelector('.kwTipo'),nm=w.querySelector('.kwNome');const upd=()=>nm.style.display=tp.value==='Outros'?'':'none';tp.onchange=upd;tp.value=d.tipo||'';nm.value=d.nome||'';upd();w.querySelector('.eqrm').onclick=()=>w.remove();$('koFerrList').appendChild(w);return w;}
+function koProjRow(d={}){const w=document.createElement('div');w.className='ko-proj-row';w.innerHTML=`<div class="ko-proj-top"><select class="kpTipo"><option value="">Tipo de projeto…</option><option>Elétrico</option><option>Hidráulico</option><option>Estrutural</option><option>Outros</option></select><input class="kpNome" placeholder="Nome do projeto" style="display:none"><button class="eqrm" type="button" title="Remover">×</button></div><div class="ko-choice kpStatus" style="margin-top:10px"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div>`;const tp=w.querySelector('.kpTipo'),nm=w.querySelector('.kpNome');const upd=()=>nm.style.display=tp.value==='Outros'?'':'none';tp.onchange=upd;tp.value=d.tipo||'';nm.value=d.nome||'';upd();w.querySelectorAll('.kpStatus button').forEach(b=>{b.onclick=()=>{const was=b.classList.contains('on');w.querySelectorAll('.kpStatus button').forEach(x=>x.classList.remove('on'));if(!was)b.classList.add('on');};if(b.dataset.val===d.status)b.classList.add('on');});w.querySelector('.eqrm').onclick=()=>w.remove();$('koProjList').appendChild(w);return w;}
 function collectKo(){
   const ko={};
   document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; ko[el.dataset.ko]=el.value; });
   document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ const b=g.querySelector('button.on'); ko[g.dataset.ko]=b?b.dataset.val:''; });
   ko.eqExtras=[...document.querySelectorAll('#koEqExtras .eqrow')].map(r=>({nome:r.querySelector('.keNome').value.trim(),funcao:r.querySelector('.keFunc').value.trim()})).filter(x=>x.nome||x.funcao);
   ko.fornecedores=[...document.querySelectorAll('#koFornList .eqrow')].map(r=>({empresa:r.querySelector('.kfEmp').value.trim(),tipo:r.querySelector('.kfTipo').value.trim()})).filter(x=>x.empresa||x.tipo);
+  ko.admGuiaDias=[...document.querySelectorAll('#koGuiaList .eqrow')].map(r=>r.querySelector('.kgDia').value).filter(Boolean);
+  ko.ferramentas=[...document.querySelectorAll('#koFerrList .eqrow')].map(r=>({tipo:r.querySelector('.kwTipo').value,nome:r.querySelector('.kwNome').value.trim()})).filter(x=>x.tipo||x.nome);
+  ko.projetos=[...document.querySelectorAll('#koProjList .ko-proj-row')].map(r=>{const st=r.querySelector('.kpStatus button.on');return {tipo:r.querySelector('.kpTipo').value,nome:r.querySelector('.kpNome').value.trim(),status:st?st.dataset.val:''};}).filter(x=>x.tipo||x.nome);
   return ko;
 }
 function populateKo(ko,o){
@@ -1616,6 +1622,9 @@ function populateKo(ko,o){
   document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ g.querySelectorAll('button').forEach(b=>b.classList.toggle('on', !!ko[g.dataset.ko] && b.dataset.val===ko[g.dataset.ko])); });
   $('koEqExtras').innerHTML=''; (Array.isArray(ko.eqExtras)?ko.eqExtras:[]).forEach(x=>koEqRow(x));
   $('koFornList').innerHTML=''; (Array.isArray(ko.fornecedores)?ko.fornecedores:[]).forEach(f=>koFornRow(f));
+  $('koGuiaList').innerHTML=''; (Array.isArray(ko.admGuiaDias)?ko.admGuiaDias:[]).forEach(d=>koGuiaRow(d));
+  $('koFerrList').innerHTML=''; (Array.isArray(ko.ferramentas)?ko.ferramentas:[]).forEach(f=>koFerrRow(f));
+  $('koProjList').innerHTML=''; (Array.isArray(ko.projetos)?ko.projetos:[]).forEach(pr=>koProjRow(pr));
 }
 let koEditKey=null;
 function renderKoList(){
@@ -1647,6 +1656,9 @@ document.querySelectorAll('#koForm .ko-choice').forEach(g=>g.querySelectorAll('b
 if($('koBack'))$('koBack').onclick=backKoList;
 if($('koAddEq'))$('koAddEq').onclick=()=>koEqRow();
 if($('koAddForn'))$('koAddForn').onclick=()=>koFornRow();
+if($('koAddGuia'))$('koAddGuia').onclick=()=>koGuiaRow();
+if($('koAddFerr'))$('koAddFerr').onclick=()=>koFerrRow();
+if($('koAddProj'))$('koAddProj').onclick=()=>koProjRow();
 function saveKO(koStatus){
   const ko=collectKo(); const name=(ko.obra||'').trim();
   if(!name){ toast('Informe o nome da obra','warn'); return; }
