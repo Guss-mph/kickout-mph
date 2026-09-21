@@ -381,7 +381,7 @@ body.setor-mode .sec-done{display:none}
 <body>
 <div id="loginScreen" class="login-screen">
   <div class="login-card">
-    <div class="login-logo"><span class="mk">Kick<em>|</em>Out</span></div>
+    <div class="login-logo"><span class="mk">Kick<em>|</em>On</span></div>
     <p class="login-sub">Selecione seu acesso para continuar</p>
     <div class="login-roles" id="loginRoles">
       <button class="role-btn" data-role="gestor">👤 Gestor <small>Cria o Kick Off e valida os Kickouts — requer senha</small></button>
@@ -402,7 +402,7 @@ body.setor-mode .sec-done{display:none}
 </div>
 <header>
   <div class="head-in">
-    <div class="brand"><span class="mk">Kick<em>|</em>Out</span><small>Gestão de Obras</small><span id="sbStatus" class="sbdot off">● Local</span></div>
+    <div class="brand"><span class="mk">Kick<em>|</em>On</span><small>Gestão de Obras</small><span id="sbStatus" class="sbdot off">● Local</span></div>
     <nav id="nav">
       <button data-v="painel" class="active">🏗 Painel</button>
       <button data-v="kickoff">🚀 Kick Off</button>
@@ -1306,7 +1306,7 @@ window.viewObra=k=>{
     return its.length?`<div class="mh">Relacionamentos</div>${its.join('')}`:'';};
   const eqArr=Array.isArray(o.equipe)?o.equipe:[];
   const eqItems=eqArr.map(p=>[p.funcao||'—',p.nome]);
-  let html=`<div class="print-only print-brand"><b>Kick|Out</b> · Documento de Kickout — MpH Engenharia</div>
+  let html=`<div class="print-only print-brand"><b>Kick|On</b> · Documento de Kickout — MpH Engenharia</div>
     <div class="modal-head"><div class="eyebrow-l">Obra</div><h3>${esc(o.obra)}</h3>
     <div class="sub">${fmtDate(o.data)||'sem data'} · ${esc(o.regime)||'regime —'}</div>
     <button class="btn ghost print-btn" onclick="resumoObra('${jsq(o.obra)}')" style="margin-top:14px;margin-right:8px">📄 Resumo executivo</button><button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
@@ -1342,7 +1342,7 @@ window.resumoObra=k=>{
   const daObra=[];forn.forEach(f=>(f.hist||[]).forEach(h=>{if(norm(h.obra)===norm(o.obra))daObra.push({empresa:f.empresa,...h});}));
   const chip=(txt,cls)=>`<span class="rex-chip ${cls}">${txt}</span>`;
   const fornHtml=daObra.length?daObra.map(f=>{const tc=pick(f.notaTec,f.nota),pc=pick(f.notaParc,f.nota);return `<tr><td><b>${esc(f.empresa)}</b> <small style="color:var(--muted)">${esc(f.tipo)||''}</small></td><td>${tc!=null?`<b style="color:${notaColor(tc)}">★ ${tc}</b>`:'—'}</td><td>${pc!=null?`<b style="color:${notaColor(pc)}">★ ${pc}</b>`:'—'}</td></tr>`;}).join(''):'<tr><td colspan="3" style="color:var(--muted)">Nenhum fornecedor registrado.</td></tr>';
-  const html=`<div class="print-only print-brand"><b>Kick|Out</b> · Resumo Executivo — MpH Engenharia</div>
+  const html=`<div class="print-only print-brand"><b>Kick|On</b> · Resumo Executivo — MpH Engenharia</div>
     <div class="modal-head"><div class="eyebrow-l">Resumo executivo</div><h3>${esc(o.obra)}</h3>
       <div class="sub">${esc(o.arq)||'arquitetura —'}${(ko.inicio||ko.termino)?` · ${fmtDate(ko.inicio)||'?'} → ${fmtDate(ko.termino)||'?'}`:''}${o.complex?' · Complexidade '+esc(o.complex):''}</div>
       <button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
