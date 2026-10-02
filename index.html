@@ -1530,6 +1530,7 @@ function requireGestor(cb){
 function tryGestor(){
   if(hashPin($('loginPin').value.trim())===IO_PIN_HASH){
     gestorAuth=true; $('loginScreen').style.display='none'; loginBackFn();
+    if($('painelBody'))renderPainel();
     const cb=pendingGestorCb; pendingGestorCb=null; if(cb)cb();
   } else { $('loginErr').textContent='Senha incorreta.'; $('loginPin').value=''; $('loginPin').focus(); }
 }
@@ -1807,7 +1808,7 @@ function renderPainel(){
       <td class="pn-kout pn-click" onclick="abrirKoutCell('${jsq(o.obra)}')">${koutCell}</td>
       <td>${fmtDate(ko.inicio)||'—'}</td>
       <td>${fmtDate(ko.termino)||'—'}</td>
-      <td class="pn-acts">${koPdf}${koutPdf}<button class="pn-del" title="Excluir obra (Gestor)" onclick="requireGestor(()=>delObra('${jsq(o.obra)}'))">🗑️</button></td></tr>`;
+      <td class="pn-acts">${koPdf}${koutPdf}${gestorAuth?`<button class="pn-del" title="Excluir obra" onclick="delObra('${jsq(o.obra)}')">🗑️</button>`:''}${(koPdf||koutPdf||gestorAuth)?'':'—'}</td></tr>`;
   }).join('');
 }
 document.querySelectorAll('.pn-filter').forEach(c=>c.onclick=()=>{ painelFilter=(painelFilter===c.dataset.f)?null:c.dataset.f; renderPainel(); });
