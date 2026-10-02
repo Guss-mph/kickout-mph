@@ -68,7 +68,7 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .rex-d{font-size:12px;color:var(--muted);margin-top:8px}
 .rex-cause{font-size:13px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
 @media(max-width:720px){.rex-grid{grid-template-columns:1fr}}
-.pn-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.pn-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
 .pn-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
 .pn-num{font-size:32px;font-weight:800;color:var(--clay);line-height:1}
 .pn-lbl{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px}
@@ -81,6 +81,35 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .pnflag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;white-space:nowrap}
 .pnflag.soon{background:rgba(224,138,30,.16);color:#a86414}
 .pnflag.late{background:rgba(239,50,54,.14);color:var(--bad)}
+.pn-filter{cursor:pointer;transition:.15s}
+.pn-filter:hover{border-color:var(--clay)}
+.pn-filter.active{border-color:var(--clay);background:rgba(239,50,54,.06);box-shadow:0 0 0 2px rgba(239,50,54,.15)}
+.pn-legend{display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:12px;color:var(--muted);margin-bottom:14px}
+.pn-legend b{color:var(--ink)}
+.pn-toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.pn-toolbar input{flex:1;min-width:220px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;font-family:inherit}
+#pnTable th[data-sort]{cursor:pointer;user-select:none}
+#pnTable th[data-sort]:hover{color:var(--clay)}
+#pnTable .pn-ko{background:rgba(46,125,107,.05)}
+#pnTable .pn-kout{background:rgba(224,138,30,.05)}
+.pn-grouphead th{text-align:center;font-size:11px;letter-spacing:.08em;color:var(--muted);border-bottom:none;padding-bottom:2px}
+.pn-grouphead .pn-ko{color:#1a7a45}
+.pn-grouphead .pn-kout{color:#a86414}
+.pn-click{cursor:pointer}
+.pn-click:hover{filter:brightness(.97)}
+.pn-pdf{background:var(--ink);color:#fff;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:4px}
+.pn-pdf:hover{background:#000}
+.pn-acts{white-space:nowrap}
+.pn-del{background:none;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px;cursor:pointer;margin-left:4px}
+.pn-del:hover{border-color:var(--bad);background:#FBE6E6}
+.nav-gestor{border:1px solid var(--line);border-radius:8px}
+.gestor-hub{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hub-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;cursor:pointer;font-family:inherit;transition:.15s}
+.hub-card:hover{border-color:var(--clay);transform:translateY(-2px);box-shadow:0 10px 30px -18px rgba(0,0,0,.3)}
+.hub-ic{font-size:26px}
+.hub-card b{font-size:16px;color:var(--ink)}
+.hub-card small{color:var(--muted);font-size:12px}
+@media(max-width:720px){.gestor-hub{grid-template-columns:1fr}.pn-cards{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.pn-cards{grid-template-columns:1fr}}
 .ko-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--mist);color:var(--muted);border:1px solid var(--line);white-space:nowrap;margin-left:8px;vertical-align:middle}
 .ko-badge.on{background:rgba(31,166,90,.14);color:#1a7a45;border-color:rgba(31,166,90,.3)}
@@ -405,14 +434,10 @@ body.setor-mode .sec-done{display:none}
     <div class="brand"><span class="mk">Kick<em>|</em>On</span><small>Gestão de Obras</small><span id="sbStatus" class="sbdot off">● Local</span></div>
     <nav id="nav">
       <button data-v="painel" class="active">🏗 Painel</button>
-      <button data-v="kickoff">🚀 Kick Off</button>
-      <button data-v="form">✎ Kickout</button>
-      <button data-v="rascunho">Rascunhos <span class="pill" id="cRasc">0</span></button>
       <button data-v="obras">Obras <span class="pill" id="cObras">0</span></button>
       <button data-v="forn">Fornecedores <span class="pill" id="cForn">0</span></button>
-      <button data-v="tipos">Tipos</button>
       <button data-v="dash">Dashboard</button>
-      <button data-v="io">Dados</button>
+      <button data-v="gestor" class="nav-gestor">⚙ Gestor</button>
     </nav>
     <span id="roleBadge" class="role-badge" style="display:none"></span>
     <button id="logoutBtn" class="logout-btn" style="display:none">⇄ Trocar acesso</button>
@@ -552,19 +577,34 @@ body.setor-mode .sec-done{display:none}
 </section>
 
 <!-- ============ RASCUNHOS ============ -->
-<section class="view" id="v-rascunho">
-  <div class="lead"><div><h1><em>Rascunhos</em> em andamento</h1><p>Kick Offs e Kickouts que ainda estão sendo preenchidos. Continue de onde parou e conclua quando estiver pronto.</p></div></div>
-  <div id="rascList"></div>
+<section class="view" id="v-painel">
+  <div class="lead"><div><h1>Painel de <em>Gestão de Obra</em></h1><p>Situação geral do ciclo. Clique num card para filtrar, e numa obra para abrir o Kick Off ou o Kickout.</p></div></div>
+  <div class="pn-cards">
+    <div class="pn-card pn-filter" data-f="kickoff"><div class="pn-num" id="pnKO">0</div><div class="pn-lbl">🚀 Kick Off pendente</div></div>
+    <div class="pn-card pn-filter" data-f="kickout"><div class="pn-num" id="pnKout">0</div><div class="pn-lbl">✎ Kickout em andamento</div></div>
+    <div class="pn-card pn-filter" data-f="rascunho"><div class="pn-num" id="pnRasc">0</div><div class="pn-lbl">✏️ Em rascunho</div></div>
+    <div class="pn-card pn-filter" data-f="concluido"><div class="pn-num" id="pnConcl">0</div><div class="pn-lbl">✓ Concluídas</div></div>
+  </div>
+  <div class="pn-legend"><b>Legenda:</b><span>⏳ pendente</span><span>✏️ em rascunho</span><span>✓ concluído</span><span>🔓 liberar Kickout</span><span>X/6 setores</span><span>🏁 prazo próximo / vencido</span></div>
+  <div class="pn-toolbar"><input id="pnSearch" placeholder="🔎 Buscar obra ou arquitetura…"><span class="hint" id="pnFilterInfo"></span></div>
+  <div class="htable-wrap"><table class="htable" id="pnTable">
+    <thead>
+      <tr class="pn-grouphead"><th></th><th class="pn-ko">KICK OFF</th><th class="pn-kout">KICKOUT</th><th colspan="3"></th></tr>
+      <tr><th data-sort="obra">Obra ⇅</th><th class="pn-ko" data-sort="ko">Status ⇅</th><th class="pn-kout" data-sort="kout">Status ⇅</th><th data-sort="inicio">Início ⇅</th><th data-sort="termino">Término (prev.) ⇅</th><th>Ações</th></tr>
+    </thead>
+    <tbody id="painelBody"></tbody>
+  </table></div>
 </section>
 
-<section class="view" id="v-painel">
-  <div class="lead"><div><h1>Painel de <em>Gestão de Obra</em></h1><p>Situação geral do ciclo — Kick Off (abertura) e Kickout (encerramento) de cada obra. Clique numa obra para abrir o Kick Off.</p></div></div>
-  <div class="pn-cards">
-    <div class="pn-card"><div class="pn-num" id="pnAguard">0</div><div class="pn-lbl">Aguardando Kick Off</div></div>
-    <div class="pn-card"><div class="pn-num" id="pnAnda">0</div><div class="pn-lbl">Em andamento</div></div>
-    <div class="pn-card"><div class="pn-num" id="pnConcl">0</div><div class="pn-lbl">Concluídas</div></div>
+<!-- ============ ÁREA DO GESTOR ============ -->
+<section class="view" id="v-gestor">
+  <div class="lead"><div><h1>Área do <em>Gestor</em></h1><p>Inicie novos processos e acesse as configurações restritas.</p></div></div>
+  <div class="gestor-hub">
+    <button class="hub-card" onclick="requireGestor(()=>abrirKO(null))"><span class="hub-ic">🚀</span><b>Novo Kick Off</b><small>Abrir uma obra do zero (ciclo completo)</small></button>
+    <button class="hub-card" onclick="requireGestor(novoKickoutDireto)"><span class="hub-ic">✎</span><b>Novo Kickout direto</b><small>Obra que terá só a reunião final</small></button>
+    <button class="hub-card" onclick="requireGestor(()=>go('tipos'))"><span class="hub-ic">🏷️</span><b>Tipos de fornecedor</b><small>Gerenciar as categorias</small></button>
+    <button class="hub-card" onclick="requireGestor(()=>go('io'))"><span class="hub-ic">💾</span><b>Dados / Importar</b><small>Exportar, importar e conexão</small></button>
   </div>
-  <div class="htable-wrap"><table class="htable"><thead><tr><th>Obra</th><th>Kick Off</th><th>Kickout</th><th>Início</th><th>Término (prev.)</th><th>Situação</th></tr></thead><tbody id="painelBody"></tbody></table></div>
 </section>
 
 <section class="view" id="v-kickoff">
@@ -1155,7 +1195,9 @@ async function saveObra(status){
   let novos=0,upd=0;
   await commitSynced(()=>{
     const oi=obras.findIndex(x=>norm(x.obra)===norm(o.obra));
-    if(oi>=0)obras[oi]=o; else obras.push(o);
+    if(oi>=0){ const prev=obras[oi]; o.kickoff=prev.kickoff; o.koStatus=prev.koStatus; o.kickoutReleased=prev.kickoutReleased; if(prev.done&&(!o.done||!o.done.length))o.done=prev.done; obras[oi]=o; }
+    else obras.push(o);
+    if(status==='rascunho' && !o.koStatus){ const _i=obras.findIndex(x=>norm(x.obra)===norm(o.obra)); if(_i>=0 && !obras[_i].kickoutReleased)obras[_i].kickoutReleased=true; }
     if(status!=='rascunho'){
       novos=0;upd=0;
       fs.forEach(f=>{
@@ -1175,7 +1217,7 @@ async function saveObra(status){
   if(status==='rascunho'){ toast('Rascunho salvo.','ok'); clearForm(); go('rascunho'); }
   else { let msg='Kickout validado.'; if(fs.length)msg+=` Fornecedores: ${novos} novo(s), ${upd} atualizado(s).`; toast(msg,'ok'); clearForm(); go('obras'); }
 }
-$('btnSave').onclick=()=>saveObra('validado');
+$('btnSave').onclick=()=>requireGestor(()=>saveObra('validado'));
 $('btnRascunho').onclick=()=>saveObra('rascunho');
 
 /* ---------- render históricos ---------- */
@@ -1445,12 +1487,19 @@ if($('ioUnlock'))$('ioUnlock').onclick=tryIoPin;
 if($('ioPin'))$('ioPin').addEventListener('keydown',e=>{if(e.key==='Enter')tryIoPin();});
 function go(v){document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='v-'+v));
-  if(v==='io'){ if(currentRole==='gestor'){$('ioGate').style.display='block';$('ioLock').style.display='none';} else lockIo(); }
+  if(v==='io'){ if(gestorAuth){$('ioGate').style.display='block';$('ioLock').style.display='none';} else lockIo(); }
   if(v==='setor')renderSetorList();
   if(v==='kickoff'){$('koForm').style.display='none';$('koList').style.display='block';renderKoList();}
   if(v==='painel')renderPainel();
   if(v!=='form'&&v!=='setor')renderAll();}
-document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
+  const v=b.dataset.v;
+  if(v==='gestor'){ requireGestor(()=>{currentRole='gestor';updateRoleUI();go('gestor');}); }
+  else go(v);
+});
+window.abrirKoutGestor=k=>{ const o=obras.find(x=>norm(x.obra)===norm(k)); if(!o)return; if(o.status==='validado'){viewObra(k);return;} currentRole='gestor';document.body.classList.remove('setor-mode');restoreFullForm();updateRoleUI();abrirRascunho(k); };
+window.abrirKoutCell=k=>{ const o=obras.find(x=>norm(x.obra)===norm(k)); if(!o)return; if(o.status==='validado'){viewObra(k);return;} if(o.kickoutReleased){ openKickoutPickerFor(k); } else { toast('Kickout ainda não liberado para preenchimento.','warn'); } };
+function novoKickoutDireto(){ currentRole='gestor'; currentObraName=null; document.body.classList.remove('setor-mode'); restoreFullForm(); clearForm(); updateRoleUI(); go('form'); window.scrollTo(0,0); toast('Preencha e valide o Kickout desta obra (sem Kick Off).','ok'); }
 
 /* ================= LOGIN / PAPÉIS ================= */
 const ROLES={
@@ -1460,43 +1509,56 @@ const ROLES={
   engenharia:{nome:'Engenharia', sec:'eng'},
   admobra:{nome:'ADM de Obra', sec:'equipe'}
 };
-let currentRole=null, currentObraName=null;
+let currentRole=null, currentObraName=null, gestorAuth=false, pendingGestorCb=null;
 
-document.querySelectorAll('.role-btn').forEach(b=>b.onclick=()=>{
-  const r=b.dataset.role;
-  if(r==='gestor'){ $('loginRoles').style.display='none'; $('gestorPass').style.display='block'; setTimeout(()=>$('loginPin').focus(),50); }
-  else enterApp(r);
-});
-function loginBackFn(){ $('gestorPass').style.display='none'; $('loginRoles').style.display=''; $('loginPin').value=''; $('loginErr').textContent=''; }
-if($('loginBack'))$('loginBack').onclick=loginBackFn;
-function tryGestor(){ if(hashPin($('loginPin').value.trim())===IO_PIN_HASH){ enterApp('gestor'); loginBackFn(); } else { $('loginErr').textContent='Senha incorreta.'; $('loginPin').value=''; $('loginPin').focus(); } }
+function updateRoleUI(){
+  const active=!!currentRole;
+  if($('roleBadge')){$('roleBadge').style.display=active?'':'none'; if(active)$('roleBadge').textContent=(currentRole==='gestor'?'Gestor':(ROLES[currentRole]?ROLES[currentRole].nome:''));}
+  if($('logoutBtn'))$('logoutBtn').style.display=active?'':'none';
+}
+function loginBackFn(){ if($('gestorPass'))$('gestorPass').style.display='none'; if($('loginRoles'))$('loginRoles').style.display=''; if($('loginPin'))$('loginPin').value=''; if($('loginErr'))$('loginErr').textContent=''; }
+/* senha do Gestor sob demanda */
+function requireGestor(cb){
+  if(gestorAuth){ cb&&cb(); return; }
+  pendingGestorCb=cb||null;
+  if($('loginRoles'))$('loginRoles').style.display='none';
+  if($('gestorPass'))$('gestorPass').style.display='block';
+  if($('loginErr'))$('loginErr').textContent=''; if($('loginPin'))$('loginPin').value='';
+  $('loginScreen').style.display='flex';
+  setTimeout(()=>{if($('loginPin'))$('loginPin').focus();},50);
+}
+function tryGestor(){
+  if(hashPin($('loginPin').value.trim())===IO_PIN_HASH){
+    gestorAuth=true; $('loginScreen').style.display='none'; loginBackFn();
+    const cb=pendingGestorCb; pendingGestorCb=null; if(cb)cb();
+  } else { $('loginErr').textContent='Senha incorreta.'; $('loginPin').value=''; $('loginPin').focus(); }
+}
+if($('loginBack'))$('loginBack').onclick=()=>{ $('loginScreen').style.display='none'; pendingGestorCb=null; loginBackFn(); };
 if($('loginEnter'))$('loginEnter').onclick=tryGestor;
 if($('loginPin'))$('loginPin').addEventListener('keydown',e=>{if(e.key==='Enter')tryGestor();});
-
+/* escolher setor (ao clicar em Kickout) */
+let pendingKickoutObra=null;
+function openKickoutPickerFor(k){ pendingKickoutObra=k||null; loginBackFn(); $('loginScreen').style.display='flex'; }
+document.querySelectorAll('.role-btn').forEach(b=>b.onclick=()=>{
+  const r=b.dataset.role; const obra=pendingKickoutObra; pendingKickoutObra=null;
+  if(r==='gestor'){ requireGestor(()=>{ currentRole='gestor'; document.body.classList.remove('setor-mode'); restoreFullForm(); updateRoleUI(); if(obra)abrirKoutGestor(obra); else { clearForm(); go('form'); } window.scrollTo(0,0); }); }
+  else { $('loginScreen').style.display='none'; currentRole=r; document.body.classList.add('setor-mode'); restoreFullForm(); updateRoleUI(); if(obra)abrirSetorObra(obra); else { renderSetorList(); go('setor'); } window.scrollTo(0,0); }
+});
+function enterSetor(role){
+  currentRole=role; currentObraName=null;
+  document.body.classList.add('setor-mode'); restoreFullForm(); updateRoleUI();
+  renderSetorList(); go('setor'); window.scrollTo(0,0);
+}
 function restoreFullForm(){
-  $('formActions').style.display='';$('setorActions').style.display='none';
+  if($('formActions'))$('formActions').style.display='';
+  if($('setorActions'))$('setorActions').style.display='none';
   const h=document.querySelector('#v-form .howto'); if(h)h.style.display='';
   document.querySelectorAll('#v-form .section').forEach(s=>s.style.display='');
 }
-function enterApp(role){
-  currentRole=role; currentObraName=null;
-  $('loginScreen').style.display='none';
-  $('roleBadge').style.display=''; $('roleBadge').textContent=ROLES[role].nome;
-  $('logoutBtn').style.display='';
-  if(ROLES[role].full){
-    document.body.classList.remove('setor-mode');
-    $('nav').style.display=''; restoreFullForm(); clearForm(); go('painel');
-  } else {
-    document.body.classList.add('setor-mode');
-    $('nav').style.display='none'; renderSetorList(); go('setor');
-  }
-  window.scrollTo(0,0);
-}
 if($('logoutBtn'))$('logoutBtn').onclick=()=>{
-  currentRole=null; currentObraName=null;
+  currentRole=null; currentObraName=null; gestorAuth=false;
   document.body.classList.remove('setor-mode'); restoreFullForm();
-  $('nav').style.display=''; $('roleBadge').style.display='none'; $('logoutBtn').style.display='none';
-  $('loginScreen').style.display='flex'; loginBackFn();
+  updateRoleUI(); go('painel'); window.scrollTo(0,0);
 };
 
 /* lista de obras abertas para o setor preencher */
@@ -1701,45 +1763,92 @@ if($('koSave'))$('koSave').onclick=()=>saveKO('concluido');
 if($('koSaveDraft'))$('koSaveDraft').onclick=()=>saveKO('rascunho');
 
 /* ================= PAINEL (Gestão de Obra) ================= */
+let painelFilter=null, pnSortKey='termino', pnSortDir=1;
 function renderPainel(){
   const box=$('painelBody'); if(!box)return;
-  if($('pnAguard'))$('pnAguard').textContent=obras.filter(o=>!o.kickoffDone).length;
-  if($('pnAnda'))$('pnAnda').textContent=obras.filter(o=>o.kickoffDone && o.status!=='validado').length;
+  const isKO=o=>o.koStatus!=='concluido';
+  const isKout=o=>o.kickoutReleased&&o.status!=='validado';
+  const isRasc=o=>o.koStatus==='rascunho'||(o.status==='rascunho'&&o.kickoutReleased);
+  if($('pnKO'))$('pnKO').textContent=obras.filter(isKO).length;
+  if($('pnKout'))$('pnKout').textContent=obras.filter(isKout).length;
+  if($('pnRasc'))$('pnRasc').textContent=obras.filter(isRasc).length;
   if($('pnConcl'))$('pnConcl').textContent=obras.filter(o=>o.status==='validado').length;
-  const rows=obras.slice().sort((a,b)=>(((a.kickoff&&a.kickoff.termino)||'zzzz').localeCompare((b.kickoff&&b.kickoff.termino)||'zzzz')));
-  if(!rows.length){ box.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">Nenhuma obra ainda. Vá em <b>Kick Off</b> para abrir a primeira.</td></tr>'; return; }
+  document.querySelectorAll('.pn-filter').forEach(c=>c.classList.toggle('active',c.dataset.f===painelFilter));
+  let rows=obras.slice();
+  const q=(($('pnSearch')&&$('pnSearch').value)||'').trim().toLowerCase();
+  if(q)rows=rows.filter(o=>[o.obra,o.arq].some(v=>(v||'').toLowerCase().includes(q)));
+  if(painelFilter==='kickoff')rows=rows.filter(isKO);
+  else if(painelFilter==='kickout')rows=rows.filter(isKout);
+  else if(painelFilter==='rascunho')rows=rows.filter(isRasc);
+  else if(painelFilter==='concluido')rows=rows.filter(o=>o.status==='validado');
+  const val=(o,k)=>{const ko=o.kickoff||{};
+    if(k==='obra')return (o.obra||'').toLowerCase();
+    if(k==='inicio')return ko.inicio||'';
+    if(k==='termino')return ko.termino||'zzzz';
+    if(k==='ko')return o.koStatus==='concluido'?2:(o.koStatus==='rascunho'?1:0);
+    if(k==='kout')return o.status==='validado'?3:(o.kickoutReleased?2:(o.koStatus==='concluido'?1:0));
+    return '';};
+  rows.sort((a,b)=>{const va=val(a,pnSortKey),vb=val(b,pnSortKey);return (va>vb?1:va<vb?-1:0)*pnSortDir;});
+  if($('pnFilterInfo'))$('pnFilterInfo').textContent=painelFilter?('Filtro ativo: '+({kickoff:'Kick Off',kickout:'Kickout',rascunho:'Rascunho',concluido:'Concluído'}[painelFilter])+' — clique no card p/ limpar'):(rows.length+' obra(s)');
+  if(!rows.length){ box.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">Nenhuma obra. Vá em <b>Kick Off</b> para abrir a primeira.</td></tr>'; return; }
   const hoje=new Date(); hoje.setHours(0,0,0,0);
   box.innerHTML=rows.map(o=>{
-    const ko=o.kickoff||{}, koOk=!!o.kickoffDone, koutOk=o.status==='validado';
+    const ko=o.kickoff||{}, koutOk=o.status==='validado';
     const done=Array.isArray(o.done)?o.done:[];
-    const liberado=!!o.kickoutReleased;
-    let sit,sc;
-    if(koutOk){sit='Concluída';sc='sit-ok';}
-    else if(!koOk){sit='Aguardando Kick Off';sc='sit-wait';}
-    else if(!liberado){sit='Kick Off ok — liberar Kickout';sc='sit-wait';}
-    else {sit='Kickout em andamento';sc='sit-run';}
     let flag='';
-    if(!koutOk && ko.termino){
-      const t=new Date(ko.termino+'T00:00:00'); const dias=Math.round((t-hoje)/86400000);
-      if(dias<0)flag='<span class="pnflag late">🏁 prazo vencido</span>';
-      else if(dias<=30)flag=`<span class="pnflag soon">🏁 ${dias}d p/ término</span>`;
-    }
-    const koutCell = koutOk?'<span class="prog-chip on">✓ concluído</span>':(liberado?`<span class="prog-chip">${done.length}/6 setores</span>`:(koOk?'<button class="btn" style="padding:5px 10px;font-size:12px" onclick="event.stopPropagation();liberarKickout(\''+jsq(o.obra)+'\')">🔓 Liberar Kickout</button>':'<span class="prog-chip">—</span>'));
-    return `<tr class="pnrow" onclick="abrirKO('${jsq(o.obra)}')">
+    if(!koutOk && ko.termino){ const t=new Date(ko.termino+'T00:00:00'); const d=Math.round((t-hoje)/86400000); if(d<0)flag='<span class="pnflag late">🏁 vencido</span>'; else if(d<=30)flag=`<span class="pnflag soon">🏁 ${d}d</span>`; }
+    const koCell=o.koStatus==='concluido'?'<span class="prog-chip on">✓ concluído</span>':(o.koStatus==='rascunho'?'<span class="prog-chip">✏️ rascunho</span>':'<span class="prog-chip">⏳ pendente</span>');
+    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<span class="prog-chip">${done.length}/6 setores</span>`:(o.koStatus==='concluido'?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">—</span>'));
+    const koPdf=o.kickoff?`<button class="pn-pdf" title="PDF do Kick Off" onclick="requireGestor(()=>imprimirKickoff('${jsq(o.obra)}'))">KO</button>`:'';
+    const koutPdf=koutOk?`<button class="pn-pdf" title="PDF do Kickout" onclick="requireGestor(()=>resumoObra('${jsq(o.obra)}'))">Out</button>`:'';
+    return `<tr>
       <td><b>${esc(o.obra)||'(sem nome)'}</b>${flag}</td>
-      <td>${o.koStatus==='concluido'?'<span class="prog-chip on">✓</span>':(o.koStatus==='rascunho'?'<span class="prog-chip">✏️ rascunho</span>':'<span class="prog-chip">⏳</span>')}</td>
-      <td>${koutCell}</td>
+      <td class="pn-ko pn-click" onclick="requireGestor(()=>abrirKO('${jsq(o.obra)}'))">${koCell}</td>
+      <td class="pn-kout pn-click" onclick="abrirKoutCell('${jsq(o.obra)}')">${koutCell}</td>
       <td>${fmtDate(ko.inicio)||'—'}</td>
       <td>${fmtDate(ko.termino)||'—'}</td>
-      <td><span class="sit ${sc}">${sit}</span></td></tr>`;
+      <td class="pn-acts">${koPdf}${koutPdf}<button class="pn-del" title="Excluir obra (Gestor)" onclick="requireGestor(()=>delObra('${jsq(o.obra)}'))">🗑️</button></td></tr>`;
   }).join('');
 }
+document.querySelectorAll('.pn-filter').forEach(c=>c.onclick=()=>{ painelFilter=(painelFilter===c.dataset.f)?null:c.dataset.f; renderPainel(); });
+if($('pnSearch'))$('pnSearch').oninput=()=>renderPainel();
+document.querySelectorAll('#pnTable th[data-sort]').forEach(th=>th.onclick=()=>{ const k=th.dataset.sort; if(pnSortKey===k)pnSortDir*=-1; else {pnSortKey=k;pnSortDir=1;} renderPainel(); });
 window.liberarKickout=k=>{
   const o=obras.find(x=>norm(x.obra)===norm(k)); if(!o)return;
   if(!confirm('Liberar o Kickout de "'+o.obra+'"? A obra passa a aparecer para os setores preencherem.'))return;
   commitSynced(()=>{ const ob=obras.find(x=>norm(x.obra)===norm(k)); if(ob)ob.kickoutReleased=true; }).then(()=>toast('Kickout liberado para os setores ✓','ok'));
 };
-window.abrirKO=k=>{ go('kickoff'); openKickoff(k); };
+window.abrirKO=k=>{ currentRole='gestor'; updateRoleUI(); go('kickoff'); openKickoff(k); };
+window.imprimirKickoff=k=>{
+  const o=obras.find(x=>norm(x.obra)===norm(k)); if(!o||!o.kickoff){toast('Sem Kick Off preenchido','warn');return;}
+  const ko=o.kickoff; const kv=(l,v)=>v?`<div class="aa"><b>${esc(l)}:</b> ${esc(v)}</div>`:''; const yn=v=>v||'—';
+  const eq=[['Equipe 1',ko.eq1],['Equipe 2',ko.eq2],['Equipe 3',ko.eq3],['Mestre',ko.eqMestre],['Orçamentos',ko.eqOrc],['Suprimentos',ko.eqSup],['Administrativo',ko.eqAdm]].filter(x=>x[1]);
+  (ko.eqExtras||[]).forEach(pp=>{if(pp.nome)eq.push([pp.funcao||'Equipe',pp.nome]);});
+  const proj=(ko.projetos||[]).map(pp=>`${esc(pp.tipo==='Outros'?pp.nome:pp.tipo)}: ${esc(pp.status)||'—'}`).join(' · ');
+  const ferr=(ko.ferramentas||[]).map(f=>esc(f.tipo==='Outros'?f.nome:f.tipo)).join(', ');
+  const forns=(ko.fornecedores||[]).map(f=>`${esc(f.empresa)}${f.tipo?' ('+esc(f.tipo)+')':''}`).join(', ');
+  const html=`<div class="print-only print-brand"><b>Kick|On</b> · Termo de Abertura (Kick Off) — MpH Engenharia</div>
+    <div class="modal-head"><div class="eyebrow-l">Kick Off</div><h3>${esc(ko.obra||o.obra)}</h3>
+      <div class="sub">${esc(ko.arq)||'arquitetura —'}${ko.dataKo?' · '+fmtDate(ko.dataKo):''}${ko.faseTipo?' · Fase '+esc(ko.faseTipo):''}</div>
+      <button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
+    <div class="modal-body">
+      <div class="mh">Dados da Obra</div>
+      <div class="dl">${kv('Endereço',ko.endereco)}${kv('Tipo',ko.tipo)}${kv('Regime',ko.regime)}${kv('Metragem',ko.metragem?ko.metragem+' m²':'')}${kv('Data Fechamento',fmtDate(ko.dataFech))}${kv('Arq. Responsável',ko.arqResp)}${kv('Gerenciadora',ko.ger)}</div>
+      <div class="mh">Equipe</div>
+      <div class="dl">${eq.length?eq.map(x=>`<div class="aa"><b>${esc(x[0])}:</b> ${esc(x[1])}</div>`).join(''):'<div class="aa">—</div>'}</div>
+      <div class="mh">Prazos</div>
+      <div class="dl">${kv('Início',fmtDate(ko.inicio))}${kv('Término',fmtDate(ko.termino))}${kv('Prazo',ko.prazoMeses?ko.prazoMeses+' meses':'')}</div>
+      <div class="mh">Orçamentos</div>
+      ${kv('Perfil da arquitetura',ko.oPerfilArq)}${proj?`<div class="aa"><b>Projetos complementares:</b> ${proj}</div>`:''}${ferr?`<div class="aa"><b>Ferramentas:</b> ${ferr}</div>`:''}${kv('Itens de atenção',ko.oItens)}${forns?`<div class="aa"><b>Fornecedores (cotação):</b> ${forns}</div>`:''}
+      <div class="mh">ADM</div>
+      ${(ko.admGuiaDias&&ko.admGuiaDias.length)?`<div class="aa"><b>Guia de envio — dia(s):</b> ${ko.admGuiaDias.join(', ')}</div>`:''}${kv('Nota cheia?',ko.admNotaCheia)}${kv('Contatos do cliente',ko.admContatos)}${(ko.admSegIni||ko.admSegFim)?`<div class="aa"><b>Horário Seg–Qui:</b> ${yn(ko.admSegIni)} às ${yn(ko.admSegFim)}</div>`:''}${(ko.admSexIni||ko.admSexFim)?`<div class="aa"><b>Sexta:</b> ${yn(ko.admSexIni)} às ${yn(ko.admSexFim)}</div>`:''}${(ko.admSabIni||ko.admSabFim)?`<div class="aa"><b>Sábado:</b> ${yn(ko.admSabIni)} às ${yn(ko.admSabFim)}</div>`:''}
+      <div class="mh">Engenharia</div>
+      ${kv('CNO?',ko.engCno)}${kv('RT',ko.engRt==='Sim'?('Sim'+(ko.engRtNum?' — '+ko.engRtNum:'')):ko.engRt)}${kv('Liberação no condomínio?',ko.engLiberacao)}${kv('Cronograma finalizado?',ko.engCronograma)}${kv('Financeiro lançado?',ko.engFinanceiro)}${kv('Dias fixos de reunião?',ko.engReunioes==='Sim'?('Sim'+(ko.engReuniaoIndef?' (não definido)':(ko.engReuniaoDia?' — '+ko.engReuniaoDia:''))):ko.engReunioes)}${kv('Alinhamento Supri×Eng?',ko.engAlinhamento)}${kv('Quem aprova cotações',ko.engAprovacao)}${kv('Próximos passos',ko.engProximos)}
+      <div class="mh">Relacionamentos / Comercial / ADM</div>
+      ${kv('Perfil do cliente',ko.relPerfil)}${kv('Cliente cadastrado?',ko.relCadastrado)}
+    </div>`;
+  openModal(html);
+};
 
 migrate();
 fornRow();equipeRow();recalc();renderAll();persistLocal();
@@ -1756,6 +1865,7 @@ if($('sbSync'))$('sbSync').onclick=async()=>{ if(!sbOn()){toast('Configure a con
 if($('sbOff'))$('sbOff').onclick=()=>{ if(confirm('Desconectar do Supabase? Os dados continuam salvos localmente neste navegador.')){sbUrl='';sbKey='';localStorage.removeItem(SBU);localStorage.removeItem(SBK);if($('sbUrl'))$('sbUrl').value='';if($('sbKey'))$('sbKey').value='';setSb('off','Desconectado.');} };
 
 sbSyncOnLoad();
+$('loginScreen').style.display='none'; updateRoleUI(); go('painel');
 </script>
 </body>
 </html>
