@@ -127,6 +127,8 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .ko-hor b{min-width:130px;font-size:13px}
 .ko-hor span{font-size:12px;color:var(--muted)}
 .ko-hor input{width:120px}
+#koForm textarea{min-height:92px;resize:vertical}
+#koForm [data-ko="oPerfilArq"]{min-height:140px}
 .ko-proj-row{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px}
 .ko-proj-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .ko-proj-top .kpTipo{min-width:150px}
@@ -625,7 +627,6 @@ body.setor-mode .sec-done{display:none}
         <div class="fld"><label>Gerenciadora</label><input data-ko="ger" list="dlGer"></div>
         <div class="fld"><label>Metragem (m²)</label><input data-ko="metragem" type="number" step="any"></div>
         <div class="fld"><label>Data Fechamento</label><input data-ko="dataFech" type="date"></div>
-        <div class="fld"><label>Fase da obra</label><select data-ko="faseTipo"><option value="">—</option><option>Cinza</option><option>Azul</option></select></div>
       </div>
     </div></div>
 
@@ -648,7 +649,7 @@ body.setor-mode .sec-done{display:none}
     <div class="section"><div class="sh"><span class="num">3</span><h2>Prazos e Orçamentos</h2></div><div class="bd">
       <div class="ko-grid">
         <div class="fld"><label>Início</label><input data-ko="inicio" type="date"></div>
-        <div class="fld"><label>Término</label><input data-ko="termino" type="date"></div>
+        <div class="fld"><label>Término <small style="color:var(--muted);font-weight:400">(calculado)</small></label><input data-ko="termino" type="date" readonly style="background:var(--mist)"></div>
         <div class="fld"><label>Prazo (meses)</label><input data-ko="prazoMeses" type="number" step="any"></div>
       </div>
       <table class="ptable" style="margin-top:14px"><thead><tr><th>Fase</th><th style="text-align:right;width:130px">%</th><th style="text-align:right;width:190px">R$</th></tr></thead><tbody>
@@ -671,18 +672,18 @@ body.setor-mode .sec-done{display:none}
 
     <div class="section"><div class="sh"><span class="num">5</span><h2>ADM</h2></div><div class="bd">
       <div class="ko-item"><label>1. Quais dias do mês para envio de Guia de Envio?</label><div id="koGuiaList"></div><button class="btn add" id="koAddGuia" type="button" style="margin-top:6px">+ Adicionar dia</button></div>
-      <div class="ko-item"><label>2. Precisa de Nota Cheia?</label><div class="ko-choice" data-ko="admNotaCheia"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>2. Precisa de Nota Cheia?</label><div class="ko-choice" data-ko="admNotaCheia"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button><button type="button" data-val="NF Parcial">NF Parcial</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="admNotaCheiaObs" placeholder="Comentário (opcional)…"></textarea></div></div>
       <div class="ko-item"><label>3. Quais os contatos do cliente para envio de notas?</label><textarea data-ko="admContatos"></textarea></div>
-      <div class="ko-item"><label>4. Horário e dias de trabalho</label>
+    </div></div>
+
+    <div class="section"><div class="sh"><span class="num">6</span><h2>Engenharia</h2></div><div class="bd">
+      <div class="ko-item"><label>Horário e dias de trabalho</label>
         <div class="ko-hor"><b>Segunda à Quinta</b><span>das</span><input data-ko="admSegIni" type="time"><span>às</span><input data-ko="admSegFim" type="time"></div>
         <div class="ko-hor"><b>Sexta</b><span>das</span><input data-ko="admSexIni" type="time"><span>às</span><input data-ko="admSexFim" type="time"></div>
         <div class="ko-hor"><b>Sábado</b><span>das</span><input data-ko="admSabIni" type="time"><span>às</span><input data-ko="admSabFim" type="time"></div>
       </div>
-    </div></div>
-
-    <div class="section"><div class="sh"><span class="num">6</span><h2>Engenharia</h2></div><div class="bd">
       <div class="ko-item"><label>A Obra possuirá CNO (Cadastro Nacional de Obras)?</label><div class="ko-choice" data-ko="engCno"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engCnoObs" placeholder="Comentário (opcional)…"></textarea></div></div>
-      <div class="ko-item"><label>RT (Registro Técnico)</label><div class="ko-choice" data-ko="engRt"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><div class="ko-cond" data-cond="engRt" data-when="Sim" style="display:none;margin-top:8px"><input data-ko="engRtNum" placeholder="Número do RT"></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engRtObs" placeholder="Comentário (opcional)…"></textarea></div></div>
+      <div class="ko-item"><label>RT</label><div class="ko-choice" data-ko="engRt"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><div class="ko-cond" data-cond="engRt" data-when="Sim" style="display:none;margin-top:8px"><input data-ko="engRtNum" placeholder="Número do RT"></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engRtObs" placeholder="Comentário (opcional)…"></textarea></div></div>
       <div class="ko-item"><label>Liberação no condomínio?</label><div class="ko-choice" data-ko="engLiberacao"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engLiberacaoObs" placeholder="Comentário (opcional)…"></textarea></div></div>
       <div class="ko-item"><label>Cronograma foi finalizado?</label><div class="ko-choice" data-ko="engCronograma"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engCronogramaObs" placeholder="Comentário (opcional)…"></textarea></div></div>
       <div class="ko-item"><label>Financeiro foi lançado no sistema?</label><div class="ko-choice" data-ko="engFinanceiro"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engFinanceiroObs" placeholder="Comentário (opcional)…"></textarea></div></div>
@@ -1695,6 +1696,7 @@ function populateKo(ko,o){
   $('koGuiaList').innerHTML=''; (Array.isArray(ko.admGuiaDias)?ko.admGuiaDias:[]).forEach(d=>koGuiaRow(d));
   $('koFerrList').innerHTML=''; (Array.isArray(ko.ferramentas)?ko.ferramentas:[]).forEach(f=>koFerrRow(f));
   $('koProjList').innerHTML=''; (Array.isArray(ko.projetos)?ko.projetos:[]).forEach(pr=>koProjRow(pr));
+  koCalcTermino();
 }
 let koEditKey=null;
 function renderKoList(){
@@ -1736,6 +1738,14 @@ if($('koAddForn'))$('koAddForn').onclick=()=>koFornRow();
 if($('koAddGuia'))$('koAddGuia').onclick=()=>koGuiaRow();
 if($('koAddFerr'))$('koAddFerr').onclick=()=>koFerrRow();
 if($('koAddProj'))$('koAddProj').onclick=()=>koProjRow();
+function koCalcTermino(){
+  const ini=document.querySelector('#koForm [data-ko="inicio"]'), mes=document.querySelector('#koForm [data-ko="prazoMeses"]'), ter=document.querySelector('#koForm [data-ko="termino"]');
+  if(!ter)return;
+  const m=parseInt(mes&&mes.value,10);
+  if(ini&&ini.value&&m>0){ const d=new Date(ini.value+'T00:00:00'); d.setMonth(d.getMonth()+m); ter.value=d.toISOString().slice(0,10); }
+  else ter.value='';
+}
+['inicio','prazoMeses'].forEach(k=>{const el=document.querySelector('#koForm [data-ko="'+k+'"]');if(el)el.addEventListener('input',koCalcTermino);});
 function saveKO(koStatus){
   const ko=collectKo(); const name=(ko.obra||'').trim();
   if(!name){ toast('Informe o nome da obra','warn'); return; }
