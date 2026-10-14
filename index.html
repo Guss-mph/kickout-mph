@@ -622,7 +622,7 @@ body.setor-mode .sec-done{display:none}
         <div class="fld"><label>Data do Kick Off</label><input data-ko="dataKo" type="date"></div>
         <div class="fld"><label>Endereço</label><input data-ko="endereco"></div>
         <div class="fld"><label>Arquitetura</label><input data-ko="arq" list="dlArq"></div>
-        <div class="fld"><label>Tipo</label><select data-ko="tipo"><option value="">—</option><option>Apartamento</option><option>Casa</option><option>Comercial</option><option>Outro</option></select></div>
+        <div class="fld"><label>Tipo</label><select data-ko="tipo"><option value="">—</option><option>Apartamento</option><option>Casa Nova</option><option>Casa Reforma</option><option>Comercial</option><option>Cobertura</option></select></div>
         <div class="fld"><label>Arq. Responsável</label><input data-ko="arqResp"></div>
         <div class="fld"><label>Regime</label><select data-ko="regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
         <div class="fld"><label>Gerenciadora</label><input data-ko="ger" list="dlGer"></div>
@@ -654,10 +654,10 @@ body.setor-mode .sec-done{display:none}
         <div class="fld"><label>Prazo (meses)</label><input data-ko="prazoMeses" type="number" step="any"></div>
       </div>
       <table class="ptable" style="margin-top:14px"><thead><tr><th>Fase</th><th style="text-align:right;width:130px">%</th><th style="text-align:right;width:190px">R$</th></tr></thead><tbody>
-        <tr><td><b>Fase Cinza</b></td><td><input data-ko="cinzapct" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="cinzaRs" type="number" step="any" style="width:100%;text-align:right" placeholder="R$"></td></tr>
-        <tr><td><b>Fase Acabamentos</b></td><td><input data-ko="acabpct" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="acabRs" type="number" step="any" style="width:100%;text-align:right" placeholder="R$"></td></tr>
-        <tr><td><b>Itens Diferenciados</b></td><td><input data-ko="itenspct" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="itensRs" type="number" step="any" style="width:100%;text-align:right" placeholder="R$"></td></tr>
-        <tr><td><b>Equipe Técnica</b></td><td><input data-ko="eqtecpct" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="eqtecRs" type="number" step="any" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Fase Cinza</b></td><td><input data-ko="cinzapct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="cinzaRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Fase Acabamentos</b></td><td><input data-ko="acabpct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="acabRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Itens Diferenciados</b></td><td><input data-ko="itenspct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="itensRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Equipe Técnica</b></td><td><input data-ko="eqtecpct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="eqtecRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
       </tbody></table>
     </div></div>
 
@@ -1712,6 +1712,7 @@ function populateKo(ko,o){
   $('koGuiaList').innerHTML=''; (Array.isArray(ko.admGuiaDias)?ko.admGuiaDias:[]).forEach(d=>koGuiaRow(d));
   document.querySelectorAll('#koForm .ferrOutrosNome').forEach(inp=>{const chk=document.querySelector('#koForm .ferrOutrosChk');inp.style.display=(chk&&chk.checked)?'':'none';});
   $('koProjList').innerHTML=''; (Array.isArray(ko.projetos)?ko.projetos:[]).forEach(pr=>koProjRow(pr));
+  koNormalizeMoney();
   koCalcTermino();
 }
 let koEditKey=null;
@@ -1762,6 +1763,10 @@ function koCalcTermino(){
   else ter.value='';
 }
 ['inicio','prazoMeses'].forEach(k=>{const el=document.querySelector('#koForm [data-ko="'+k+'"]');if(el)el.addEventListener('input',koCalcTermino);});
+/* máscara de valores (R$ e %) — estilo caixa registradora: vírgula decimal + separador de milhar, 2 casas */
+function fmtMoneyField(el){ let d=(el.value||'').replace(/\D/g,''); if(!d){el.value='';return;} el.value=(parseInt(d,10)/100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function koNormalizeMoney(){ document.querySelectorAll('#koForm .ko-money, #koForm .ko-pct').forEach(el=>{ const v=(el.value||'').trim(); if(!v)return; if(v.indexOf(',')<0){ const n=parseFloat(v.replace(/\./g,'').replace(',','.')); if(!isNaN(n))el.value=n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); } }); }
+document.querySelectorAll('#koForm .ko-money, #koForm .ko-pct').forEach(el=>el.addEventListener('input',()=>fmtMoneyField(el)));
 function saveKO(koStatus){
   const ko=collectKo(); const name=(ko.obra||'').trim();
   if(!name){ toast('Informe o nome da obra','warn'); return; }
