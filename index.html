@@ -203,6 +203,7 @@ table{width:100%;border-collapse:collapse}
 .seg button.on-good{background:var(--good);color:#fff}
 .seg button.on-bad{background:var(--bad);color:#fff}
 .seg button.on-na{background:var(--muted);color:#fff}
+.seg button.on-neutral{background:var(--gold);color:#fff}
 .engrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
 .engrow .seg{max-width:280px;flex:1 1 200px}
 .sublabel{display:block;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px}
@@ -663,17 +664,27 @@ body.setor-mode .sec-done{display:none}
     <div class="section"><div class="sh"><span class="num">4</span><h2>Orçamentos</h2></div><div class="bd">
       <div class="ko-item"><label>1. Perfil da arquitetura</label><textarea data-ko="oPerfilArq"></textarea></div>
       <div class="ko-item"><label>2. Projetos complementares</label><div id="koProjList"></div><button class="btn add" id="koAddProj" type="button" style="margin-top:6px">+ Adicionar projeto</button></div>
-      <div class="ko-item"><label>3. Ferramentas de gestão de equipe (Construct In, Trello, etc.)</label><div id="koFerrList"></div><button class="btn add" id="koAddFerr" type="button" style="margin-top:6px">+ Adicionar ferramenta</button></div>
+      <div class="ko-item"><label>3. TIC</label>
+        <div class="ko-tic" style="display:flex;flex-wrap:wrap;gap:14px;margin-top:4px">
+          <label class="ko-check"><input type="checkbox" data-ko="ferrConstructIn"> Construct In</label>
+          <label class="ko-check"><input type="checkbox" data-ko="ferrTrello"> Trello</label>
+          <label class="ko-check"><input type="checkbox" data-ko="ferrOutros" class="ferrOutrosChk"> Outros</label>
+        </div>
+        <input data-ko="ferrOutrosNome" class="ferrOutrosNome" placeholder="Qual(is)?" style="display:none;margin-top:8px"></div>
       <div class="ko-item"><label>4. Itens importantes ou que demandam atenção da obra</label><textarea data-ko="oItens"></textarea></div>
       <div class="ko-item"><label>5. Lista de Fornecedores da Fase Orçamentos</label>
         <div id="koFornList"></div>
         <button class="btn add" id="koAddForn" type="button" style="margin-top:6px">+ Adicionar fornecedor</button></div>
     </div></div>
 
-    <div class="section"><div class="sh"><span class="num">5</span><h2>ADM</h2></div><div class="bd">
+    <div class="section"><div class="sh"><span class="num">5</span><h2>ADM / Comercial</h2></div><div class="bd">
       <div class="ko-item"><label>1. Quais dias do mês para envio de Guia de Envio?</label><div id="koGuiaList"></div><button class="btn add" id="koAddGuia" type="button" style="margin-top:6px">+ Adicionar dia</button></div>
       <div class="ko-item"><label>2. Precisa de Nota Cheia?</label><div class="ko-choice" data-ko="admNotaCheia"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button><button type="button" data-val="NF Parcial">NF Parcial</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="admNotaCheiaObs" placeholder="Comentário (opcional)…"></textarea></div></div>
       <div class="ko-item"><label>3. Quais os contatos do cliente para envio de notas?</label><textarea data-ko="admContatos"></textarea></div>
+      <div class="ko-item"><label>4. Perfil do cliente</label><textarea data-ko="relPerfil"></textarea></div>
+      <div class="ko-item"><label>5. Cliente cadastrado no sistema?</label><div class="ko-choice" data-ko="relCadastrado"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
+      <div class="ko-item"><label>6. Contrato assinado?</label><div class="ko-choice" data-ko="admContrato"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="admContratoObs" placeholder="Comentário (opcional)…"></textarea></div></div>
+      <div class="ko-item"><label>7. ART emitida?</label><div class="ko-choice" data-ko="admArt"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="admArtObs" placeholder="Comentário (opcional)…"></textarea></div></div>
     </div></div>
 
     <div class="section"><div class="sh"><span class="num">6</span><h2>Engenharia</h2></div><div class="bd">
@@ -691,11 +702,6 @@ body.setor-mode .sec-done{display:none}
       <div class="ko-item"><label>Reunião de Alinhamento Suprimentos x Engenharia já marcada?</label><div class="ko-choice" data-ko="engAlinhamento"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div><button class="ko-cmt-btn" type="button">+ comentário</button><div class="ko-cmt" style="display:none;margin-top:8px"><textarea data-ko="engAlinhamentoObs" placeholder="Comentário (opcional)…"></textarea></div></div>
       <div class="ko-item"><label>Quem aprova os mapas de cotação e quem recebe o relatório financeiro?</label><input data-ko="engAprovacao"></div>
       <div class="ko-item"><label>Próximos passos para o começo da obra</label><textarea data-ko="engProximos"></textarea></div>
-    </div></div>
-
-    <div class="section"><div class="sh"><span class="num">7</span><h2>Relacionamentos / Comercial / ADM</h2></div><div class="bd">
-      <div class="ko-item"><label>1. Perfil do cliente</label><textarea data-ko="relPerfil"></textarea></div>
-      <div class="ko-item"><label>2. Cliente cadastrado no sistema?</label><div class="ko-choice" data-ko="relCadastrado"><button type="button" data-val="Sim">Sim</button><button type="button" data-val="Não">Não</button></div></div>
     </div></div>
 
     <div class="actbar">
@@ -928,6 +934,11 @@ function migrate(){
     if(!Array.isArray(o.equipe))o.equipe=[];
   });
   obras.forEach(o=>{ if(!o.status)o.status='validado'; if(!o.koStatus)o.koStatus=o.kickoffDone?'concluido':''; if(o.kickoutReleased===undefined)o.kickoutReleased=(o.status==='rascunho'&&o.koStatus!=='rascunho'); });
+  // TIC: lista antiga [{tipo,nome}] -> checkboxes fixos
+  obras.forEach(o=>{ const ko=o.kickoff; if(ko && Array.isArray(ko.ferramentas)){
+    ko.ferramentas.forEach(f=>{ const t=(f.tipo||'').trim(); if(t==='Construct In')ko.ferrConstructIn=true; else if(t==='Trello')ko.ferrTrello=true; else if(t==='Outros'||f.nome){ko.ferrOutros=true; if(f.nome)ko.ferrOutrosNome=(ko.ferrOutrosNome?ko.ferrOutrosNome+', ':'')+f.nome.trim();} });
+    delete ko.ferramentas;
+  }});
 }
 function addTipoSilent(t){ t=(t||'').trim(); if(!t)return; if(!tipos.some(x=>stripAcc(x)===stripAcc(t)))tipos.push(t); }
 const $ = id => document.getElementById(id);
@@ -941,7 +952,7 @@ const ENG = [
   {q:"Houve envio de relatórios quinzenais?",type:"yesno",good:"Sim"},
   {q:"Cronograma seguido durante a obra?",type:"yesno",good:"Sim"},
   {q:"Houveram muitas compras de urgência?",type:"yesno",good:"Não"},
-  {q:"Caderno de Notas dos fornecedores gerado e já encaminhado pro cliente?",type:"yesno",good:"Sim",na:true},
+  {q:"Caderno de Notas dos fornecedores gerado e já encaminhado pro cliente?",type:"yesno",good:"Sim",na:true,dateNo:true},
   {q:"Feedback do Mestre (suprimentos, gestão de obras e afins)",type:"text",ph:"Feedback do mestre…"},
   {q:"As Built já iniciado?",type:"yesno",good:"Sim",na:true,prazo:true},
   {q:"Algum problema que você já viu se repetir em outras obras? (padrão recorrente)",type:"text",ph:"Descreva o padrão recorrente, se houver…"}
@@ -963,6 +974,7 @@ function buildEng(){
         <button type="button" class="relToggle engToggle">+ comentário</button>
       </div>
       ${c.prazo?`<div class="eng-prazo" style="display:none;margin-top:10px"><label class="sublabel">Data de prazo limite</label><input type="date" class="engPrazo" style="max-width:200px"></div>`:''}
+      ${c.dateNo?`<div class="eng-datno" style="display:none;margin-top:10px"><label class="sublabel">Data prevista para gerar/enviar ao cliente</label><input type="date" class="engDateNo" style="max-width:200px"></div>`:''}
       <div class="eng-extra" style="display:none;margin-top:10px"><textarea class="engTxt" placeholder="Comentário (opcional)…"></textarea></div></div>`;
   }).join('');
   ENG.forEach((c,i)=>{ if(c.type==='text')return;
@@ -972,6 +984,7 @@ function buildEng(){
       bx.querySelectorAll('.engSeg button').forEach(x=>x.className='');
       let ans=''; if(!was){ b.className = b.dataset.a==='N/A' ? 'on-na' : (b.dataset.a===c.good?'on-good':'on-bad'); ans=b.dataset.a; }
       if(c.prazo){const pz=bx.querySelector('.eng-prazo'); if(pz)pz.style.display=(ans==='Sim'||ans==='Não')?'block':'none';}
+      if(c.dateNo){const dn=bx.querySelector('.eng-datno'); if(dn)dn.style.display=(ans==='Não')?'block':'none';}
     });
     const tg=bx.querySelector('.engToggle');
     tg.onclick=()=>{const ex=bx.querySelector('.eng-extra');const show=(ex.style.display==='none'||!ex.style.display);
@@ -1027,10 +1040,12 @@ function fornRow(d={}){
         <option value="A"${d.porte==='A'?' selected':''}>A – Obra grande</option>
         <option value="B"${d.porte==='B'?' selected':''}>B – Obra intermediária</option>
         <option value="C"${d.porte==='C'?' selected':''}>C – Obra pequeno porte</option>
+        <option value="D"${d.porte==='D'?' selected':''}>D – Comercial/Corporativo</option>
       </select></div>
       <div class="fld"><label>Sentimento</label>
         <div class="seg fSeg">
           <button type="button" data-s="Positivo" class="${sent==='Positivo'?'on-pos':''}">Positivo</button>
+          <button type="button" data-s="Neutro" class="${sent==='Neutro'?'on-neutral':''}">Neutro</button>
           <button type="button" data-s="Negativo" class="${sent==='Negativo'?'on-neg':''}">Negativo</button>
         </div></div>
     </div>
@@ -1041,9 +1056,9 @@ function fornRow(d={}){
     </div>`;
   wrap.querySelector('.rm').onclick=()=>wrap.remove();
   wrap.querySelectorAll('.fSeg button').forEach(b=>b.onclick=()=>{
-    const on=b.classList.contains('on-pos')||b.classList.contains('on-neg');
+    const on=b.classList.contains('on-pos')||b.classList.contains('on-neg')||b.classList.contains('on-neutral');
     wrap.querySelectorAll('.fSeg button').forEach(x=>x.className='');
-    if(!on)b.className=b.dataset.s==='Positivo'?'on-pos':'on-neg';
+    if(!on)b.className=b.dataset.s==='Positivo'?'on-pos':(b.dataset.s==='Neutro'?'on-neutral':'on-neg');
   });
   const selT=wrap.querySelector('.fTipo'); selT._prev=selT.value;
   selT.onchange=()=>{
@@ -1122,7 +1137,8 @@ function collect(){
     const sel=[...bx.querySelectorAll('.engSeg button')].find(b=>b.classList.contains('on-good')||b.classList.contains('on-bad')||b.classList.contains('on-na'));
     const ta=bx.querySelector('.engTxt');
     const pz=bx.querySelector('.engPrazo');
-    const r={ans:sel?sel.dataset.a:'',txt:ta?ta.value:''}; if(pz)r.prazo=pz.value; return r;});
+    const dn=bx.querySelector('.engDateNo');
+    const r={ans:sel?sel.dataset.a:'',txt:ta?ta.value:''}; if(pz)r.prazo=pz.value; if(dn)r.dateNo=dn.value; return r;});
   o.rel_qa=REL.map((c,i)=>{const bx=$('relBlock').querySelector(`.qa[data-i="${i}"]`);
     if(c.type==='comment')return {txt:bx.querySelector('.relTxt').value};
     if(c.type==='satis'){const na=bx.querySelector('.relNa').dataset.on==='1';return {satis:bx.querySelector('.relSatis').value,txt:bx.querySelector('.relTxt').value,na};}
@@ -1130,7 +1146,7 @@ function collect(){
   const fs=[];
   document.querySelectorAll('#fornList .forn').forEach(w=>{
     const emp=w.querySelector('.fEmp').value.trim(); if(!emp&&!w.querySelector('.fTipo').value.trim())return;
-    const segOn=w.querySelector('.fSeg .on-pos')?'Positivo':(w.querySelector('.fSeg .on-neg')?'Negativo':'');
+    const segOn=w.querySelector('.fSeg .on-pos')?'Positivo':(w.querySelector('.fSeg .on-neutral')?'Neutro':(w.querySelector('.fSeg .on-neg')?'Negativo':''));
     fs.push({tipo:w.querySelector('.fTipo').value.trim(),empresa:emp,
       notaTec:w.querySelector('.fTec').value,notaParc:w.querySelector('.fParc').value,porte:w.querySelector('.fPorte').value,
       sent:segOn,feedback:w.querySelector('.fFb').value.trim(),orcamento:w.querySelector('.fOrc').checked,
@@ -1159,6 +1175,7 @@ function populate(o){
     if(b)b.className=(d.ans==='N/A')?'on-na':((d.ans===c.good)?'on-good':'on-bad');
     const ta=bx.querySelector('.engTxt');if(ta)ta.value=d.txt||'';
     if(c.prazo){const pz=bx.querySelector('.engPrazo');if(pz){pz.value=d.prazo||'';const pzbox=bx.querySelector('.eng-prazo');if(pzbox)pzbox.style.display=(d.ans==='Sim'||d.ans==='Não')?'block':'none';}}
+    if(c.dateNo){const dn=bx.querySelector('.engDateNo');if(dn){dn.value=d.dateNo||'';const dnbox=bx.querySelector('.eng-datno');if(dnbox)dnbox.style.display=(d.ans==='Não')?'block':'none';}}
     if(d.txt&&d.txt.trim()){const ex=bx.querySelector('.eng-extra');if(ex)ex.style.display='block';const tg=bx.querySelector('.engToggle');if(tg)tg.textContent='− comentário';}});
   const RQ=Array.isArray(o.rel_qa)?o.rel_qa:[];
   REL.forEach((c,i)=>{const bx=$('relBlock').querySelector(`.qa[data-i="${i}"]`);const d=RQ[i]||{};
@@ -1310,7 +1327,7 @@ $('modalX').onclick=closeModal;
 $('modal').onclick=e=>{if(e.target===$('modal'))closeModal();};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
-function sentCol(s){return s==='Positivo'?'var(--good)':s==='Negativo'?'var(--bad)':'var(--line)';}
+function sentCol(s){return s==='Positivo'?'var(--good)':s==='Negativo'?'var(--bad)':s==='Neutro'?'var(--gold)':'var(--line)';}
 window.viewObra=k=>{
   const o=obras.find(x=>norm(x.obra)===norm(k));if(!o)return;
   const t=obraTotals(o);const p=o.prazos||{};const eq=o.equipe||{};
@@ -1328,12 +1345,13 @@ window.viewObra=k=>{
   const engView=()=>{const EQ=Array.isArray(o.eng_qa)?o.eng_qa:[];
     const its=ENG.map((c,i)=>{const d=EQ[i]||{};
       if(c.type==='text')return (d.txt&&d.txt.trim())?`<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa">${esc(d.txt)}</div></div>`:'';
-      if(!d.ans && !(d.txt&&d.txt.trim()) && !d.prazo)return '';
+      if(!d.ans && !(d.txt&&d.txt.trim()) && !d.prazo && !d.dateNo)return '';
       const color=d.ans==='N/A'?'var(--muted)':((d.ans===c.good)?'var(--good)':'var(--bad)');
       const ansPart=d.ans?`<div class="aa"><b style="color:${color}">${d.ans}</b></div>`:'';
       const pzPart=(c.prazo&&d.prazo)?`<div class="aa"><b>Prazo limite:</b> ${fmtDate(d.prazo)}</div>`:'';
+      const dnPart=(c.dateNo&&d.dateNo&&d.ans==='Não')?`<div class="aa"><b>Previsão de envio ao cliente:</b> ${fmtDate(d.dateNo)}</div>`:'';
       const ex=(d.txt&&d.txt.trim())?`<div class="aa">${esc(d.txt)}</div>`:'';
-      return `<div class="qa-v"><div class="qq">${esc(c.q)}</div>${ansPart}${pzPart}${ex}</div>`;
+      return `<div class="qa-v"><div class="qq">${esc(c.q)}</div>${ansPart}${pzPart}${dnPart}${ex}</div>`;
     }).filter(Boolean);
     return its.length?`<div class="mh">Engenharia</div>${its.join('')}`:'';};
   const relView=()=>{const RQ=Array.isArray(o.rel_qa)?o.rel_qa:[];
@@ -1651,7 +1669,7 @@ $('impFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const rd=
       const av=String(r["Avaliação"]||'');
       const mt=av.match(/t[ée]c\D*(\d)/i), mp=av.match(/parc\D*(\d)/i);
       const notaTec=mt?mt[1]:(av.match(/\d/)||[''])[0], notaParc=mp?mp[1]:'';
-      const porte=(String(r["Porte"]||'').match(/[ABC]/i)||[''])[0].toUpperCase();
+      const porte=(String(r["Porte"]||'').match(/[ABCD]/i)||[''])[0].toUpperCase();
       const entry={data:'',obra:r.Obra||'',ano:r.Ano||'',eng:r.Engenheiro||'',notaTec,notaParc,porte,sent:/posit/i.test(av)?'Positivo':(/negat/i.test(av)?'Negativo':''),feedback:r.Feedback||'',tipo:tipo,orcamento:/sim/i.test(r["Usada em Orçamentos"]||''),concorrencia:/sim/i.test(r["Concorrência"]||'')};
       const ob=obras.find(x=>norm(x.obra)===norm(entry.obra));if(ob)entry.data=ob.data||'';
       if(tipo)addTipoSilent(tipo);
@@ -1671,7 +1689,6 @@ $('wipe').onclick=()=>{if(confirm('Apagar TODOS os dados salvos?')){commitSynced
 function koEqRow(d={}){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Nome</label><input class="keNome" placeholder="Nome" value="${esc(d.nome)}"></div><div class="fld"><label>Função</label><input class="keFunc" list="eqFuncList2" placeholder="Função" value="${esc(d.funcao)}"></div><button class="eqrm" type="button" title="Remover">×</button>`;w.querySelector('.eqrm').onclick=()=>w.remove();$('koEqExtras').appendChild(w);return w;}
 function koFornRow(d={}){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Empresa</label><input class="kfEmp" list="dlForn" placeholder="Nome do fornecedor" value="${esc(d.empresa)}"></div><div class="fld"><label>Tipo</label><select class="kfTipo">${tipoOptions(d.tipo)}</select></div><button class="eqrm" type="button" title="Remover">×</button>`;w.querySelector('.eqrm').onclick=()=>w.remove();$('koFornList').appendChild(w);return w;}
 function koGuiaRow(d=''){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Dia do mês</label><select class="kgDia"><option value="">—</option>${Array.from({length:31},(_,i)=>`<option value="${i+1}"${String(i+1)===String(d)?' selected':''}>Dia ${i+1}</option>`).join('')}</select></div><button class="eqrm" type="button" title="Remover">×</button>`;w.querySelector('.eqrm').onclick=()=>w.remove();$('koGuiaList').appendChild(w);return w;}
-function koFerrRow(d={}){const w=document.createElement('div');w.className='eqrow';w.innerHTML=`<div class="fld"><label>Ferramenta</label><select class="kwTipo"><option value="">Escolha…</option><option>Construct In</option><option>Trello</option><option>Outros</option></select></div><div class="fld"><label>Nome (se Outros)</label><input class="kwNome" placeholder="Nome da ferramenta" style="display:none"></div><button class="eqrm" type="button" title="Remover">×</button>`;const tp=w.querySelector('.kwTipo'),nm=w.querySelector('.kwNome');const upd=()=>nm.style.display=tp.value==='Outros'?'':'none';tp.onchange=upd;tp.value=d.tipo||'';nm.value=d.nome||'';upd();w.querySelector('.eqrm').onclick=()=>w.remove();$('koFerrList').appendChild(w);return w;}
 function koProjRow(d={}){const w=document.createElement('div');w.className='ko-proj-row';w.innerHTML=`<div class="ko-proj-top"><select class="kpTipo"><option value="">Tipo de projeto…</option><option>Elétrico</option><option>Hidráulico</option><option>Estrutural</option><option>Outros</option></select><input class="kpNome" placeholder="Nome do projeto" style="display:none"><button class="eqrm" type="button" title="Remover">×</button></div><div class="ko-choice kpStatus" style="margin-top:10px"><button type="button" data-val="Existente">Existente</button><button type="button" data-val="N se aplica">N se aplica</button><button type="button" data-val="A contratar">A contratar</button></div>`;const tp=w.querySelector('.kpTipo'),nm=w.querySelector('.kpNome');const upd=()=>nm.style.display=tp.value==='Outros'?'':'none';tp.onchange=upd;tp.value=d.tipo||'';nm.value=d.nome||'';upd();w.querySelectorAll('.kpStatus button').forEach(b=>{b.onclick=()=>{const was=b.classList.contains('on');w.querySelectorAll('.kpStatus button').forEach(x=>x.classList.remove('on'));if(!was)b.classList.add('on');};if(b.dataset.val===d.status)b.classList.add('on');});w.querySelector('.eqrm').onclick=()=>w.remove();$('koProjList').appendChild(w);return w;}
 function collectKo(){
   const ko={};
@@ -1680,7 +1697,6 @@ function collectKo(){
   ko.eqExtras=[...document.querySelectorAll('#koEqExtras .eqrow')].map(r=>({nome:r.querySelector('.keNome').value.trim(),funcao:r.querySelector('.keFunc').value.trim()})).filter(x=>x.nome||x.funcao);
   ko.fornecedores=[...document.querySelectorAll('#koFornList .eqrow')].map(r=>({empresa:r.querySelector('.kfEmp').value.trim(),tipo:r.querySelector('.kfTipo').value.trim()})).filter(x=>x.empresa||x.tipo);
   ko.admGuiaDias=[...document.querySelectorAll('#koGuiaList .eqrow')].map(r=>r.querySelector('.kgDia').value).filter(Boolean);
-  ko.ferramentas=[...document.querySelectorAll('#koFerrList .eqrow')].map(r=>({tipo:r.querySelector('.kwTipo').value,nome:r.querySelector('.kwNome').value.trim()})).filter(x=>x.tipo||x.nome);
   ko.projetos=[...document.querySelectorAll('#koProjList .ko-proj-row')].map(r=>{const st=r.querySelector('.kpStatus button.on');return {tipo:r.querySelector('.kpTipo').value,nome:r.querySelector('.kpNome').value.trim(),status:st?st.dataset.val:''};}).filter(x=>x.tipo||x.nome);
   return ko;
 }
@@ -1694,7 +1710,7 @@ function populateKo(ko,o){
   $('koEqExtras').innerHTML=''; (Array.isArray(ko.eqExtras)?ko.eqExtras:[]).forEach(x=>koEqRow(x));
   $('koFornList').innerHTML=''; (Array.isArray(ko.fornecedores)?ko.fornecedores:[]).forEach(f=>koFornRow(f));
   $('koGuiaList').innerHTML=''; (Array.isArray(ko.admGuiaDias)?ko.admGuiaDias:[]).forEach(d=>koGuiaRow(d));
-  $('koFerrList').innerHTML=''; (Array.isArray(ko.ferramentas)?ko.ferramentas:[]).forEach(f=>koFerrRow(f));
+  document.querySelectorAll('#koForm .ferrOutrosNome').forEach(inp=>{const chk=document.querySelector('#koForm .ferrOutrosChk');inp.style.display=(chk&&chk.checked)?'':'none';});
   $('koProjList').innerHTML=''; (Array.isArray(ko.projetos)?ko.projetos:[]).forEach(pr=>koProjRow(pr));
   koCalcTermino();
 }
@@ -1736,7 +1752,7 @@ if($('koBack'))$('koBack').onclick=backKoList;
 if($('koAddEq'))$('koAddEq').onclick=()=>koEqRow();
 if($('koAddForn'))$('koAddForn').onclick=()=>koFornRow();
 if($('koAddGuia'))$('koAddGuia').onclick=()=>koGuiaRow();
-if($('koAddFerr'))$('koAddFerr').onclick=()=>koFerrRow();
+document.querySelectorAll('#koForm .ferrOutrosChk').forEach(cb=>cb.onchange=()=>{const inp=document.querySelector('#koForm .ferrOutrosNome');if(inp){inp.style.display=cb.checked?'':'none';if(!cb.checked)inp.value='';}});
 if($('koAddProj'))$('koAddProj').onclick=()=>koProjRow();
 function koCalcTermino(){
   const ini=document.querySelector('#koForm [data-ko="inicio"]'), mes=document.querySelector('#koForm [data-ko="prazoMeses"]'), ter=document.querySelector('#koForm [data-ko="termino"]');
@@ -1836,7 +1852,7 @@ window.imprimirKickoff=k=>{
   const eq=[['Equipe 1',ko.eq1],['Equipe 2',ko.eq2],['Equipe 3',ko.eq3],['Mestre',ko.eqMestre],['Orçamentos',ko.eqOrc],['Suprimentos',ko.eqSup],['Administrativo',ko.eqAdm]].filter(x=>x[1]);
   (ko.eqExtras||[]).forEach(pp=>{if(pp.nome)eq.push([pp.funcao||'Equipe',pp.nome]);});
   const proj=(ko.projetos||[]).map(pp=>`${esc(pp.tipo==='Outros'?pp.nome:pp.tipo)}: ${esc(pp.status)||'—'}`).join(' · ');
-  const ferr=(ko.ferramentas||[]).map(f=>esc(f.tipo==='Outros'?f.nome:f.tipo)).join(', ');
+  const ferr=[ko.ferrConstructIn?'Construct In':'',ko.ferrTrello?'Trello':'',ko.ferrOutros?(ko.ferrOutrosNome?('Outros: '+ko.ferrOutrosNome):'Outros'):''].filter(Boolean).map(esc).join(', ');
   const forns=(ko.fornecedores||[]).map(f=>`${esc(f.empresa)}${f.tipo?' ('+esc(f.tipo)+')':''}`).join(', ');
   const html=`<div class="print-only print-brand"><b>Kick|On</b> · Termo de Abertura (Kick Off) — MpH Engenharia</div>
     <div class="modal-head"><div class="eyebrow-l">Kick Off</div><h3>${esc(ko.obra||o.obra)}</h3>
@@ -1850,13 +1866,11 @@ window.imprimirKickoff=k=>{
       <div class="mh">Prazos</div>
       <div class="dl">${kv('Início',fmtDate(ko.inicio))}${kv('Término',fmtDate(ko.termino))}${kv('Prazo',ko.prazoMeses?ko.prazoMeses+' meses':'')}</div>
       <div class="mh">Orçamentos</div>
-      ${kv('Perfil da arquitetura',ko.oPerfilArq)}${proj?`<div class="aa"><b>Projetos complementares:</b> ${proj}</div>`:''}${ferr?`<div class="aa"><b>Ferramentas:</b> ${ferr}</div>`:''}${kv('Itens de atenção',ko.oItens)}${forns?`<div class="aa"><b>Fornecedores (cotação):</b> ${forns}</div>`:''}
-      <div class="mh">ADM</div>
-      ${(ko.admGuiaDias&&ko.admGuiaDias.length)?`<div class="aa"><b>Guia de envio — dia(s):</b> ${ko.admGuiaDias.join(', ')}</div>`:''}${kv('Nota cheia?',ko.admNotaCheia)}${kv('Contatos do cliente',ko.admContatos)}${(ko.admSegIni||ko.admSegFim)?`<div class="aa"><b>Horário Seg–Qui:</b> ${yn(ko.admSegIni)} às ${yn(ko.admSegFim)}</div>`:''}${(ko.admSexIni||ko.admSexFim)?`<div class="aa"><b>Sexta:</b> ${yn(ko.admSexIni)} às ${yn(ko.admSexFim)}</div>`:''}${(ko.admSabIni||ko.admSabFim)?`<div class="aa"><b>Sábado:</b> ${yn(ko.admSabIni)} às ${yn(ko.admSabFim)}</div>`:''}
+      ${kv('Perfil da arquitetura',ko.oPerfilArq)}${proj?`<div class="aa"><b>Projetos complementares:</b> ${proj}</div>`:''}${ferr?`<div class="aa"><b>TIC:</b> ${ferr}</div>`:''}${kv('Itens de atenção',ko.oItens)}${forns?`<div class="aa"><b>Fornecedores (cotação):</b> ${forns}</div>`:''}
+      <div class="mh">ADM / Comercial</div>
+      ${(ko.admGuiaDias&&ko.admGuiaDias.length)?`<div class="aa"><b>Guia de envio — dia(s):</b> ${ko.admGuiaDias.join(', ')}</div>`:''}${kv('Nota cheia?',ko.admNotaCheia)}${kv('Contatos do cliente',ko.admContatos)}${kv('Perfil do cliente',ko.relPerfil)}${kv('Cliente cadastrado?',ko.relCadastrado)}${kv('Contrato assinado?',ko.admContrato)}${kv('ART emitida?',ko.admArt)}
       <div class="mh">Engenharia</div>
-      ${kv('CNO?',ko.engCno)}${kv('RT',ko.engRt==='Sim'?('Sim'+(ko.engRtNum?' — '+ko.engRtNum:'')):ko.engRt)}${kv('Liberação no condomínio?',ko.engLiberacao)}${kv('Cronograma finalizado?',ko.engCronograma)}${kv('Financeiro lançado?',ko.engFinanceiro)}${kv('Dias fixos de reunião?',ko.engReunioes==='Sim'?('Sim'+(ko.engReuniaoIndef?' (não definido)':(ko.engReuniaoDia?' — '+ko.engReuniaoDia:''))):ko.engReunioes)}${kv('Alinhamento Supri×Eng?',ko.engAlinhamento)}${kv('Quem aprova cotações',ko.engAprovacao)}${kv('Próximos passos',ko.engProximos)}
-      <div class="mh">Relacionamentos / Comercial / ADM</div>
-      ${kv('Perfil do cliente',ko.relPerfil)}${kv('Cliente cadastrado?',ko.relCadastrado)}
+      ${(ko.admSegIni||ko.admSegFim)?`<div class="aa"><b>Horário Seg–Qui:</b> ${yn(ko.admSegIni)} às ${yn(ko.admSegFim)}</div>`:''}${(ko.admSexIni||ko.admSexFim)?`<div class="aa"><b>Sexta:</b> ${yn(ko.admSexIni)} às ${yn(ko.admSexFim)}</div>`:''}${(ko.admSabIni||ko.admSabFim)?`<div class="aa"><b>Sábado:</b> ${yn(ko.admSabIni)} às ${yn(ko.admSabFim)}</div>`:''}${kv('CNO?',ko.engCno)}${kv('RT',ko.engRt==='Sim'?('Sim'+(ko.engRtNum?' — '+ko.engRtNum:'')):ko.engRt)}${kv('Liberação no condomínio?',ko.engLiberacao)}${kv('Cronograma finalizado?',ko.engCronograma)}${kv('Financeiro lançado?',ko.engFinanceiro)}${kv('Dias fixos de reunião?',ko.engReunioes==='Sim'?('Sim'+(ko.engReuniaoIndef?' (não definido)':(ko.engReuniaoDia?' — '+ko.engReuniaoDia:''))):ko.engReunioes)}${kv('Alinhamento Supri×Eng?',ko.engAlinhamento)}${kv('Quem aprova cotações',ko.engAprovacao)}${kv('Próximos passos',ko.engProximos)}
     </div>`;
   openModal(html);
 };
