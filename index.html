@@ -152,6 +152,10 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .rasc-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .rasc-acts .del-btn{border-color:var(--bad);color:var(--bad)}
 .rasc-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.05em;color:var(--gold);background:rgba(224,138,30,.14);border:1px solid rgba(224,138,30,.35);border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+.ko-total-row td{border-top:2px solid var(--line)}
+.ko-total-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;border-radius:6px;padding:3px 8px;white-space:nowrap}
+.ko-total-badge.auto{color:var(--good);background:rgba(46,125,107,.12);border:1px solid rgba(46,125,107,.35)}
+.ko-total-badge.manual{color:var(--gold);background:rgba(224,138,30,.14);border:1px solid rgba(224,138,30,.40)}
 .section>.bd{padding:22px}
 
 .lead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
@@ -473,11 +477,15 @@ body.setor-mode .sec-done{display:none}
       <div class="grid g3">
         <div class="fld"><label>Nome da Obra *</label><input id="f_obra" placeholder="Ex.: Aluízio e Cristina"></div>
         <div class="fld"><label>Data da Reunião</label><input id="f_data" type="date"></div>
+        <div class="fld"><label>Endereço</label><input id="f_endereco"></div>
         <div class="fld"><label>Arquitetura</label><input id="f_arq" list="dlArq" placeholder="Ex.: Bruno Rubiano"></div>
+        <div class="fld"><label>Arq. Responsável</label><input id="f_arqResp"></div>
         <div class="fld"><label>Gerenciadora</label><input id="f_ger" list="dlGer" placeholder="Ex.: nome da gerenciadora"></div>
         <div class="fld"><label>Regime de Contratação</label>
           <select id="f_regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
+        <div class="fld"><label>Tipo</label><select id="f_tipo"><option value="">—</option><option>Apartamento</option><option>Casa Nova</option><option>Casa Reforma</option><option>Comercial</option><option>Cobertura</option></select></div>
         <div class="fld"><label>Metragem (m²)</label><input id="f_metr" type="number" step="any" placeholder="300"></div>
+        <div class="fld"><label>Data Fechamento</label><input id="f_dataFech" type="date"></div>
         <div class="fld"><label>Ano de Conclusão</label><input id="f_ano" type="number" placeholder="2025"></div>
         <div class="fld"><label>Complexidade da obra</label><select id="f_complex"><option value="">—</option><option>Baixa</option><option>Média</option><option>Alta</option><option>Muito alta</option></select></div>
       </div>
@@ -616,18 +624,19 @@ body.setor-mode .sec-done{display:none}
   <div id="koList"></div>
 
   <div id="koForm" style="display:none">
-    <div class="section"><div class="sh"><span class="num">1</span><h2>Dados da Obra</h2></div><div class="bd">
-      <div class="ko-grid">
-        <div class="fld"><label>Obra</label><input data-ko="obra" placeholder="Nome da obra"></div>
-        <div class="fld"><label>Data do Kick Off</label><input data-ko="dataKo" type="date"></div>
+    <div class="section"><div class="sh"><span class="num">1</span><h2>Identificação da Obra</h2></div><div class="bd">
+      <div class="grid g3">
+        <div class="fld"><label>Nome da Obra *</label><input data-ko="obra" placeholder="Ex.: Aluízio e Cristina"></div>
+        <div class="fld"><label>Data da Reunião</label><input data-ko="dataKo" type="date"></div>
         <div class="fld"><label>Endereço</label><input data-ko="endereco"></div>
-        <div class="fld"><label>Arquitetura</label><input data-ko="arq" list="dlArq"></div>
-        <div class="fld"><label>Tipo</label><select data-ko="tipo"><option value="">—</option><option>Apartamento</option><option>Casa Nova</option><option>Casa Reforma</option><option>Comercial</option><option>Cobertura</option></select></div>
+        <div class="fld"><label>Arquitetura</label><input data-ko="arq" list="dlArq" placeholder="Ex.: Bruno Rubiano"></div>
         <div class="fld"><label>Arq. Responsável</label><input data-ko="arqResp"></div>
-        <div class="fld"><label>Regime</label><select data-ko="regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
-        <div class="fld"><label>Gerenciadora</label><input data-ko="ger" list="dlGer"></div>
-        <div class="fld"><label>Metragem (m²)</label><input data-ko="metragem" type="number" step="any"></div>
+        <div class="fld"><label>Gerenciadora</label><input data-ko="ger" list="dlGer" placeholder="Ex.: nome da gerenciadora"></div>
+        <div class="fld"><label>Regime de Contratação</label><select data-ko="regime"><option value="">—</option><option>100% adm</option><option>Preço fechado</option><option>Misto</option><option>Empreitada</option></select></div>
+        <div class="fld"><label>Tipo</label><select data-ko="tipo"><option value="">—</option><option>Apartamento</option><option>Casa Nova</option><option>Casa Reforma</option><option>Comercial</option><option>Cobertura</option></select></div>
+        <div class="fld"><label>Metragem (m²)</label><input data-ko="metragem" type="number" step="any" placeholder="300"></div>
         <div class="fld"><label>Data Fechamento</label><input data-ko="dataFech" type="date"></div>
+        <div class="fld"><label>Complexidade da obra</label><select data-ko="complex"><option value="">—</option><option>Baixa</option><option>Média</option><option>Alta</option><option>Muito alta</option></select></div>
       </div>
     </div></div>
 
@@ -658,13 +667,14 @@ body.setor-mode .sec-done{display:none}
         <tr><td><b>Fase Acabamentos</b></td><td><input data-ko="acabpct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="acabRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
         <tr><td><b>Itens Diferenciados</b></td><td><input data-ko="itenspct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="itensRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
         <tr><td><b>Equipe Técnica</b></td><td><input data-ko="eqtecpct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="eqtecRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr class="ko-total-row"><td><b>TOTAL</b></td><td style="text-align:right"><span class="ko-total-badge auto" id="koTotalBadge">SOMA AUTOMÁTICA</span></td><td><input data-ko="totalRs" class="ko-money koTotal" inputmode="numeric" style="width:100%;text-align:right;font-weight:700" placeholder="R$"><input type="hidden" data-ko="totalManual" class="koTotalManual"></td></tr>
       </tbody></table>
     </div></div>
 
     <div class="section"><div class="sh"><span class="num">4</span><h2>Orçamentos</h2></div><div class="bd">
       <div class="ko-item"><label>1. Perfil da arquitetura</label><textarea data-ko="oPerfilArq"></textarea></div>
       <div class="ko-item"><label>2. Projetos complementares</label><div id="koProjList"></div><button class="btn add" id="koAddProj" type="button" style="margin-top:6px">+ Adicionar projeto</button></div>
-      <div class="ko-item"><label>3. TIC</label>
+      <div class="ko-item"><label>3. Ferramentas de Gestão</label>
         <div class="ko-tic" style="display:flex;flex-wrap:wrap;gap:14px;margin-top:4px">
           <label class="ko-check"><input type="checkbox" data-ko="ferrConstructIn"> Construct In</label>
           <label class="ko-check"><input type="checkbox" data-ko="ferrTrello"> Trello</label>
@@ -1126,6 +1136,8 @@ function collect(){
     obra:$('f_obra').value.trim(), data:$('f_data').value, arq:$('f_arq').value.trim(), ger:$('f_ger').value.trim(),
     metragem:$('f_metr').value, regime:$('f_regime').value, ano:$('f_ano').value, eng:eqEng(_eqL),
     complex:$('f_complex')?$('f_complex').value:'',
+    endereco:$('f_endereco')?$('f_endereco').value.trim():'', arqResp:$('f_arqResp')?$('f_arqResp').value.trim():'',
+    tipo:$('f_tipo')?$('f_tipo').value:'', dataFech:$('f_dataFech')?$('f_dataFech').value:'',
     atraso:{motivo:$('f_atrasoMot')?$('f_atrasoMot').value:'',obs:$('f_atrasoObs')?$('f_atrasoObs').value:''},
     desvio:{motivo:$('f_desvioMot')?$('f_desvioMot').value:'',obs:$('f_desvioObs')?$('f_desvioObs').value:''},
     equipe:_eqL,
@@ -1156,9 +1168,14 @@ function collect(){
   return {o,fs};
 }
 function populate(o){
-  $('f_obra').value=o.obra||'';$('f_data').value=o.data||'';$('f_arq').value=o.arq||'';$('f_ger').value=o.ger||'';
-  $('f_metr').value=o.metragem||'';$('f_regime').value=o.regime||'';$('f_ano').value=o.ano||'';
-  if($('f_complex'))$('f_complex').value=o.complex||'';
+  const ko=o.kickoff||{};
+  $('f_obra').value=o.obra||'';$('f_data').value=o.data||'';$('f_arq').value=o.arq||ko.arq||'';$('f_ger').value=o.ger||ko.ger||'';
+  $('f_metr').value=o.metragem||ko.metragem||'';$('f_regime').value=o.regime||ko.regime||'';$('f_ano').value=o.ano||'';
+  if($('f_complex'))$('f_complex').value=o.complex||ko.complex||'';
+  if($('f_endereco'))$('f_endereco').value=o.endereco||ko.endereco||'';
+  if($('f_arqResp'))$('f_arqResp').value=o.arqResp||ko.arqResp||'';
+  if($('f_tipo'))$('f_tipo').value=o.tipo||ko.tipo||'';
+  if($('f_dataFech'))$('f_dataFech').value=o.dataFech||ko.dataFech||'';
   const at=o.atraso||{},dv=o.desvio||{};
   if($('f_atrasoMot'))$('f_atrasoMot').value=at.motivo||'';
   if($('f_atrasoObs')){$('f_atrasoObs').value=at.obs||'';if(at.obs){$('atrasoObsWrap').style.display='block';$('atrasoObsBtn').textContent='− observação';}}
@@ -1193,7 +1210,7 @@ function populate(o){
   recalc();
 }
 function clearForm(){
-  ['f_obra','f_data','f_arq','f_ger','f_metr','f_regime','f_ano','f_obs','f_complex','f_atrasoMot','f_atrasoObs','f_desvioMot','f_desvioObs'].forEach(i=>{if($(i))$(i).value='';});
+  ['f_obra','f_data','f_arq','f_ger','f_metr','f_regime','f_ano','f_obs','f_complex','f_endereco','f_arqResp','f_tipo','f_dataFech','f_atrasoMot','f_atrasoObs','f_desvioMot','f_desvioObs'].forEach(i=>{if($(i))$(i).value='';});
   if($('atrasoObsWrap'))$('atrasoObsWrap').style.display='none';if($('atrasoObsBtn'))$('atrasoObsBtn').textContent='+ observação';
   if($('desvioObsWrap'))$('desvioObsWrap').style.display='none';if($('desvioObsBtn'))$('desvioObsBtn').textContent='+ observação';
   $('eqList').innerHTML='';equipeRow();
@@ -1373,7 +1390,7 @@ window.viewObra=k=>{
     <button class="btn ghost print-btn" onclick="resumoObra('${jsq(o.obra)}')" style="margin-top:14px;margin-right:8px">📄 Resumo executivo</button><button class="btn print-btn" onclick="window.print()" style="margin-top:14px">🖨 Imprimir / Salvar em PDF</button></div>
     <div class="modal-body">
     <div class="mh">Identificação</div>
-    <div class="dl">${kv('Arquitetura',esc(o.arq))}${kv('Gerenciadora',esc(o.ger))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Ano',o.ano)}${kv('Regime',esc(o.regime))}${kv('Complexidade',esc(o.complex))}</div>
+    <div class="dl">${kv('Endereço',esc(o.endereco||(o.kickoff&&o.kickoff.endereco)))}${kv('Arquitetura',esc(o.arq))}${kv('Arq. Responsável',esc(o.arqResp||(o.kickoff&&o.kickoff.arqResp)))}${kv('Gerenciadora',esc(o.ger))}${kv('Regime',esc(o.regime))}${kv('Tipo',esc(o.tipo||(o.kickoff&&o.kickoff.tipo)))}${kv('Metragem',o.metragem?o.metragem+' m²':'')}${kv('Data Fechamento',fmtDate(o.dataFech||(o.kickoff&&o.kickoff.dataFech)))}${kv('Ano',o.ano)}${kv('Complexidade',esc(o.complex))}</div>
     <div class="mh">Equipe</div>
     ${eqArr.length?`<div class="dl">${eqItems.map(([l,v])=>kv(l,esc(v))).join('')}</div>`:'<p class="hint">Equipe não informada.</p>'}
     <div class="mh">Prazos e Orçamentos</div>${prz}
@@ -1701,7 +1718,7 @@ function collectKo(){
   return ko;
 }
 function populateKo(ko,o){
-  ko=Object.assign({}, o?{obra:o.obra,arq:o.arq,ger:o.ger,metragem:o.metragem,regime:o.regime,tipo:o.tipo}:{}, ko||{});
+  ko=Object.assign({}, o?{obra:o.obra,arq:o.arq,ger:o.ger,metragem:o.metragem,regime:o.regime,tipo:o.tipo,endereco:o.endereco,arqResp:o.arqResp,dataFech:o.dataFech,complex:o.complex}:{}, ko||{});
   document.querySelectorAll('#koForm [data-ko]').forEach(el=>{ if(el.classList.contains('ko-choice'))return; if(el.type==='checkbox')el.checked=!!ko[el.dataset.ko]; else el.value=ko[el.dataset.ko]||''; });
   document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>{ g.querySelectorAll('button').forEach(b=>b.classList.toggle('on', !!ko[g.dataset.ko] && b.dataset.val===ko[g.dataset.ko])); });
   document.querySelectorAll('#koForm .ko-choice[data-ko]').forEach(g=>updateKoCond(g.dataset.ko));
@@ -1713,6 +1730,7 @@ function populateKo(ko,o){
   document.querySelectorAll('#koForm .ferrOutrosNome').forEach(inp=>{const chk=document.querySelector('#koForm .ferrOutrosChk');inp.style.display=(chk&&chk.checked)?'':'none';});
   $('koProjList').innerHTML=''; (Array.isArray(ko.projetos)?ko.projetos:[]).forEach(pr=>koProjRow(pr));
   koNormalizeMoney();
+  koRenderTotalBadge(koTotalManual()); if(!koTotalManual())koUpdateTotal();
   koCalcTermino();
 }
 let koEditKey=null;
@@ -1767,6 +1785,15 @@ function koCalcTermino(){
 function fmtMoneyField(el){ let d=(el.value||'').replace(/\D/g,''); if(!d){el.value='';return;} el.value=(parseInt(d,10)/100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function koNormalizeMoney(){ document.querySelectorAll('#koForm .ko-money, #koForm .ko-pct').forEach(el=>{ const v=(el.value||'').trim(); if(!v)return; if(v.indexOf(',')<0){ const n=parseFloat(v.replace(/\./g,'').replace(',','.')); if(!isNaN(n))el.value=n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); } }); }
 document.querySelectorAll('#koForm .ko-money, #koForm .ko-pct').forEach(el=>el.addEventListener('input',()=>fmtMoneyField(el)));
+/* TOTAL da FASE — soma automática x manual */
+function parseBR(v){return parseFloat(String(v||'').replace(/\./g,'').replace(',','.'))||0;}
+function koFaseSum(){return ['cinzaRs','acabRs','itensRs','eqtecRs'].reduce((s,k)=>{const el=document.querySelector('#koForm [data-ko="'+k+'"]');return s+(el?parseBR(el.value):0);},0);}
+function koTotalManual(){const m=document.querySelector('#koForm .koTotalManual');return !!(m&&m.value);}
+function koRenderTotalBadge(manual){const b=document.getElementById('koTotalBadge');if(!b)return;b.textContent=manual?'SOMA MANUAL':'SOMA AUTOMÁTICA';b.className='ko-total-badge '+(manual?'manual':'auto');}
+function koSetTotalManual(v){const m=document.querySelector('#koForm .koTotalManual');if(m)m.value=v?'1':'';koRenderTotalBadge(v);}
+function koUpdateTotal(){ if(koTotalManual())return; const t=document.querySelector('#koForm .koTotal'); if(!t)return; const s=koFaseSum(); t.value=s?s.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}):''; koRenderTotalBadge(false); }
+['cinzaRs','acabRs','itensRs','eqtecRs'].forEach(k=>{const el=document.querySelector('#koForm [data-ko="'+k+'"]');if(el)el.addEventListener('input',koUpdateTotal);});
+(function(){const t=document.querySelector('#koForm .koTotal');if(t)t.addEventListener('input',()=>{ if((t.value||'').replace(/\D/g,'')===''){ koSetTotalManual(false); koUpdateTotal(); } else { koSetTotalManual(true); } });})();
 function saveKO(koStatus){
   const ko=collectKo(); const name=(ko.obra||'').trim();
   if(!name){ toast('Informe o nome da obra','warn'); return; }
@@ -1776,6 +1803,7 @@ function saveKO(koStatus){
     if(idx>=0)o=obras[idx]; else { o={obra:name,status:'rascunho',done:[]}; obras.push(o); }
     o.obra=name; o.kickoff=ko; o.koStatus=koStatus; o.kickoffDone=(koStatus==='concluido');
     o.arq=ko.arq||o.arq||''; o.ger=ko.ger||o.ger||''; o.metragem=ko.metragem||o.metragem||''; o.regime=ko.regime||o.regime||''; o.tipo=ko.tipo||o.tipo||'';
+    o.endereco=ko.endereco||o.endereco||''; o.arqResp=ko.arqResp||o.arqResp||''; o.dataFech=ko.dataFech||o.dataFech||''; o.complex=ko.complex||o.complex||'';
     if(!o.data && ko.dataKo)o.data=ko.dataKo;
     if(!Array.isArray(o.equipe)||!o.equipe.length){
       const eq=[];
@@ -1871,7 +1899,7 @@ window.imprimirKickoff=k=>{
       <div class="mh">Prazos</div>
       <div class="dl">${kv('Início',fmtDate(ko.inicio))}${kv('Término',fmtDate(ko.termino))}${kv('Prazo',ko.prazoMeses?ko.prazoMeses+' meses':'')}</div>
       <div class="mh">Orçamentos</div>
-      ${kv('Perfil da arquitetura',ko.oPerfilArq)}${proj?`<div class="aa"><b>Projetos complementares:</b> ${proj}</div>`:''}${ferr?`<div class="aa"><b>TIC:</b> ${ferr}</div>`:''}${kv('Itens de atenção',ko.oItens)}${forns?`<div class="aa"><b>Fornecedores (cotação):</b> ${forns}</div>`:''}
+      ${kv('Perfil da arquitetura',ko.oPerfilArq)}${proj?`<div class="aa"><b>Projetos complementares:</b> ${proj}</div>`:''}${ferr?`<div class="aa"><b>Ferramentas de Gestão:</b> ${ferr}</div>`:''}${kv('Itens de atenção',ko.oItens)}${forns?`<div class="aa"><b>Fornecedores (cotação):</b> ${forns}</div>`:''}
       <div class="mh">ADM / Comercial</div>
       ${(ko.admGuiaDias&&ko.admGuiaDias.length)?`<div class="aa"><b>Guia de envio — dia(s):</b> ${ko.admGuiaDias.join(', ')}</div>`:''}${kv('Nota cheia?',ko.admNotaCheia)}${kv('Contatos do cliente',ko.admContatos)}${kv('Perfil do cliente',ko.relPerfil)}${kv('Cliente cadastrado?',ko.relCadastrado)}${kv('Contrato assinado?',ko.admContrato)}${kv('ART emitida?',ko.admArt)}
       <div class="mh">Engenharia</div>
