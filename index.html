@@ -208,6 +208,43 @@ table{width:100%;border-collapse:collapse}
 .seg button.on-bad{background:var(--bad);color:#fff}
 .seg button.on-na{background:var(--muted);color:#fff}
 .seg button.on-neutral{background:var(--gold);color:#fff}
+/* motor de perguntas (itens 6-9) */
+.qa-item{padding:16px 0;border-top:1px solid var(--line)}
+.qa-item:first-child{border-top:none;padding-top:4px}
+.qa-q{font-weight:600;margin-bottom:9px;font-size:14px;color:var(--ink)}
+.qa-mtitle{font-weight:800;font-size:15px;color:var(--ink);margin-bottom:2px}
+.qa-legend{font-size:12px;color:var(--muted);font-style:italic;margin:0 0 9px}
+.qa-sub{font-size:13px;color:var(--muted);margin:4px 0 6px}
+.qseg{display:flex;flex-wrap:wrap;gap:7px}
+.qseg button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:9px;padding:8px 13px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.qseg button:hover{border-color:var(--clay)}
+.qseg button.on{background:var(--clay);color:#fff;border-color:var(--clay)}
+.qa-cmtbtn{background:none;border:none;color:var(--clay);font-weight:600;font-size:13px;cursor:pointer;padding:6px 0;font-family:inherit}
+.qa-cmt textarea{width:100%;min-height:62px;border:1px solid var(--line);border-radius:8px;padding:9px;font-family:inherit;font-size:13px;background:var(--paper);color:var(--ink);resize:vertical}
+.qmatrix{width:100%;border-collapse:collapse;font-size:13px;min-width:420px}
+.qmatrix th,.qmatrix td{border:1px solid var(--line);padding:7px 8px;text-align:center}
+.qmatrix td:first-child,.qmatrix th:first-child{text-align:left;font-weight:600;min-width:170px}
+.qmatrix thead th{background:var(--bg);font-weight:800;width:44px}
+.qmatrix .mdot{width:20px;height:20px;border:2px solid var(--muted);border-radius:50%;display:inline-block;cursor:pointer;vertical-align:middle;transition:.1s}
+.qmatrix .mdot:hover{border-color:var(--clay)}
+.qmatrix .mdot.on{background:var(--clay);border-color:var(--clay)}
+.qchecks{display:flex;flex-direction:column;gap:8px}
+.qchecks label{display:inline-flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;color:var(--ink)}
+.qoutros,.qnumv{border:1px solid var(--line);border-radius:8px;padding:8px;font-family:inherit;font-size:13px;background:var(--paper);color:var(--ink)}
+.qgate-body{margin-top:10px;padding:12px;background:var(--bg);border-radius:9px}
+/* dashboard */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:14px 0}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.kpi .kv{font-size:27px;font-weight:800;color:var(--clay);line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi .kl{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.kpi .ks{font-size:12px;color:var(--muted);margin-top:3px}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.dash-grid{grid-template-columns:1fr}}
+.donut-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.dlegs{display:flex;flex-direction:column;gap:5px;min-width:0}
+.dleg{font-size:13px;color:var(--ink);display:flex;align-items:center;gap:7px}
+.dleg .sw{width:12px;height:12px;border-radius:3px;display:inline-block;flex:0 0 auto}
+.dleg b{margin-left:3px;font-variant-numeric:tabular-nums}
 .engrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
 .engrow .seg{max-width:280px;flex:1 1 200px}
 .sublabel{display:block;font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px}
@@ -421,10 +458,11 @@ body.setor-mode .sec-done{display:none}
     <p class="login-sub">Selecione seu acesso para continuar</p>
     <div class="login-roles" id="loginRoles">
       <button class="role-btn" data-role="gestor">👤 Gestor <small>Cria o Kick Off e valida os Kickouts — requer senha</small></button>
-      <button class="role-btn" data-role="suprimentos">📦 Suprimentos <small>Preenche a Avaliação de Fornecedores</small></button>
+      <button class="role-btn" data-role="suprimentos">📦 Suprimentos <small>Fornecedores, Equipe de Obra e Avaliação da Engenharia</small></button>
       <button class="role-btn" data-role="orcamentos">💰 Orçamentos <small>Preenche os Prazos e Orçamentos</small></button>
-      <button class="role-btn" data-role="engenharia">🏗️ Engenharia <small>Preenche a seção de Engenharia</small></button>
-      <button class="role-btn" data-role="admobra">📋 ADM de Obra <small>Preenche a Equipe do Projeto</small></button>
+      <button class="role-btn" data-role="engenharia">🏗️ Engenharia <small>Engenharia, Fornecedores, Relacionamentos e Equipe de Obra</small></button>
+      <button class="role-btn" data-role="coordenacao">🧭 Coordenação <small>Preenche a Equipe de Obra (avaliação cruzada)</small></button>
+      <button class="role-btn" data-role="admobra">📋 ADM de Obra <small>Sem seção no momento (uso futuro)</small></button>
     </div>
     <div id="gestorPass" class="gestor-pass" style="display:none">
       <input id="loginPin" type="password" inputmode="numeric" placeholder="Senha do Gestor" autocomplete="off">
@@ -472,7 +510,7 @@ body.setor-mode .sec-done{display:none}
 
   <!-- 1 -->
   <div class="section" data-sec="ident">
-    <div class="sh"><span class="num">1</span><h2>Identificação da Obra</h2><div class="sec-meta"><span class="sec-tag">Engenharia / Coord.</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="ident"> Parte preenchida</label></div></div>
+    <div class="sh"><span class="num">1</span><h2>Identificação da Obra</h2><div class="sec-meta"><span class="sec-tag">Gestor</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="ident"> Parte preenchida</label></div></div>
     <div class="bd">
       <div class="grid g3">
         <div class="fld"><label>Nome da Obra *</label><input id="f_obra" placeholder="Ex.: Aluízio e Cristina"></div>
@@ -494,11 +532,12 @@ body.setor-mode .sec-done{display:none}
 
   <!-- 2 -->
   <div class="section" data-sec="equipe">
-    <div class="sh"><span class="num">2</span><h2>Equipe do Projeto</h2><div class="sec-meta"><span class="sec-tag">Coordenação / ADM</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="equipe"> Parte preenchida</label></div></div>
+    <div class="sh"><span class="num">2</span><h2>Equipe do Projeto</h2><div class="sec-meta"><span class="sec-tag">Gestor</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="equipe"> Parte preenchida</label></div></div>
     <div class="bd">
       <p class="hint" style="margin:-2px 0 14px">Adicione cada pessoa e informe a função. A pessoa com função <b>Engenheiro</b> é usada como responsável nos relatórios, na tabela de Obras e no histórico de fornecedores.</p>
       <div id="eqList"></div>
       <button class="btn add" id="addEq" type="button">+ Adicionar pessoa</button>
+      <button class="btn ghost" id="btnPullTeam" type="button" style="display:none;margin-left:8px">↻ Puxar equipe do Kick Off</button>
       <datalist id="eqFuncList"><option value="Diretoria"><option value="Coordenação"><option value="Engenheiro 1"><option value="Engenheiro 2"><option value="Engenheiro 3"><option value="Mestre"><option value="Orçamentista"><option value="Suprimentos"><option value="ADM"></datalist>
     </div>
   </div>
@@ -537,7 +576,7 @@ body.setor-mode .sec-done{display:none}
 
   <!-- 4 -->
   <div class="section" data-sec="forn">
-    <div class="sh"><span class="num">4</span><h2>Avaliação de Fornecedores</h2><div class="sec-meta"><span class="sec-tag">Suprimentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="forn"> Parte preenchida</label></div></div>
+    <div class="sh"><span class="num">4</span><h2>Avaliação de Fornecedores</h2><div class="sec-meta"><span class="sec-tag">Eng. / Suprimentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="forn"> Parte preenchida</label></div></div>
     <div class="bd">
       <p class="hint" style="margin:-2px 0 14px">Escala das notas — <b>0</b> Péssimo · <b>1</b> Ruim · <b>2</b> Regular · <b>3</b> Satisfatório · <b>4</b> Bom · <b>5</b> Excelente</p>
       <div id="fornList"></div>
@@ -551,9 +590,33 @@ body.setor-mode .sec-done{display:none}
     <div class="bd" id="engBlock"></div>
   </div>
 
-  <!-- 6 -->
+  <!-- 6 Relacionamento Cliente -->
+  <div class="section" data-sec="relcli">
+    <div class="sh"><span class="num">6</span><h2>Relacionamento Cliente</h2><div class="sec-meta"><span class="sec-tag">Engenharia</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="relcli"> Parte preenchida</label></div></div>
+    <div class="bd" id="relcliBlock"></div>
+  </div>
+
+  <!-- 7 Relacionamento com Arquitetura -->
+  <div class="section" data-sec="relarq">
+    <div class="sh"><span class="num">7</span><h2>Relacionamento com Arquitetura</h2><div class="sec-meta"><span class="sec-tag">Engenharia</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="relarq"> Parte preenchida</label></div></div>
+    <div class="bd" id="relarqBlock"></div>
+  </div>
+
+  <!-- 8 Equipe de Obra -->
+  <div class="section" data-sec="equipeobra">
+    <div class="sh"><span class="num">8</span><h2>Equipe de Obra</h2><div class="sec-meta"><span class="sec-tag">Coord. / Eng. / Supri.</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="equipeobra"> Parte preenchida</label></div></div>
+    <div class="bd" id="equipeobraBlock"></div>
+  </div>
+
+  <!-- 9 Avaliação da Engenharia -->
+  <div class="section" data-sec="engaval">
+    <div class="sh"><span class="num">9</span><h2>Avaliação da Engenharia</h2><div class="sec-meta"><span class="sec-tag">Suprimentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="engaval"> Parte preenchida</label></div></div>
+    <div class="bd" id="engavalBlock"></div>
+  </div>
+
+  <!-- 10 Outros (relacionamentos antigos — preservados) -->
   <div class="section" data-sec="rel">
-    <div class="sh"><span class="num">6</span><h2>Relacionamentos</h2><div class="sec-meta"><span class="sec-tag">Todos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="rel"> Parte preenchida</label></div></div>
+    <div class="sh"><span class="num">10</span><h2>Outros</h2><div class="sec-meta"><span class="sec-tag">Gestor</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="rel"> Parte preenchida</label></div></div>
     <div class="bd" id="relBlock"></div>
   </div>
 
@@ -766,11 +829,25 @@ body.setor-mode .sec-done{display:none}
 <!-- ============ DASHBOARD ============ -->
 <section class="view" id="v-dash">
   <div class="lead"><div><h1><em>Dashboard</em> de Análise</h1><p>Visão geral com base em tudo que foi registrado.</p></div></div>
-  <div class="section"><div class="sh"><span class="num">★</span><h2>Arquiteturas — mais obras</h2></div><div class="bd"><div id="dashArq"></div></div></div>
+  <div class="kpis" id="dashKpis"></div>
+  <div class="dash-grid">
+    <div class="section"><div class="sh"><span class="num">♥</span><h2>Satisfação do cliente</h2></div><div class="bd"><div id="dashSatCli"></div></div></div>
+    <div class="section"><div class="sh"><span class="num">✎</span><h2>Satisfação da arquitetura</h2></div><div class="bd"><div id="dashSatArq"></div></div></div>
+  </div>
+  <div class="section"><div class="sh"><span class="num">★</span><h2>Notas médias da equipe</h2></div><div class="bd"><div id="dashNotasEq"></div></div></div>
+  <div class="dash-grid">
+    <div class="section"><div class="sh"><span class="num">✓</span><h2>Recomendaria a equipe de campo?</h2></div><div class="bd"><div id="dashRecom"></div></div></div>
+    <div class="section"><div class="sh"><span class="num">◐</span><h2>Sentimento dos fornecedores</h2></div><div class="bd"><div id="dashSent"></div></div></div>
+  </div>
   <div class="section"><div class="sh"><span class="num">↗</span><h2>Fornecedores mais citados</h2></div><div class="bd"><div id="dashForn"></div></div></div>
-  <div class="section"><div class="sh"><span class="num">⌖</span><h2>Obras fechadas por ano</h2></div><div class="bd"><div id="dashAno"></div></div></div>
-  <div class="section"><div class="sh"><span class="num">⚠</span><h2>Causas de atraso</h2></div><div class="bd"><div id="dashAtraso"></div></div></div>
-  <div class="section"><div class="sh"><span class="num">⚠</span><h2>Causas de desvio de orçamento</h2></div><div class="bd"><div id="dashDesvio"></div></div></div>
+  <div class="dash-grid">
+    <div class="section"><div class="sh"><span class="num">⌖</span><h2>Obras fechadas por ano</h2></div><div class="bd"><div id="dashAno"></div></div></div>
+    <div class="section"><div class="sh"><span class="num">★</span><h2>Arquiteturas — mais obras</h2></div><div class="bd"><div id="dashArq"></div></div></div>
+  </div>
+  <div class="dash-grid">
+    <div class="section"><div class="sh"><span class="num">⚠</span><h2>Causas de atraso</h2></div><div class="bd"><div id="dashAtraso"></div></div></div>
+    <div class="section"><div class="sh"><span class="num">⚠</span><h2>Causas de desvio de orçamento</h2></div><div class="bd"><div id="dashDesvio"></div></div></div>
+  </div>
 </section>
 
 <!-- ============ DADOS ============ -->
@@ -787,6 +864,15 @@ body.setor-mode .sec-done{display:none}
     </div>
   </div>
   <div id="ioGate" style="display:none">
+  <div class="section"><div class="sh"><span class="num">❖</span><h2>Backup completo</h2></div><div class="bd">
+    <p class="hint" style="margin-top:0">Salva (ou restaura) <b>tudo</b> — obras, fornecedores e tipos — em um único arquivo <b>.json</b> no seu computador. Faça um backup antes de qualquer mudança. <b>Dica:</b> clique em "Baixar" com o app <b>Online</b>, para pegar a versão completa da nuvem.</p>
+    <div class="io-row" style="margin-top:12px">
+      <button class="btn" id="bkpDown">⬇ Baixar backup completo</button>
+      <input type="file" id="bkpFile" accept=".json,application/json" style="display:none">
+      <button class="btn ghost" id="bkpRestore">⬆ Restaurar backup…</button>
+    </div>
+    <p class="hint" id="bkpMsg" style="margin-top:10px"></p>
+  </div></div>
   <div class="section"><div class="sh"><span class="num">↓</span><h2>Exportar</h2></div><div class="bd">
     <p class="hint" style="margin-top:0">Gera um <b>.xlsx</b> com as abas PREENCHER_AQUI, DASHBOARD, HISTORICO_OBRAS e HISTORICO_FORNECEDORES — pronto para Tabela Dinâmica.</p>
     <div class="io-row" style="margin-top:12px">
@@ -1019,7 +1105,106 @@ function buildRel(){
     qa.querySelector('.relSatis').style.opacity=on?.5:1; qa.querySelector('.relTxt').style.opacity=on?.5:1;
   });
 }
-buildEng(); buildRel();
+/* ===================== MOTOR DE PERGUNTAS (itens 6-9) ===================== */
+const SAT5=['Muito satisfeito','Satisfeito','Parcialmente satisfeito','Insatisfeito','Muito insatisfeito'];
+const CRIT_PAD=['Comunicação com o cliente','Comunicação com a arquitetura','Organização','Planejamento','Controle de qualidade','Antecipação de problemas','Capacidade de resolver conflitos'];
+const CRIT_MESTRE=['Postura profissional','Organização da equipe','Comunicação com o cliente','Comunicação com a arquitetura','Cuidado com o Imóvel','Controle de qualidade dos serviços','Capacidade de resolver problemas','Postura diante de situações de pressão'];
+const CRIT_SUPRI=['Agilidade no atendimento às solicitações de compra','Cumprimento dos prazos de entrega','Qualidade e adequação dos materiais/fornecedores','Comunicação e alinhamento com a obra','Capacidade de negociação (custo-benefício)','Resolução de pendências e problemas','Proatividade'];
+const CRIT_ARQ=['Qualidade e clareza dos projetos','Agilidade nas definições','Compatibilização entre projetos','Organização das informações','Facilidade de comunicação','Respeito aos processos e ao planejamento da obra'];
+const CRIT_ENGAVAL=['Clareza e qualidade das especificações/pedidos de compra','Antecedência no envio das solicitações','Comunicação e alinhamento com Suprimentos','Agilidade nas aprovações (mapas de cotação)','Estabilidade do projeto (poucas alterações que geram recompra/retrabalho)','Colaboração na resolução de pendências'];
+
+const QA_CLI=[
+  {k:'satisf',t:'buttons',q:'Como você classificaria a satisfação do cliente?',opts:SAT5,cmt:true},
+  {k:'recForm',t:'buttons',q:'O Cliente fez reclamações formais durante a obra? Quais foram os principais temas?',opts:['Sim','Não'],cmt:true},
+  {k:'recAcesso',t:'buttons',q:'O Cliente reclamou de acesso à obra, sujeira, horários, barulho ou postura da equipe?',opts:['Sim','Não'],cmt:true},
+  {k:'perdaConf',t:'buttons',q:'Em algum momento o cliente demonstrou perda de confiança na construtora?',opts:['Sim','Não','Sim, parcialmente','Sim, claramente'],cmt:true}
+];
+const QA_ARQ=[
+  {k:'satisf',t:'buttons',q:'Como você classificaria a satisfação da arquitetura?',opts:SAT5,cmt:true},
+  {k:'matriz',t:'matrix',q:'Avalie a arquitetura',crits:CRIT_ARQ},
+  {k:'entrega',t:'buttons',q:'O Projeto foi entregue completo e compatibilizado antes do início da obra?',opts:['Sim','Não'],cmt:true},
+  {k:'revisoes',t:'numimpact',q:'Quantas alterações relevantes de projeto ocorreram durante a execução? Impactaram prazo e/ou orçamento?'}
+];
+const QA_EQO=[
+  {k:'mEng',t:'matrix',q:'Engenheiro',legend:'avaliação preenchida pelo Coordenador',crits:CRIT_PAD},
+  {k:'mCoord',t:'matrix',q:'Coordenador',legend:'avaliação preenchida pelo Engenheiro',crits:CRIT_PAD},
+  {k:'mMestre',t:'matrix',q:'Mestre / Encarregado',legend:'avaliação preenchida pelo Engenheiro e Coordenador',crits:CRIT_MESTRE},
+  {k:'mSupri',t:'matrix',q:'Suprimentos / Compras',legend:'avaliação preenchida pelo Engenheiro',crits:CRIT_SUPRI},
+  {k:'mAdm',t:'matrix',q:'Administrativo',legend:'avaliação preenchida pelo Engenheiro',crits:['(Definir critérios para ADM)']},
+  {k:'fator',t:'buttons',q:'O mestre/encarregado foi um fator positivo ou negativo na satisfação do cliente?',opts:['Muito positivo','Positivo','Neutro','Negativo','Muito negativo'],cmt:true},
+  {k:'subst',t:'buttons',q:'Foi necessário substituir algum encarregado ou membro-chave da equipe durante a obra? Por quê?',opts:['Sim','Não'],cmt:true},
+  {k:'recl',t:'checksgate',q:'Houve alguma reclamação direta relacionada à equipe da construtora?',showOn:'Sim',opts:['Engenheiro','Mestre / Encarregado','Terceirizados','Limpeza / organização','Postura / comportamento'],outros:true},
+  {k:'recom',t:'buttons',q:'Você recomendaria esta equipe de campo (mestre/encarregados) para a próxima obra de {TIPO}?',opts:['Sim','Não'],cmt:true}
+];
+const QA_ENGAVAL=[ {k:'matriz',t:'matrix',q:'Avalie a Engenharia',crits:CRIT_ENGAVAL} ];
+const QA_SECTIONS=[['relcliBlock',QA_CLI],['relarqBlock',QA_ARQ],['equipeobraBlock',QA_EQO],['engavalBlock',QA_ENGAVAL]];
+
+function curTipoLabel(o){ const t=(o&&o.tipo)|| ($('f_tipo')?$('f_tipo').value:'') ; return t?('próxima obra de '+t):'próxima obra'; }
+function qaCmtHTML(k){return `<button type="button" class="qa-cmtbtn" data-k="${k}">+ comentário</button><div class="qa-cmt qcmtbox" data-for="${k}" style="display:none;margin-top:6px"><textarea class="qcmt" data-k="${k}" placeholder="Comentário (opcional)…"></textarea></div>`;}
+function qaMatrixHTML(c){
+  const title=c.q?`<div class="qa-mtitle">${esc(c.q)}</div>`:''; const legend=c.legend?`<div class="qa-legend">${esc(c.legend)}</div>`:'';
+  const rows=c.crits.map((cr,r)=>`<tr data-r="${r}"><td>${esc(cr)}</td>${[1,2,3,4,5].map(n=>`<td><span class="mdot" data-k="${c.k}" data-r="${r}" data-n="${n}"></span></td>`).join('')}</tr>`).join('');
+  return `${title}${legend}<div style="overflow-x:auto"><table class="qmatrix" data-k="${c.k}"><thead><tr><th>Critério</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function qaRenderItems(cfg){
+  return cfg.map((c,i)=>{
+    const q=esc(c.q||'').replace('{TIPO}','<span class="qTipoRef">a próxima obra</span>');
+    let inner='';
+    if(c.t==='buttons'){ inner=`<div class="qseg" data-k="${c.k}">${c.opts.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>`; if(c.cmt)inner+=qaCmtHTML(c.k); }
+    else if(c.t==='matrix'){ inner=qaMatrixHTML(c); }
+    else if(c.t==='checksgate'){ inner=`<div class="qseg qgate" data-k="${c.k}">${['Sim','Não'].map(o=>`<button type="button" data-v="${o}">${o}</button>`).join('')}</div><div class="qgate-body" data-for="${c.k}" style="display:none"><div class="qa-sub">Se sim, relacionada a:</div><div class="qchecks">${c.opts.map(o=>`<label><input type="checkbox" class="qchk" data-k="${c.k}" data-v="${esc(o)}"> ${esc(o)}</label>`).join('')}${c.outros?`<label><input type="checkbox" class="qchk qchk-outros" data-k="${c.k}" data-v="Outros"> Outros</label>`:''}</div>${c.outros?`<input class="qoutros" data-k="${c.k}" placeholder="Qual outra reclamação?" style="display:none;margin-top:8px;width:100%">`:''}</div>`; }
+    else if(c.t==='numimpact'){ inner=`<input type="number" min="0" step="1" class="qnumv" data-k="${c.k}" placeholder="Nº de revisões" style="max-width:170px"><div class="qchecks" style="flex-direction:row;flex-wrap:wrap;gap:18px;margin-top:10px"><label><input type="checkbox" class="qimp" data-k="${c.k}" data-v="prazo"> Impactou Prazo</label><label><input type="checkbox" class="qimp" data-k="${c.k}" data-v="orcamento"> Impactou Orçamento</label></div><div class="qa-cmt qimp-cmt" data-for="${c.k}" style="display:none;margin-top:8px"><textarea class="qcmt" data-k="${c.k}" placeholder="Comentário sobre o impacto…"></textarea></div>`; }
+    const head=(c.t==='matrix')?'':`<div class="qa-q">${q}</div>`;
+    return `<div class="qa-item" data-k="${c.k}">${head}${inner}</div>`;
+  }).join('');
+}
+function buildQA(containerId,cfg){
+  const box=$(containerId); if(!box)return; box.innerHTML=qaRenderItems(cfg);
+  box.querySelectorAll('.qseg').forEach(seg=>seg.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const was=b.classList.contains('on'); seg.querySelectorAll('button').forEach(x=>x.classList.remove('on')); if(!was)b.classList.add('on');
+    if(seg.classList.contains('qgate')){const body=box.querySelector('.qgate-body[data-for="'+seg.dataset.k+'"]'); if(body)body.style.display=(b.classList.contains('on')&&b.dataset.v==='Sim')?'':'none';}
+  }));
+  box.querySelectorAll('.qmatrix tbody tr').forEach(tr=>tr.querySelectorAll('.mdot').forEach(d=>d.onclick=()=>{
+    const on=d.classList.contains('on'); tr.querySelectorAll('.mdot').forEach(x=>x.classList.remove('on')); if(!on)d.classList.add('on');
+  }));
+  box.querySelectorAll('.qa-cmtbtn').forEach(btn=>btn.onclick=()=>{const bx=box.querySelector('.qcmtbox[data-for="'+btn.dataset.k+'"]');const show=(bx.style.display==='none'||!bx.style.display);bx.style.display=show?'':'none';btn.textContent=show?'− comentário':'+ comentário';});
+  box.querySelectorAll('.qimp').forEach(cb=>cb.onchange=()=>{const k=cb.dataset.k;const any=[...box.querySelectorAll('.qimp[data-k="'+k+'"]')].some(x=>x.checked);const cm=box.querySelector('.qimp-cmt[data-for="'+k+'"]');if(cm)cm.style.display=any?'':'none';});
+  box.querySelectorAll('.qchk-outros').forEach(cb=>cb.onchange=()=>{const k=cb.dataset.k;const t=box.querySelector('.qoutros[data-k="'+k+'"]');if(t){t.style.display=cb.checked?'':'none';if(!cb.checked)t.value='';}});
+}
+function buildQAll(){ QA_SECTIONS.forEach(([id,cfg])=>buildQA(id,cfg)); updateTipoRefs(); }
+function updateTipoRefs(){ const t=$('f_tipo')?$('f_tipo').value:''; const lbl=t?('próxima obra de '+t):'a próxima obra'; document.querySelectorAll('.qTipoRef').forEach(s=>s.textContent=lbl); }
+function qaCollect(containerId,cfg){
+  const box=$(containerId); const out={}; if(!box)return out;
+  cfg.forEach(c=>{
+    if(c.t==='buttons'){ const sel=box.querySelector('.qseg[data-k="'+c.k+'"] button.on'); out[c.k]=sel?sel.dataset.v:''; if(c.cmt){const t=box.querySelector('.qcmtbox[data-for="'+c.k+'"] textarea'); out[c.k+'_c']=t?t.value:'';} }
+    else if(c.t==='matrix'){ out[c.k]=c.crits.map((cr,r)=>{const d=box.querySelector('.mdot.on[data-k="'+c.k+'"][data-r="'+r+'"]');return d?+d.dataset.n:0;}); }
+    else if(c.t==='checksgate'){ const sel=box.querySelector('.qgate[data-k="'+c.k+'"] button.on'); out[c.k]=sel?sel.dataset.v:''; out[c.k+'_t']=[...box.querySelectorAll('.qchk[data-k="'+c.k+'"]:checked')].map(x=>x.dataset.v); const ot=box.querySelector('.qoutros[data-k="'+c.k+'"]'); out[c.k+'_o']=ot?ot.value:''; }
+    else if(c.t==='numimpact'){ const n=box.querySelector('.qnumv[data-k="'+c.k+'"]'); out[c.k+'_n']=n?n.value:''; out[c.k+'_imp']=[...box.querySelectorAll('.qimp[data-k="'+c.k+'"]:checked')].map(x=>x.dataset.v); const cm=box.querySelector('.qimp-cmt[data-for="'+c.k+'"] textarea'); out[c.k+'_c']=cm?cm.value:''; }
+  });
+  return out;
+}
+function qaFill(containerId,cfg,data){
+  const box=$(containerId); if(!box)return; data=data||{};
+  cfg.forEach(c=>{
+    if(c.t==='buttons'){ const v=data[c.k]||''; box.querySelectorAll('.qseg[data-k="'+c.k+'"] button').forEach(b=>b.classList.toggle('on',!!v&&b.dataset.v===v)); if(c.cmt){const t=box.querySelector('.qcmtbox[data-for="'+c.k+'"] textarea');const cv=data[c.k+'_c']||'';if(t){t.value=cv;const bx=t.closest('.qcmtbox');const btn=box.querySelector('.qa-cmtbtn[data-k="'+c.k+'"]');if(cv&&cv.trim()){bx.style.display='';if(btn)btn.textContent='− comentário';}}} }
+    else if(c.t==='matrix'){ const arr=Array.isArray(data[c.k])?data[c.k]:[]; c.crits.forEach((cr,r)=>{const n=arr[r]||0;box.querySelectorAll('.mdot[data-k="'+c.k+'"][data-r="'+r+'"]').forEach(d=>d.classList.toggle('on',+d.dataset.n===n));}); }
+    else if(c.t==='checksgate'){ const v=data[c.k]||''; box.querySelectorAll('.qgate[data-k="'+c.k+'"] button').forEach(b=>b.classList.toggle('on',!!v&&b.dataset.v===v)); const body=box.querySelector('.qgate-body[data-for="'+c.k+'"]'); if(body)body.style.display=(v==='Sim')?'':'none'; const ts=data[c.k+'_t']||[]; box.querySelectorAll('.qchk[data-k="'+c.k+'"]').forEach(x=>x.checked=ts.includes(x.dataset.v)); const ot=box.querySelector('.qoutros[data-k="'+c.k+'"]');const ov=data[c.k+'_o']||'';if(ot){ot.value=ov;const oc=box.querySelector('.qchk-outros[data-k="'+c.k+'"]');ot.style.display=(oc&&oc.checked)?'':'none';} }
+    else if(c.t==='numimpact'){ const n=box.querySelector('.qnumv[data-k="'+c.k+'"]');if(n)n.value=data[c.k+'_n']||''; const imp=data[c.k+'_imp']||[];box.querySelectorAll('.qimp[data-k="'+c.k+'"]').forEach(x=>x.checked=imp.includes(x.dataset.v));const cm=box.querySelector('.qimp-cmt[data-for="'+c.k+'"]');if(cm)cm.style.display=imp.length?'':'none';const cmt=box.querySelector('.qimp-cmt[data-for="'+c.k+'"] textarea');if(cmt)cmt.value=data[c.k+'_c']||''; }
+  });
+}
+function qaView(cfg,data,title,tipoLbl){
+  data=data||{}; let any=false;
+  const parts=cfg.map(c=>{
+    if(c.t==='buttons'){ const v=data[c.k];const cm=data[c.k+'_c'];if(!v&&!(cm&&cm.trim()))return ''; any=true; const qq=esc(c.q).replace('{TIPO}',esc(tipoLbl||'a próxima obra')); return `<div class="qa-v"><div class="qq">${qq}</div>${v?`<div class="aa"><b>${esc(v)}</b></div>`:''}${cm&&cm.trim()?`<div class="aa">${esc(cm)}</div>`:''}</div>`; }
+    if(c.t==='matrix'){ const arr=data[c.k]||[];if(!arr.some(x=>x))return ''; any=true; const rows=c.crits.map((cr,r)=>arr[r]?`<div class="aa"><b>${esc(cr)}:</b> ${arr[r]}/5</div>`:'').join(''); return `<div class="qa-v"><div class="qq">${esc(c.q)}</div>${rows}</div>`; }
+    if(c.t==='checksgate'){ const v=data[c.k];const ts=data[c.k+'_t']||[];const o=data[c.k+'_o'];if(!v)return ''; any=true; const lst=ts.map(t=>t==='Outros'&&o?('Outros: '+o):t).join(', '); return `<div class="qa-v"><div class="qq">${esc(c.q)}</div><div class="aa"><b>${esc(v)}</b>${lst?' — '+esc(lst):''}</div></div>`; }
+    if(c.t==='numimpact'){ const n=data[c.k+'_n'];const imp=data[c.k+'_imp']||[];const cm=data[c.k+'_c'];if(!n&&!imp.length&&!(cm&&cm.trim()))return ''; any=true; const impt=imp.map(x=>x==='prazo'?'Prazo':'Orçamento').join(' e '); return `<div class="qa-v"><div class="qq">${esc(c.q).replace('{TIPO}',esc(tipoLbl||''))}</div>${n?`<div class="aa"><b>Revisões:</b> ${esc(n)}</div>`:''}${impt?`<div class="aa"><b>Impacto:</b> ${esc(impt)}</div>`:''}${cm&&cm.trim()?`<div class="aa">${esc(cm)}</div>`:''}</div>`; }
+    return '';
+  }).filter(Boolean);
+  return any?`<div class="mh">${esc(title)}</div>${parts.join('')}`:'';
+}
+
+buildEng(); buildRel(); buildQAll();
 
 /* ---------- fornecedor rows ---------- */
 function equipeRow(d={}){
@@ -1033,6 +1218,20 @@ function equipeRow(d={}){
 }
 function eqCollect(){return [...document.querySelectorAll('#eqList .eqrow')].map(r=>({nome:r.querySelector('.eqNome').value.trim(),funcao:r.querySelector('.eqFunc').value.trim()})).filter(r=>r.nome||r.funcao);}
 function eqEng(list){const e=(list||eqCollect()).find(r=>/engenheir|engenharia/i.test(r.funcao||''));return e?e.nome:'';}
+/* ---- replicação da equipe do Kick Off -> item 2 (mão única) ---- */
+let _curKickoffTeam=[];
+function koTeamFromKickoff(ko){ ko=ko||{}; const eq=[];
+  if(ko.eqOrc&&ko.eqOrc.trim())eq.push({nome:ko.eqOrc.trim(),funcao:'Orçamentos'});
+  if(ko.eqSup&&ko.eqSup.trim())eq.push({nome:ko.eqSup.trim(),funcao:'Suprimentos'});
+  if(ko.eqAdm&&ko.eqAdm.trim())eq.push({nome:ko.eqAdm.trim(),funcao:'ADM'});
+  [ko.eq1,ko.eq2,ko.eq3].forEach((nm,i)=>{if(nm&&nm.trim())eq.push({nome:nm.trim(),funcao:'Engenheiro '+(i+1)});});
+  if(ko.eqMestre&&ko.eqMestre.trim())eq.push({nome:ko.eqMestre.trim(),funcao:'Mestre'});
+  (ko.eqExtras||[]).forEach(x=>{if(x.nome&&x.nome.trim())eq.push({nome:x.nome.trim(),funcao:x.funcao||'Equipe'});});
+  return eq;
+}
+function eqTeamNames(){return [...document.querySelectorAll('#eqList .eqrow .eqNome')].map(i=>norm(i.value));}
+function missingKoMembers(){ const have=eqTeamNames(); return (_curKickoffTeam||[]).filter(m=>m.nome&&!have.includes(norm(m.nome))); }
+function updatePullTeamBtn(){ const b=$('btnPullTeam'); if(!b)return; const miss=missingKoMembers(); b.style.display=miss.length?'':'none'; b.textContent='↻ Puxar equipe do Kick Off'+(miss.length?` (${miss.length})`:''); }
 function fornRow(d={}){
   const wrap=document.createElement('div'); wrap.className='forn';
   const sent = d.sent==null?'':d.sent;
@@ -1107,7 +1306,9 @@ function addTipo(t){
   return {name:t,isNew:true};
 }
 $('addForn').onclick=()=>fornRow();
-$('addEq').onclick=()=>equipeRow();
+$('addEq').onclick=()=>{equipeRow();updatePullTeamBtn();};
+if($('btnPullTeam'))$('btnPullTeam').onclick=()=>{ const miss=missingKoMembers(); miss.forEach(m=>equipeRow(m)); updatePullTeamBtn(); toast(miss.length?('Puxado(s) '+miss.length+' do Kick Off'):'Equipe já está completa','ok'); };
+if($('eqList')){$('eqList').addEventListener('input',updatePullTeamBtn);$('eqList').addEventListener('click',()=>setTimeout(updatePullTeamBtn,0));}
 [['atrasoObsBtn','atrasoObsWrap'],['desvioObsBtn','desvioObsWrap']].forEach(([b,w])=>{const bt=$(b);if(bt)bt.onclick=()=>{const wr=$(w);const show=(wr.style.display==='none'||!wr.style.display);wr.style.display=show?'block':'none';bt.textContent=show?'− observação':'+ observação';};});
 
 /* ---------- prazos calc ---------- */
@@ -1165,6 +1366,10 @@ function collect(){
       concorrencia:w.querySelector('.fConc').checked});
   });
   o.done=[...document.querySelectorAll('.secChk:checked')].map(c=>c.dataset.sec);
+  o.relcli=qaCollect('relcliBlock',QA_CLI);
+  o.relarq=qaCollect('relarqBlock',QA_ARQ);
+  o.equipeobra=qaCollect('equipeobraBlock',QA_EQO);
+  o.engaval=qaCollect('engavalBlock',QA_ENGAVAL);
   return {o,fs};
 }
 function populate(o){
@@ -1181,10 +1386,15 @@ function populate(o){
   if($('f_atrasoObs')){$('f_atrasoObs').value=at.obs||'';if(at.obs){$('atrasoObsWrap').style.display='block';$('atrasoObsBtn').textContent='− observação';}}
   if($('f_desvioMot'))$('f_desvioMot').value=dv.motivo||'';
   if($('f_desvioObs')){$('f_desvioObs').value=dv.obs||'';if(dv.obs){$('desvioObsWrap').style.display='block';$('desvioObsBtn').textContent='− observação';}}
-  $('eqList').innerHTML='';(Array.isArray(o.equipe)?o.equipe:[]).forEach(p=>equipeRow(p));if(!$('eqList').children.length)equipeRow();
+  $('eqList').innerHTML='';
+  _curKickoffTeam=koTeamFromKickoff(o.kickoff);
+  const eqSrc=(Array.isArray(o.equipe)&&o.equipe.length)?o.equipe:(_curKickoffTeam.length?_curKickoffTeam:[]);
+  eqSrc.forEach(p=>equipeRow(p)); if(!$('eqList').children.length)equipeRow();
+  updatePullTeamBtn();
   $('f_obs').value=o.obs||'';
   document.querySelectorAll('#ptable tbody tr[data-k]').forEach(t=>{const p=(o.prazos||{})[t.dataset.k]||{};t.querySelector('.pv').value=p.pv||'';t.querySelector('.rl').value=p.rl||'';});
-  buildEng();buildRel();
+  buildEng();buildRel();buildQAll();updateTipoRefs();
+  qaFill('relcliBlock',QA_CLI,o.relcli); qaFill('relarqBlock',QA_ARQ,o.relarq); qaFill('equipeobraBlock',QA_EQO,o.equipeobra); qaFill('engavalBlock',QA_ENGAVAL,o.engaval);
   const EQ=Array.isArray(o.eng_qa)?o.eng_qa:[];
   ENG.forEach((c,i)=>{const bx=$('engBlock').querySelector(`.qa[data-i="${i}"]`);const d=EQ[i]||{};
     if(c.type==='text'){bx.querySelector('.engTxt').value=d.txt||'';return;}
@@ -1215,7 +1425,7 @@ function clearForm(){
   if($('desvioObsWrap'))$('desvioObsWrap').style.display='none';if($('desvioObsBtn'))$('desvioObsBtn').textContent='+ observação';
   $('eqList').innerHTML='';equipeRow();
   document.querySelectorAll('#ptable input').forEach(i=>i.value='');
-  buildEng();buildRel();
+  buildEng();buildRel();buildQAll();updateTipoRefs();
   $('fornList').innerHTML='';fornRow();recalc();editKey=null;$('editFlag').textContent='';
   document.querySelectorAll('.secChk').forEach(c=>c.checked=false);
 }
@@ -1381,7 +1591,7 @@ window.viewObra=k=>{
       const rows=c.subs.map((s,j)=>{const sd=subs[j]||{};return (sd.txt&&sd.txt.trim())?`<div class="aa" style="margin-top:4px"><b>${esc(s)}:</b> ${esc(sd.txt)}</div>`:'';}).filter(Boolean);
       return rows.length?`<div class="qa-v"><div class="qq">${esc(c.q)}</div>${rows.join('')}</div>`:'';
     }).filter(Boolean);
-    return its.length?`<div class="mh">Relacionamentos</div>${its.join('')}`:'';};
+    return its.length?`<div class="mh">Outros</div>${its.join('')}`:'';};
   const eqArr=Array.isArray(o.equipe)?o.equipe:[];
   const eqItems=eqArr.map(p=>[p.funcao||'—',p.nome]);
   let html=`<div class="print-only print-brand"><b>Kick|On</b> · Documento de Kickout — MpH Engenharia</div>
@@ -1398,6 +1608,11 @@ window.viewObra=k=>{
     <div class="mh">Fornecedores desta obra (${daObra.length})</div>`;
   html+= daObra.length? daObra.map(f=>`<div class="hcard" style="border-left-color:${sentCol(f.sent)}"><div class="top"><span class="ob">${esc(f.empresa)}</span><span class="dt">${notaLabel(f)}${f.sent?' · '+f.sent:''}</span></div><div class="meta"><span>${esc(f.tipo)||'—'}</span>${f.porte?`<span>Porte ${esc(f.porte)}</span>`:''}</div>${f.feedback?`<div class="fb">${esc(f.feedback)}</div>`:''}</div>`).join('') : '<p class="hint">Nenhum fornecedor registrado nesta obra.</p>';
   html+= engView();
+  const _tl=curTipoLabel(o);
+  html+= qaView(QA_CLI,o.relcli,'Relacionamento Cliente',_tl);
+  html+= qaView(QA_ARQ,o.relarq,'Relacionamento com Arquitetura',_tl);
+  html+= qaView(QA_EQO,o.equipeobra,'Equipe de Obra',_tl);
+  html+= qaView(QA_ENGAVAL,o.engaval,'Avaliação da Engenharia',_tl);
   html+= relView();
   openModal(html+'</div>');
 };
@@ -1499,6 +1714,52 @@ function renderDash(){
   };
   rankCausa(o=>(o.atraso||{}).motivo,'dashAtraso','obra(s)');
   rankCausa(o=>(o.desvio||{}).motivo,'dashDesvio','obra(s)');
+  renderDashNovos(dObras);
+}
+/* ---- painéis novos do dashboard (dados do Kickout novo) ---- */
+const SATSCORE={'Muito satisfeito':5,'Satisfeito':4,'Parcialmente satisfeito':3,'Insatisfeito':2,'Muito insatisfeito':1};
+const SATCOLOR={'Muito satisfeito':'#2E7D6B','Satisfeito':'#5FA88F','Parcialmente satisfeito':'#E0A800','Insatisfeito':'#E07A3C','Muito insatisfeito':'#C0392B'};
+function svgDonut(segs){
+  const total=segs.reduce((s,x)=>s+x.value,0);
+  if(!total) return '<p class="hint">Sem dados ainda. Aparece quando houver Kickouts preenchidos no formato novo.</p>';
+  const R=52,Cc=2*Math.PI*R; let off=0;
+  const arcs=segs.filter(s=>s.value>0).map(s=>{const len=s.value/total*Cc;const el=`<circle cx="70" cy="70" r="${R}" fill="none" stroke="${s.color}" stroke-width="22" stroke-dasharray="${len.toFixed(2)} ${(Cc-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 70 70)"></circle>`;off+=len;return el;}).join('');
+  const legend=segs.filter(s=>s.value>0).map(s=>`<div class="dleg"><span class="sw" style="background:${s.color}"></span>${esc(s.label)} <b>${s.value}</b></div>`).join('');
+  return `<div class="donut-wrap"><svg viewBox="0 0 140 140" width="130" height="130" aria-hidden="true">${arcs}<text x="70" y="78" text-anchor="middle" font-size="24" font-weight="800" fill="var(--ink)">${total}</text></svg><div class="dlegs">${legend}</div></div>`;
+}
+function distSat(dObras,secKey){const m={};SAT5.forEach(l=>m[l]=0);dObras.forEach(o=>{const v=(o[secKey]||{}).satisf;if(v&&m[v]!==undefined)m[v]++;});return SAT5.map(l=>({label:l,value:m[l],color:SATCOLOR[l]}));}
+function avgSat(dObras,secKey){let s=0,c=0;dObras.forEach(o=>{const v=(o[secKey]||{}).satisf;if(SATSCORE[v]){s+=SATSCORE[v];c++;}});return{avg:c?s/c:0,n:c};}
+function avgMat(dObras,secKey,matKey){let s=0,c=0;dObras.forEach(o=>{const d=(o[secKey]||{})[matKey];if(Array.isArray(d))d.forEach(n=>{if(n>0){s+=n;c++;}});});return{avg:c?s/c:0,n:c};}
+function notaBarColor(a){return a>=4?'#2E7D6B':a>=3?'#E0A800':'#C0392B';}
+function pctPrazo(dObras){let ok=0,tot=0;dObras.forEach(o=>{const p=(o.prazos||{}).prazo||{};const pv=+p.pv||0,rl=+p.rl||0;if(pv>0&&rl>0){tot++;if(rl<=pv)ok++;}});return tot?Math.round(ok/tot*100):null;}
+function renderDashNovos(dObras){
+  // KPIs
+  const satc=avgSat(dObras,'relcli');
+  const eqParts=['mEng','mCoord','mMestre','mSupri'].map(k=>avgMat(dObras,'equipeobra',k)).concat([avgMat(dObras,'engaval','matriz')]);
+  const eqSum=eqParts.reduce((a,b)=>({s:a.s+b.avg*b.n,n:a.n+b.n}),{s:0,n:0});
+  const eqAvg=eqSum.n?eqSum.s/eqSum.n:0;
+  const pz=pctPrazo(dObras);
+  const satcLbl=satc.n?satc.avg.toFixed(1).replace('.',',')+'/5':'—';
+  const eqLbl=eqSum.n?eqAvg.toFixed(1).replace('.',',')+'/5':'—';
+  $('dashKpis').innerHTML=[
+    `<div class="kpi"><div class="kv">${dObras.length}</div><div class="kl">Obras concluídas</div></div>`,
+    `<div class="kpi"><div class="kv">${satcLbl}</div><div class="kl">Satisfação do cliente</div><div class="ks">${satc.n} avaliação(ões)</div></div>`,
+    `<div class="kpi"><div class="kv">${eqLbl}</div><div class="kl">Nota média da equipe</div><div class="ks">${eqSum.n} nota(s)</div></div>`,
+    `<div class="kpi"><div class="kv">${pz===null?'—':pz+'%'}</div><div class="kl">Obras no prazo</div></div>`
+  ].join('');
+  // donuts
+  $('dashSatCli').innerHTML=svgDonut(distSat(dObras,'relcli'));
+  $('dashSatArq').innerHTML=svgDonut(distSat(dObras,'relarq'));
+  // sentimento fornecedores
+  const ms={Positivo:0,Neutro:0,Negativo:0};forn.forEach(f=>(f.hist||[]).forEach(h=>{if(ms[h.sent]!==undefined)ms[h.sent]++;}));
+  $('dashSent').innerHTML=svgDonut([{label:'Positivo',value:ms.Positivo,color:'#2E7D6B'},{label:'Neutro',value:ms.Neutro,color:'#E08A1E'},{label:'Negativo',value:ms.Negativo,color:'#C0392B'}]);
+  // recomendaria
+  let rsim=0,rnao=0;dObras.forEach(o=>{const v=(o.equipeobra||{}).recom;if(v==='Sim')rsim++;else if(v==='Não')rnao++;});
+  $('dashRecom').innerHTML=svgDonut([{label:'Sim',value:rsim,color:'#2E7D6B'},{label:'Não',value:rnao,color:'#C0392B'}]);
+  // notas médias por papel
+  const papeis=[['Engenheiro',avgMat(dObras,'equipeobra','mEng')],['Coordenador',avgMat(dObras,'equipeobra','mCoord')],['Mestre/Encarregado',avgMat(dObras,'equipeobra','mMestre')],['Suprimentos',avgMat(dObras,'equipeobra','mSupri')],['Engenharia',avgMat(dObras,'engaval','matriz')]];
+  const withData=papeis.filter(([n,x])=>x.n>0);
+  $('dashNotasEq').innerHTML=withData.length?withData.map(([n,x])=>`<div class="rank"><span class="nm">${esc(n)}</span><div class="minibar"><div style="width:${(x.avg/5*100).toFixed(0)}%;background:${notaBarColor(x.avg)}"></div></div><span class="vv">${x.avg.toFixed(1).replace('.',',')}<small>/5</small></span></div>`).join(''):'<p class="hint">Sem avaliações de equipe ainda. Aparece quando houver Kickouts no formato novo.</p>';
 }
 function refreshCounts(){$('cObras').textContent=obras.filter(o=>o.status!=='rascunho').length;const cr=$('cRasc');if(cr)cr.textContent=obras.filter(o=>o.koStatus==='rascunho'||(o.status==='rascunho'&&o.kickoutReleased)).length;$('cForn').textContent=forn.length;const ct=$('cTipos');if(ct)ct.textContent=tipos.length;}
 function refreshDatalists(){
@@ -1540,11 +1801,13 @@ function novoKickoutDireto(){ currentRole='gestor'; currentObraName=null; docume
 /* ================= LOGIN / PAPÉIS ================= */
 const ROLES={
   gestor:{nome:'Gestor', full:true},
-  suprimentos:{nome:'Suprimentos', sec:'forn'},
-  orcamentos:{nome:'Orçamentos', sec:'prazos'},
-  engenharia:{nome:'Engenharia', sec:'eng'},
-  admobra:{nome:'ADM de Obra', sec:'equipe'}
+  suprimentos:{nome:'Suprimentos', secs:['forn','equipeobra','engaval']},
+  orcamentos:{nome:'Orçamentos', secs:['prazos']},
+  engenharia:{nome:'Engenharia', secs:['forn','eng','relcli','relarq','equipeobra']},
+  coordenacao:{nome:'Coordenação', secs:['equipeobra']},
+  admobra:{nome:'ADM de Obra', secs:[]}
 };
+const SEC_LABEL={ident:'Identificação',equipe:'Equipe do Projeto',prazos:'Prazos e Orçamentos',forn:'Avaliação de Fornecedores',eng:'Engenharia',relcli:'Relacionamento Cliente',relarq:'Relacionamento com Arquitetura',equipeobra:'Equipe de Obra',engaval:'Avaliação da Engenharia',rel:'Outros'};
 let currentRole=null, currentObraName=null, gestorAuth=false, pendingGestorCb=null;
 
 function updateRoleUI(){
@@ -1603,11 +1866,13 @@ function renderSetorList(){
   const box=$('setorList'); if(!box)return;
   const r=ROLES[currentRole]; if(!r||r.full)return;
   $('setorTitle').innerHTML='Obras aguardando <em>'+esc(r.nome)+'</em>';
+  const secs=r.secs||[];
+  if(!secs.length){box.innerHTML='<p class="hint">Seu setor ('+esc(r.nome)+') ainda não tem nenhuma seção para preencher no Kickout. Em breve terá a sua parte.</p>';return;}
   const rs=obras.filter(o=>o.status==='rascunho'&&o.kickoutReleased).slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   if(!rs.length){box.innerHTML='<p class="hint">Nenhuma obra aberta no momento. Aguarde o Gestor criar uma obra em rascunho.</p>';return;}
   box.innerHTML=rs.map(o=>{
     const done=Array.isArray(o.done)?o.done:[];
-    const feito=done.includes(r.sec);
+    const feito=secs.every(s=>done.includes(s));
     return `<div class="rasc-card">
       <div class="rasc-top">
         <div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}</div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div>
@@ -1624,25 +1889,32 @@ window.abrirSetorObra=k=>{
   $('formActions').style.display='none'; $('setorActions').style.display='flex';
   $('setorFlag').textContent=o.obra+' · '+r.nome;
   const h=document.querySelector('#v-form .howto'); if(h)h.style.display='none';
-  document.querySelectorAll('#v-form .section').forEach(s=>{ s.style.display=(s.dataset.sec===r.sec)?'':'none'; });
+  const secs=r.secs||[];
+  document.querySelectorAll('#v-form .section').forEach(s=>{ s.style.display=secs.includes(s.dataset.sec)?'':'none'; });
   go('form'); window.scrollTo(0,0);
 };
 if($('setorBack'))$('setorBack').onclick=()=>{ currentObraName=null; renderSetorList(); go('setor'); window.scrollTo(0,0); };
 if($('setorSave'))$('setorSave').onclick=()=>{
   const r=ROLES[currentRole]; if(!r||r.full)return;
   if(!currentObraName){toast('Nenhuma obra selecionada','warn');return;}
-  const {o,fs}=collect(); const sec=r.sec; const name=currentObraName;
+  const {o,fs}=collect(); const secs=r.secs||[]; const name=currentObraName;
   commitSynced(()=>{
     const idx=obras.findIndex(x=>norm(x.obra)===norm(name)&&x.status==='rascunho');
     if(idx<0)return;
     const ob=obras[idx];
-    if(sec==='forn') ob.draftForn=fs;
-    else if(sec==='prazos') ob.prazos=o.prazos;
-    else if(sec==='eng') ob.eng_qa=o.eng_qa;
-    else if(sec==='equipe'){ ob.equipe=o.equipe; ob.eng=o.eng; }
-    else if(sec==='rel') ob.rel_qa=o.rel_qa;
     ob.done=Array.isArray(ob.done)?ob.done:[];
-    if(!ob.done.includes(sec))ob.done.push(sec);
+    secs.forEach(sec=>{
+      if(sec==='forn') ob.draftForn=fs;
+      else if(sec==='prazos') ob.prazos=o.prazos;
+      else if(sec==='eng') ob.eng_qa=o.eng_qa;
+      else if(sec==='equipe'){ ob.equipe=o.equipe; ob.eng=o.eng; }
+      else if(sec==='rel') ob.rel_qa=o.rel_qa;
+      else if(sec==='relcli') ob.relcli=o.relcli;
+      else if(sec==='relarq') ob.relarq=o.relarq;
+      else if(sec==='equipeobra') ob.equipeobra=o.equipeobra;
+      else if(sec==='engaval') ob.engaval=o.engaval;
+      if(!ob.done.includes(sec))ob.done.push(sec);
+    });
   }).then(()=>{ toast('Sua parte foi salva! ✓','ok'); currentObraName=null; renderSetorList(); go('setor'); window.scrollTo(0,0); });
 };
 
@@ -1672,6 +1944,18 @@ function csv(rows){return rows.map(r=>r.map(c=>{c=(c==null?'':c).toString();retu
 function dl(name,txt){const b=new Blob(["\ufeff"+txt],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();}
 $('expCsvO').onclick=()=>{const r=[["Obra","Data","Arquitetura","Metragem","Regime","Ano","Engenheiro","Prazo Prev","Prazo Real","Orc Prev","Orc Real"]];obras.forEach(o=>{const t=obraTotals(o);const p=o.prazos||{};r.push([o.obra,fmtDate(o.data),o.arq,o.metragem,o.regime,o.ano,o.eng,(p.prazo||{}).pv||0,(p.prazo||{}).rl||0,t.tp,t.tr]);});dl("historico_obras.csv",csv(r));toast('CSV exportado','ok');};
 $('expCsvF').onclick=()=>{const r=[["Empresa","Tipo/Departamento","Porte","Data Kickout","Obra","Técnico","Parceria","Sentimento","Engenheiro","Ano","Feedback"]];forn.forEach(f=>(f.hist||[]).forEach(h=>{const t=pick(h.notaTec,h.nota),p=pick(h.notaParc,h.nota);r.push([f.empresa,h.tipo||f.tipo,h.porte||f.porte||'',fmtDate(h.data),h.obra,t??'',p??'',h.sent,h.eng,h.ano,h.feedback]);}));dl("historico_fornecedores.csv",csv(r));toast('CSV exportado','ok');};
+/* ---- backup completo (.json) ---- */
+function dlJson(name,obj){const b=new Blob([JSON.stringify(obj)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);}
+if($('bkpDown'))$('bkpDown').onclick=()=>{ const d=new Date().toISOString().slice(0,10); dlJson('KICKOUT-backup-'+d+'.json',{_app:'KICKOUT',_v:1,exported_at:new Date().toISOString(),obras,forn,tipos}); if($('bkpMsg'))$('bkpMsg').textContent='Backup de '+obras.length+' obra(s) e '+forn.length+' fornecedor(es) baixado.'; toast('Backup baixado ✓','ok'); };
+if($('bkpRestore'))$('bkpRestore').onclick=()=>$('bkpFile').click();
+if($('bkpFile'))$('bkpFile').onchange=e=>{ const f=e.target.files[0]; if(!f){return;} const rd=new FileReader();
+  rd.onload=()=>{ try{ const data=JSON.parse(rd.result);
+      if(!data||!Array.isArray(data.obras)){toast('Arquivo de backup inválido','warn');return;}
+      if(!confirm('Restaurar vai SUBSTITUIR todos os dados atuais pelos do backup ('+data.obras.length+' obra(s)). Essa ação não pode ser desfeita. Continuar?')){e.target.value='';return;}
+      commitSynced(()=>{ obras=Array.isArray(data.obras)?data.obras:[]; forn=Array.isArray(data.forn)?data.forn:[]; tipos=Array.isArray(data.tipos)?data.tipos:[]; migrate(); }).then(()=>{ if($('bkpMsg'))$('bkpMsg').textContent='Backup restaurado: '+obras.length+' obra(s).'; toast('Backup restaurado ✓','ok'); });
+    }catch(err){ toast('Não consegui ler o arquivo','warn'); }
+    e.target.value=''; };
+  rd.readAsText(f); };
 
 /* ---------- import xlsx ---------- */
 $('impBtn').onclick=()=>$('impFile').click();
