@@ -742,10 +742,10 @@ body.setor-mode .sec-done{display:none}
         <div class="fld"><label>Prazo (meses)</label><input data-ko="prazoMeses" type="number" step="any"></div>
       </div>
       <table class="ptable" style="margin-top:14px"><thead><tr><th>Fase</th><th style="text-align:right;width:130px">%</th><th style="text-align:right;width:190px">R$</th></tr></thead><tbody>
-        <tr><td><b>Fase Cinza</b></td><td><input data-ko="cinzapct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="cinzaRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
-        <tr><td><b>Fase Acabamentos</b></td><td><input data-ko="acabpct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="acabRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
-        <tr><td><b>Itens Diferenciados</b></td><td><input data-ko="itenspct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="itensRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
-        <tr><td><b>Equipe Técnica</b></td><td><input data-ko="eqtecpct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="eqtecRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Fase Cinza (R$)</b></td><td><input data-ko="cinzapct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="cinzaRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Fase Acabamentos (R$)</b></td><td><input data-ko="acabpct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="acabRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Extras (R$)</b></td><td><input data-ko="itenspct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="itensRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
+        <tr><td><b>Equipe (R$)</b></td><td><input data-ko="eqtecpct" class="ko-pct" inputmode="numeric" style="width:100%;text-align:right" placeholder="%"></td><td><input data-ko="eqtecRs" class="ko-money" inputmode="numeric" style="width:100%;text-align:right" placeholder="R$"></td></tr>
         <tr class="ko-total-row"><td><b>TOTAL</b></td><td style="text-align:right"><span class="ko-total-badge auto" id="koTotalBadge">SOMA AUTOMÁTICA</span></td><td><input data-ko="totalRs" class="ko-money koTotal" inputmode="numeric" style="width:100%;text-align:right;font-weight:700" placeholder="R$"><input type="hidden" data-ko="totalManual" class="koTotalManual"></td></tr>
       </tbody></table>
     </div></div>
@@ -2139,6 +2139,7 @@ function saveKO(koStatus){
       if(eq.length){o.equipe=eq; o.eng=eqEng(eq);}
     }
     if(ko.prazoMeses){ o.prazos=o.prazos||{}; if(!o.prazos.prazo||!o.prazos.prazo.pv){o.prazos.prazo={pv:num(ko.prazoMeses),rl:(o.prazos.prazo||{}).rl||0};} }
+    [['cinza','cinzaRs'],['acab','acabRs'],['extras','itensRs'],['equipe','eqtecRs']].forEach(([k,src])=>{ const v=parseBR(ko[src]); if(v>0){ o.prazos=o.prazos||{}; if(!o.prazos[k]||!o.prazos[k].pv){ o.prazos[k]={pv:v,rl:(o.prazos[k]||{}).rl||0}; } } });
     koEditKey=o.obra;
   }).then(()=>{ toast(koStatus==='concluido'?'Kick Off concluído! ✓':'Rascunho de Kick Off salvo.','ok'); backKoList(); });
 }
