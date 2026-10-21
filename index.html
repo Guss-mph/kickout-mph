@@ -2150,7 +2150,7 @@ function renderPainel(){
     let flag='';
     if(!koutOk && ko.termino){ const t=new Date(ko.termino+'T00:00:00'); const d=Math.round((t-hoje)/86400000); if(d<0)flag='<span class="pnflag late">🏁 vencido</span>'; else if(d<=30)flag=`<span class="pnflag soon">🏁 ${d}d</span>`; }
     const koCell=o.koStatus==='concluido'?'<span class="prog-chip on">✓ concluído</span>':(o.koStatus==='rascunho'?'<span class="prog-chip">✏️ rascunho</span>':'<span class="prog-chip">⏳ pendente</span>');
-    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<span class="pn-fill">✎ Preencher <small>· ${done.length}/${SECTIONS.length}</small></span>`:(o.koStatus==='concluido'?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">—</span>'));
+    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<span class="pn-fill">✎ Preencher <small>· ${done.length}/${SECTIONS.length}</small></span>`:(o.koStatus==='concluido'?(gestorAuth?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">⏳ aguardando liberação</span>'):'<span class="prog-chip">—</span>'));
     const koPdf=o.kickoff?`<button class="pn-pdf" title="PDF do Kick Off" onclick="imprimirKickoff('${jsq(o.obra)}')">KO</button>`:'';
     const koutPdf=koutOk?`<button class="pn-pdf" title="PDF do Kickout" onclick="resumoObra('${jsq(o.obra)}')">Out</button>`:'';
     return `<tr>
