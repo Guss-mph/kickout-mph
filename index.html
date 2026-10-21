@@ -385,7 +385,8 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
   z-index:100;padding:40px 16px;overflow:auto;backdrop-filter:blur(2px)}
 .modal.show{display:flex;animation:fade .25s ease}
 .modal-card{background:var(--paper);border-radius:16px;box-shadow:0 24px 70px -20px rgba(0,0,0,.5);max-width:720px;width:100%;
-  position:relative;border:1px solid var(--line)}
+  position:relative;border:1px solid var(--line);max-height:calc(100dvh - 48px);display:flex;flex-direction:column;overflow:hidden}
+#modalBody{overflow-y:auto;min-height:0}
 .modal-x{position:absolute;top:12px;right:14px;background:none;border:none;font-size:26px;line-height:1;color:var(--muted);cursor:pointer;z-index:2}
 .modal-x:hover{color:var(--clay)}
 .modal-head{padding:24px 26px 16px;border-bottom:1px solid var(--line)}
@@ -445,7 +446,8 @@ body.setor-mode .sec-done{display:none}
 @media print{
   body>*:not(#modal){display:none !important}
   #modal{position:static !important;display:block !important;background:#fff !important;padding:0 !important;inset:auto !important}
-  #modal .modal-card{box-shadow:none !important;max-height:none !important;max-width:100% !important;width:100% !important;border-radius:0 !important;overflow:visible !important;animation:none !important}
+  #modal .modal-card{box-shadow:none !important;max-height:none !important;max-width:100% !important;width:100% !important;border-radius:0 !important;overflow:visible !important;animation:none !important;display:block !important}
+  #modal #modalBody{overflow:visible !important;max-height:none !important}
   #modalX,.print-btn{display:none !important}
   .print-only{display:block !important}
   .print-brand{padding:0 26px 10px;margin:0 0 8px;border-bottom:2px solid var(--clay);font-size:13px;color:var(--ink);font-weight:600}
