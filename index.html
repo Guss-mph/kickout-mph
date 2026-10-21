@@ -285,6 +285,9 @@ table{width:100%;border-collapse:collapse}
 .btn.ghost:hover{border-color:var(--clay);color:var(--clay)}
 .btn.sm{padding:7px 12px;font-size:13px}
 .btn.add{background:#fff;color:var(--clay);border:1px dashed var(--clay)}
+.na-lbl{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;background:#FFF4E0;border:1px solid #F0D28C;border-radius:8px;padding:9px 12px;margin:0 0 14px}
+.na-lbl input{width:16px;height:16px;accent-color:var(--clay);cursor:pointer}
+#fornWrap.na-off{opacity:.45;pointer-events:none;filter:grayscale(.45)}
 .eqrow{display:flex;gap:10px;align-items:flex-end;margin-bottom:10px}
 .eqrow .fld{flex:1;margin:0}
 .eqrow .fld:first-child{flex:1.5}
@@ -588,9 +591,12 @@ body.setor-mode .sec-done{display:none}
   <div class="section" data-sec="forn">
     <div class="sh"><span class="num">4</span><h2>Avaliação de Fornecedores</h2><div class="sec-meta"><span class="sec-tag">Eng. / Suprimentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="forn"> Parte preenchida</label></div></div>
     <div class="bd">
-      <p class="hint" style="margin:-2px 0 14px">Escala das notas — <b>0</b> Péssimo · <b>1</b> Ruim · <b>2</b> Regular · <b>3</b> Satisfatório · <b>4</b> Bom · <b>5</b> Excelente</p>
-      <div id="fornList"></div>
-      <button class="btn add" id="addForn">+ Adicionar fornecedor</button>
+      <label class="na-lbl"><input type="checkbox" id="fornNa"> <b>Não se aplica</b> — meu setor não teve fornecedores para avaliar nesta obra</label>
+      <div id="fornWrap">
+        <p class="hint" style="margin:-2px 0 14px">Escala das notas — <b>0</b> Péssimo · <b>1</b> Ruim · <b>2</b> Regular · <b>3</b> Satisfatório · <b>4</b> Bom · <b>5</b> Excelente</p>
+        <div id="fornList"></div>
+        <button class="btn add" id="addForn">+ Adicionar fornecedor</button>
+      </div>
     </div>
   </div>
 
@@ -1319,6 +1325,8 @@ function addTipo(t){
   return {name:t,isNew:true};
 }
 $('addForn').onclick=()=>fornRow();
+function setFornNa(on){ if($('fornNa'))$('fornNa').checked=on; if($('fornWrap'))$('fornWrap').classList.toggle('na-off',on); }
+if($('fornNa'))$('fornNa').onchange=function(){ setFornNa(this.checked); };
 $('addEq').onclick=()=>{equipeRow();updatePullTeamBtn();};
 if($('btnPullTeam'))$('btnPullTeam').onclick=()=>{ const miss=missingKoMembers(); miss.forEach(m=>equipeRow(m)); updatePullTeamBtn(); toast(miss.length?('Puxado(s) '+miss.length+' do Kick Off'):'Equipe já está completa','ok'); };
 if($('eqList')){$('eqList').addEventListener('input',updatePullTeamBtn);$('eqList').addEventListener('click',()=>setTimeout(updatePullTeamBtn,0));}
@@ -1430,6 +1438,8 @@ function populate(o){
   if(mine.length)mine.forEach(f=>fornRow(f)); else fornRow();
   document.querySelectorAll('.secChk').forEach(c=>c.checked=false);
   (Array.isArray(o.done)?o.done:[]).forEach(k=>{const c=document.querySelector('.secChk[data-sec="'+k+'"]');if(c)c.checked=true;});
+  const fna=o.forn_na||{};
+  setFornNa(currentRole==='gestor' ? Object.values(fna).some(Boolean) : !!fna[currentRole]);
   recalc();
 }
 function clearForm(){
@@ -1441,6 +1451,7 @@ function clearForm(){
   buildEng();buildRel();buildQAll();updateTipoRefs();
   $('fornList').innerHTML='';fornRow();recalc();editKey=null;$('editFlag').textContent='';
   document.querySelectorAll('.secChk').forEach(c=>c.checked=false);
+  setFornNa(false);
 }
 $('btnClear').onclick=()=>{clearForm();toast('Formulário limpo','warn');};
 
@@ -1453,7 +1464,7 @@ async function saveObra(status){
   let novos=0,upd=0;
   await commitSynced(()=>{
     const oi=obras.findIndex(x=>norm(x.obra)===norm(o.obra));
-    if(oi>=0){ const prev=obras[oi]; o.kickoff=prev.kickoff; o.koStatus=prev.koStatus; o.kickoutReleased=prev.kickoutReleased; if(prev.done&&(!o.done||!o.done.length))o.done=prev.done; obras[oi]=o; }
+    if(oi>=0){ const prev=obras[oi]; o.kickoff=prev.kickoff; o.koStatus=prev.koStatus; o.kickoutReleased=prev.kickoutReleased; if(prev.done&&(!o.done||!o.done.length))o.done=prev.done; if(prev.forn_na)o.forn_na=prev.forn_na; obras[oi]=o; }
     else obras.push(o);
     if(status==='rascunho' && !o.koStatus){ const _i=obras.findIndex(x=>norm(x.obra)===norm(o.obra)); if(_i>=0 && !obras[_i].kickoutReleased)obras[_i].kickoutReleased=true; }
     if(status!=='rascunho'){
@@ -1627,6 +1638,7 @@ window.viewObra=k=>{
     ${o.obs?`<div class="mh">Observações</div><p style="margin:0;font-size:14px;white-space:pre-wrap">${esc(o.obs)}</p>`:''}
     <div class="mh">Fornecedores desta obra (${daObra.length})</div>`;
   html+= daObra.length? daObra.map(f=>`<div class="hcard" style="border-left-color:${sentCol(f.sent)}"><div class="top"><span class="ob">${esc(f.empresa)}</span><span class="dt">${notaLabel(f)}${f.sent?' · '+f.sent:''}</span></div><div class="meta"><span>${esc(f.tipo)||'—'}</span>${f.porte?`<span>Porte ${esc(f.porte)}</span>`:''}</div>${f.feedback?`<div class="fb">${esc(f.feedback)}</div>`:''}</div>`).join('') : '<p class="hint">Nenhum fornecedor registrado nesta obra.</p>';
+  {const fnaOn=Object.entries(o.forn_na||{}).filter(([,v])=>v).map(([r])=>(ROLES[r]&&ROLES[r].nome)||r); if(fnaOn.length)html+=`<p class="hint" style="margin-top:8px">✔ Marcado como <b>"não se aplica"</b> por: <b>${esc(fnaOn.join(', '))}</b> — sem fornecedores para avaliar nesta obra.</p>`;}
   html+= engView();
   const _tl=curTipoLabel(o);
   html+= qaView(QA_CLI,o.relcli,'Relacionamento Cliente',_tl);
@@ -1669,6 +1681,7 @@ window.resumoObra=k=>{
       ${rec?`<div class="mh">Problema recorrente</div><div class="aa">${esc(rec)}</div>`:''}
       <div class="mh">Fornecedores</div>
       <table class="ptable"><thead><tr><th>Empresa</th><th>Técnico</th><th>Parceria</th></tr></thead><tbody>${fornHtml}</tbody></table>
+      ${(()=>{const fnaOn=Object.entries(o.forn_na||{}).filter(([,v])=>v).map(([r])=>(ROLES[r]&&ROLES[r].nome)||r);return fnaOn.length?`<p class="hint" style="margin-top:6px">✔ <b>Não se aplica</b> — ${esc(fnaOn.join(', '))} não teve fornecedores para avaliar nesta obra.</p>`:'';})()}
     </div>`;
   openModal(html);
 };
@@ -1930,7 +1943,7 @@ if($('setorSave'))$('setorSave').onclick=()=>{
     const ob=obras[idx];
     ob.done=Array.isArray(ob.done)?ob.done:[];
     secs.forEach(sec=>{
-      if(sec==='forn') ob.draftForn=fs;
+      if(sec==='forn'){ ob.draftForn=fs; ob.forn_na=ob.forn_na||{}; ob.forn_na[currentRole]=!!($('fornNa')&&$('fornNa').checked); }
       else if(sec==='prazos') ob.prazos=o.prazos;
       else if(sec==='eng') ob.eng_qa=o.eng_qa;
       else if(sec==='equipe'){ ob.equipe=o.equipe; ob.eng=o.eng; }
