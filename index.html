@@ -472,8 +472,8 @@ body.setor-mode .sec-done{display:none}
     <div class="login-roles" id="loginRoles">
       <button class="role-btn" data-role="gestor">👤 Gestor <small>Cria o Kick Off e valida os Kickouts — requer senha</small></button>
       <button class="role-btn" data-role="suprimentos">📦 Suprimentos <small>Fornecedores, Equipe de Obra e Avaliação da Engenharia</small></button>
-      <button class="role-btn" data-role="orcamentos">💰 Orçamentos <small>Preenche os Prazos e Orçamentos</small></button>
-      <button class="role-btn" data-role="engenharia">🏗️ Engenharia <small>Engenharia, Fornecedores, Relacionamentos e Equipe de Obra</small></button>
+      <button class="role-btn" data-role="orcamentos">💰 Orçamentos <small>Sem seção no momento (uso futuro)</small></button>
+      <button class="role-btn" data-role="engenharia">🏗️ Engenharia <small>Prazos e Orçamentos, Engenharia, Fornecedores, Relacionamentos e Equipe de Obra</small></button>
       <button class="role-btn" data-role="coordenacao">🧭 Coordenação <small>Preenche a Equipe de Obra (avaliação cruzada)</small></button>
       <button class="role-btn" data-role="admobra">📋 ADM de Obra <small>Sem seção no momento (uso futuro)</small></button>
     </div>
@@ -557,7 +557,7 @@ body.setor-mode .sec-done{display:none}
 
   <!-- 3 -->
   <div class="section" data-sec="prazos">
-    <div class="sh"><span class="num">3</span><h2>Prazos e Orçamentos</h2><div class="sec-meta"><span class="sec-tag">Orçamentos</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="prazos"> Parte preenchida</label></div></div>
+    <div class="sh"><span class="num">3</span><h2>Prazos e Orçamentos</h2><div class="sec-meta"><span class="sec-tag">Engenharia</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="prazos"> Parte preenchida</label></div></div>
     <div class="bd">
       <table class="ptable" id="ptable">
         <thead><tr><th style="width:36%">Item</th><th style="width:22%">Previsto</th><th style="width:22%">Real</th><th style="width:20%;text-align:right">Desvio</th></tr></thead>
@@ -1548,7 +1548,7 @@ const SECTIONS=[
   {key:'rel',setor:'Gestor'}
 ];
 /* setores que preenchem o Kickout, p/ mostrar pendências no painel */
-const PAINEL_SETORES=[['Orçamentos','Orç',['prazos']],['Suprimentos','Supri',['forn','engaval']],['Engenharia','Eng',['forn','eng','relcli','relarq','equipeobra']],['Coordenação','Coord',['equipeobra']]];
+const PAINEL_SETORES=[['Suprimentos','Supri',['forn','engaval']],['Engenharia','Eng',['prazos','forn','eng','relcli','relarq','equipeobra']],['Coordenação','Coord',['equipeobra']]];
 function painelSetorChips(done){ done=Array.isArray(done)?done:[]; return '<div class="pn-setchips">'+PAINEL_SETORES.map(([nome,ab,secs])=>{const ok=secs.every(s=>done.includes(s));return `<span class="pn-setchip ${ok?'ok':''}" title="${esc(nome)}">${ok?'✓':'⏳'} ${esc(ab)}</span>`;}).join('')+'</div>'; }
 function renderRascunhos(){
   const box=$('rascList'); if(!box)return;
@@ -1836,8 +1836,8 @@ function novoKickoutDireto(){ currentRole='gestor'; currentObraName=null; docume
 const ROLES={
   gestor:{nome:'Gestor', full:true},
   suprimentos:{nome:'Suprimentos', secs:['forn','engaval']},
-  orcamentos:{nome:'Orçamentos', secs:['prazos']},
-  engenharia:{nome:'Engenharia', secs:['forn','eng','relcli','relarq','equipeobra']},
+  orcamentos:{nome:'Orçamentos', secs:[]},
+  engenharia:{nome:'Engenharia', secs:['prazos','forn','eng','relcli','relarq','equipeobra']},
   coordenacao:{nome:'Coordenação', secs:['equipeobra']},
   admobra:{nome:'ADM de Obra', secs:[]}
 };
