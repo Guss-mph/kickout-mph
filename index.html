@@ -99,7 +99,8 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .pn-click:hover{filter:brightness(.97)}
 .pn-fill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:6px 12px;border-radius:8px;background:var(--paper);color:var(--clay);border:1.5px solid var(--clay);cursor:pointer;transition:.12s;box-shadow:0 1px 2px rgba(0,0,0,.05)}
 .pn-fill small{font-weight:600;opacity:.8}
-.pn-setchips{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.pn-kout-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pn-setchips{display:inline-flex;flex-wrap:wrap;gap:4px}
 .pn-setchip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(224,138,30,.12);color:var(--gold);border:1px solid rgba(224,138,30,.32);white-space:nowrap}
 .pn-setchip.ok{background:rgba(31,166,90,.14);color:#1a7a45;border-color:rgba(31,166,90,.32)}
 .pn-kout.pn-click:hover .pn-fill{background:var(--clay);color:#fff}
@@ -1536,8 +1537,8 @@ const SECTIONS=[
   {key:'rel',setor:'Gestor'}
 ];
 /* setores que preenchem o Kickout, p/ mostrar pendências no painel */
-const PAINEL_SETORES=[['Orçamentos',['prazos']],['Suprimentos',['forn','engaval']],['Engenharia',['forn','eng','relcli','relarq','equipeobra']],['Coordenação',['equipeobra']]];
-function painelSetorChips(done){ done=Array.isArray(done)?done:[]; return '<div class="pn-setchips">'+PAINEL_SETORES.map(([nome,secs])=>{const ok=secs.every(s=>done.includes(s));return `<span class="pn-setchip ${ok?'ok':''}">${ok?'✓':'⏳'} ${esc(nome)}</span>`;}).join('')+'</div>'; }
+const PAINEL_SETORES=[['Orçamentos','Orç',['prazos']],['Suprimentos','Supri',['forn','engaval']],['Engenharia','Eng',['forn','eng','relcli','relarq','equipeobra']],['Coordenação','Coord',['equipeobra']]];
+function painelSetorChips(done){ done=Array.isArray(done)?done:[]; return '<div class="pn-setchips">'+PAINEL_SETORES.map(([nome,ab,secs])=>{const ok=secs.every(s=>done.includes(s));return `<span class="pn-setchip ${ok?'ok':''}" title="${esc(nome)}">${ok?'✓':'⏳'} ${esc(ab)}</span>`;}).join('')+'</div>'; }
 function renderRascunhos(){
   const box=$('rascList'); if(!box)return;
   const koR=obras.filter(o=>o.koStatus==='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
@@ -2167,7 +2168,7 @@ function renderPainel(){
     let flag='';
     if(!koutOk && ko.termino){ const t=new Date(ko.termino+'T00:00:00'); const d=Math.round((t-hoje)/86400000); if(d<0)flag='<span class="pnflag late">🏁 vencido</span>'; else if(d<=30)flag=`<span class="pnflag soon">🏁 ${d}d</span>`; }
     const koCell=o.koStatus==='concluido'?'<span class="prog-chip on">✓ concluído</span>':(o.koStatus==='rascunho'?'<span class="prog-chip">✏️ rascunho</span>':'<span class="prog-chip">⏳ pendente</span>');
-    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<span class="pn-fill">✎ Preencher <small>· ${done.length}/${SECTIONS.length}</small></span>${painelSetorChips(done)}`:(o.koStatus==='concluido'?(gestorAuth?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">⏳ aguardando liberação</span>'):'<span class="prog-chip">—</span>'));
+    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<div class="pn-kout-row"><span class="pn-fill">✎ Preencher <small>· ${done.length}/${SECTIONS.length}</small></span>${painelSetorChips(done)}</div>`:(o.koStatus==='concluido'?(gestorAuth?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">⏳ aguardando liberação</span>'):'<span class="prog-chip">—</span>'));
     const koPdf=o.kickoff?`<button class="pn-pdf" title="PDF do Kick Off" onclick="imprimirKickoff('${jsq(o.obra)}')">KO</button>`:'';
     const koutPdf=koutOk?`<button class="pn-pdf" title="PDF do Kickout" onclick="resumoObra('${jsq(o.obra)}')">Out</button>`:'';
     return `<tr>
