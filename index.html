@@ -97,6 +97,10 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .pn-grouphead .pn-kout{color:#a86414}
 .pn-click{cursor:pointer}
 .pn-click:hover{filter:brightness(.97)}
+.pn-fill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:6px 12px;border-radius:8px;background:var(--paper);color:var(--clay);border:1.5px solid var(--clay);cursor:pointer;transition:.12s;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.pn-fill small{font-weight:600;opacity:.8}
+.pn-kout.pn-click:hover .pn-fill{background:var(--clay);color:#fff}
+.pn-kout.pn-click:hover .pn-fill small{opacity:.9}
 .pn-pdf{background:var(--ink);color:#fff;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:4px}
 .pn-pdf:hover{background:#000}
 .pn-acts{white-space:nowrap}
@@ -659,7 +663,7 @@ body.setor-mode .sec-done{display:none}
     <div class="pn-card pn-filter" data-f="rascunho"><div class="pn-num" id="pnRasc">0</div><div class="pn-lbl">✏️ Em rascunho</div></div>
     <div class="pn-card pn-filter" data-f="concluido"><div class="pn-num" id="pnConcl">0</div><div class="pn-lbl">✓ Concluídas</div></div>
   </div>
-  <div class="pn-legend"><b>Legenda:</b><span>⏳ pendente</span><span>✏️ em rascunho</span><span>✓ concluído</span><span>🔓 liberar Kickout</span><span>X/6 setores</span><span>🏁 prazo próximo / vencido</span></div>
+  <div class="pn-legend"><b>Legenda:</b><span>⏳ pendente</span><span>✏️ em rascunho</span><span>✓ concluído</span><span>🔓 liberar Kickout</span><span>X/N setores</span><span>🏁 prazo próximo / vencido</span></div>
   <div class="pn-toolbar"><input id="pnSearch" placeholder="🔎 Buscar obra ou arquitetura…"><span class="hint" id="pnFilterInfo"></span></div>
   <div class="htable-wrap"><table class="htable" id="pnTable">
     <thead>
@@ -1471,7 +1475,7 @@ function renderObras(q=''){
   const rows=obras.filter(o=>o.status!=='rascunho').filter(o=>!q||[o.obra,o.arq,o.eng,o.regime,o.ano].some(v=>norm(v).includes(q)));
   if(!rows.length){tb.innerHTML=`<tr><td colspan="5"><div class="empty"><div class="big">Nenhuma obra ${obras.length?'encontrada':'salva ainda'}</div>${obras.length?'Ajuste a busca.':'Preencha o formulário e salve.'}</div></td></tr>`;return;}
   tb.innerHTML=rows.map(o=>`<tr><td><b>${esc(o.obra)}</b>${o.kickoffDone?'<span class="ko-badge on">Kick Off ✓</span>':'<span class="ko-badge">Kick Off ⏳</span>'}</td><td>${fmtDate(o.data)}</td><td>${esc(o.arq)}</td><td>${esc(o.regime)}</td>
-    <td class="acts"><button onclick="viewObra('${jsq(o.obra)}')">Visualizar</button><button class="del" onclick="delObra('${jsq(o.obra)}')">Excluir</button></td></tr>`).join('');
+    <td class="acts"><button onclick="viewObra('${jsq(o.obra)}')">Visualizar</button>${gestorAuth?`<button class="del" onclick="delObra('${jsq(o.obra)}')">Excluir</button>`:''}</td></tr>`).join('');
 }
 function renderForn(q=''){
   const tb=$('fornBody');q=norm(q);
@@ -1504,20 +1508,24 @@ function renderForn(q=''){
       <td>${tec!=null?`<b style="color:${notaColor(tec)}">★ ${tec.toFixed(1)}</b>`:'—'}</td>
       <td>${parc!=null?`<b style="color:${notaColor(parc)}">★ ${parc.toFixed(1)}</b>`:'—'}</td>
       <td>${esc(last.obra||'')}</td>
-      <td class="acts"><button onclick="viewForn('${jsq(f.empresa)}')">Ver histórico</button><button class="del" onclick="delForn('${jsq(f.empresa)}')">Excluir</button></td></tr>`;}).join('');
+      <td class="acts"><button onclick="viewForn('${jsq(f.empresa)}')">Ver histórico</button>${gestorAuth?`<button class="del" onclick="delForn('${jsq(f.empresa)}')">Excluir</button>`:''}</td></tr>`;}).join('');
 }
 function jsq(s){return (s||'').replace(/'/g,"\\'");}
 function fmtDate(d){if(!d)return'';const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}
-window.delObra=k=>{if(confirm('Excluir a obra "'+k+'"? Os fornecedores ficam no histórico.')){commitSynced(()=>{obras=obras.filter(x=>norm(x.obra)!==norm(k));}).then(()=>toast('Obra excluída','warn'));}};
+window.delObra=k=>requireGestor(()=>{if(confirm('Excluir a obra "'+k+'"? Os fornecedores ficam no histórico.')){commitSynced(()=>{obras=obras.filter(x=>norm(x.obra)!==norm(k));}).then(()=>toast('Obra excluída','warn'));}});
 
 /* ---------- rascunhos (por setor) ---------- */
 const SECTIONS=[
-  {key:'ident',setor:'Engenharia / Coord.'},
-  {key:'equipe',setor:'Coordenação / ADM'},
+  {key:'ident',setor:'Gestor'},
+  {key:'equipe',setor:'Gestor'},
   {key:'prazos',setor:'Orçamentos'},
-  {key:'forn',setor:'Suprimentos'},
-  {key:'eng',setor:'Gestão de Obras'},
-  {key:'rel',setor:'Todos'}
+  {key:'forn',setor:'Eng. / Suprimentos'},
+  {key:'eng',setor:'Engenharia'},
+  {key:'relcli',setor:'Engenharia'},
+  {key:'relarq',setor:'Engenharia'},
+  {key:'equipeobra',setor:'Coord. / Eng. / Supri.'},
+  {key:'engaval',setor:'Suprimentos'},
+  {key:'rel',setor:'Gestor'}
 ];
 function renderRascunhos(){
   const box=$('rascList'); if(!box)return;
@@ -1527,7 +1535,7 @@ function renderRascunhos(){
   if(!koR.length) html+='<p class="hint">Nenhum Kick Off em rascunho.</p>';
   else html+=koR.map(o=>`<div class="rasc-card">
       <div class="rasc-top"><div><div class="rasc-name">${esc(o.obra)||'(sem nome)'}<span class="ko-badge">✏️ Kick Off em rascunho</span></div><div class="rasc-sub">${fmtDate(o.data)||'sem data'} · ${esc(o.arq)||'arquitetura —'}</div></div></div>
-      <div class="rasc-acts"><button class="btn" onclick="abrirKO('${jsq(o.obra)}')">✎ Continuar Kick Off</button><button class="btn ghost del-btn" onclick="delRascunho('${jsq(o.obra)}')">Excluir</button></div></div>`).join('');
+      <div class="rasc-acts"><button class="btn" onclick="abrirKO('${jsq(o.obra)}')">✎ Continuar Kick Off</button>${gestorAuth?`<button class="btn ghost del-btn" onclick="delRascunho('${jsq(o.obra)}')">Excluir</button>`:''}</div></div>`).join('');
   html+='<h2 class="rasc-h" style="margin-top:26px">✎ Rascunhos de Kickout</h2>';
   if(!koutR.length) html+='<p class="hint">Nenhum Kickout em rascunho. Ao concluir um Kick Off, a obra aparece aqui para os setores preencherem.</p>';
   else html+=koutR.map(o=>{
@@ -1539,13 +1547,13 @@ function renderRascunhos(){
         <div class="rasc-pct">${done.length}/${SECTIONS.length}<small>setores</small></div></div>
       <div class="prog-bar"><div style="width:${pct}%"></div></div>
       <div class="prog-chips">${chips}</div>
-      <div class="rasc-acts"><button class="btn" onclick="abrirRascunho('${jsq(o.obra)}')">✎ Abrir / continuar</button><button class="btn ghost del-btn" onclick="delRascunho('${jsq(o.obra)}')">Excluir</button></div></div>`;
+      <div class="rasc-acts"><button class="btn" onclick="abrirRascunho('${jsq(o.obra)}')">✎ Abrir / continuar</button>${gestorAuth?`<button class="btn ghost del-btn" onclick="delRascunho('${jsq(o.obra)}')">Excluir</button>`:''}</div></div>`;
   }).join('');
   box.innerHTML=html;
 }
 window.abrirRascunho=k=>{const o=obras.find(x=>norm(x.obra)===norm(k)&&x.status==='rascunho');if(!o)return;populate(o);editKey=o.obra;$('editFlag').textContent='Rascunho: '+o.obra;go('form');window.scrollTo(0,0);};
-window.delRascunho=k=>{if(confirm('Excluir este rascunho? (não afeta o histórico oficial)')){commitSynced(()=>{obras=obras.filter(x=>!(norm(x.obra)===norm(k)&&x.status==='rascunho'));}).then(()=>toast('Rascunho excluído','warn'));}};
-window.delForn=k=>{if(confirm('Excluir o fornecedor "'+k+'" e todo o seu histórico?')){commitSynced(()=>{forn=forn.filter(x=>norm(x.empresa)!==norm(k));}).then(()=>toast('Fornecedor excluído','warn'));}};
+window.delRascunho=k=>requireGestor(()=>{if(confirm('Excluir este rascunho? (não afeta o histórico oficial)')){commitSynced(()=>{obras=obras.filter(x=>!(norm(x.obra)===norm(k)&&x.status==='rascunho'));}).then(()=>toast('Rascunho excluído','warn'));}});
+window.delForn=k=>requireGestor(()=>{if(confirm('Excluir o fornecedor "'+k+'" e todo o seu histórico?')){commitSynced(()=>{forn=forn.filter(x=>norm(x.empresa)!==norm(k));}).then(()=>toast('Fornecedor excluído','warn'));}});
 
 /* ---------- modal ---------- */
 function openModal(html){$('modalBody').innerHTML=html;$('modal').classList.add('show');}
@@ -1681,10 +1689,10 @@ function renderTipos(){
   const cnt={};forn.forEach(f=>{const t=stripAcc(f.tipo);if(t)cnt[t]=(cnt[t]||0)+1;});
   const arr=tipos.slice().sort((a,b)=>a.localeCompare(b,'pt'));
   const c2=$('cTipos2');if(c2)c2.textContent=tipos.length;
-  box.innerHTML = arr.length? arr.map(t=>`<div class="tip-item"><button class="flink nm" title="Ver melhores fornecedores deste tipo" onclick="verFornDoTipo('${jsq(t)}')">${esc(t)}</button><span class="ct">${cnt[stripAcc(t)]||0} fornecedor(es)</span><button class="del" title="Remover" onclick="delTipo('${jsq(t)}')">×</button></div>`).join('') : '<p class="hint">Nenhum tipo cadastrado. Adicione acima.</p>';
+  box.innerHTML = arr.length? arr.map(t=>`<div class="tip-item"><button class="flink nm" title="Ver melhores fornecedores deste tipo" onclick="verFornDoTipo('${jsq(t)}')">${esc(t)}</button><span class="ct">${cnt[stripAcc(t)]||0} fornecedor(es)</span>${gestorAuth?`<button class="del" title="Remover" onclick="delTipo('${jsq(t)}')">×</button>`:''}</div>`).join('') : '<p class="hint">Nenhum tipo cadastrado. Adicione acima.</p>';
 }
 window.verFornDoTipo=t=>{ go('forn'); const f=$('filtForn'); if(f)f.value=t; const s=$('sortForn'); if(s)s.value='nota'; const sr=$('srcForn'); if(sr)sr.value=''; renderForn(''); };
-window.delTipo=t=>{if(confirm('Remover o tipo "'+t+'"? (não altera fornecedores já salvos)')){commitSynced(()=>{tipos=tipos.filter(x=>x!==t);}).then(()=>{refreshTipoSelects();toast('Tipo removido','warn');});}};
+window.delTipo=t=>requireGestor(()=>{if(confirm('Remover o tipo "'+t+'"? (não altera fornecedores já salvos)')){commitSynced(()=>{tipos=tipos.filter(x=>x!==t);}).then(()=>{refreshTipoSelects();toast('Tipo removido','warn');});}});
 $('addTipo').onclick=()=>{const r=addTipo($('novoTipo').value);if(r&&r.isNew){$('novoTipo').value='';refreshTipoSelects();toast('Tipo adicionado','ok');}};
 $('novoTipo').addEventListener('keydown',e=>{if(e.key==='Enter')$('addTipo').click();});
 
@@ -1829,7 +1837,7 @@ function requireGestor(cb){
 function tryGestor(){
   if(hashPin($('loginPin').value.trim())===IO_PIN_HASH){
     gestorAuth=true; $('loginScreen').style.display='none'; loginBackFn();
-    if($('painelBody'))renderPainel();
+    renderAll();
     const cb=pendingGestorCb; pendingGestorCb=null; if(cb)cb();
   } else { $('loginErr').textContent='Senha incorreta.'; $('loginPin').value=''; $('loginPin').focus(); }
 }
@@ -1858,7 +1866,7 @@ function restoreFullForm(){
 if($('logoutBtn'))$('logoutBtn').onclick=()=>{
   currentRole=null; currentObraName=null; gestorAuth=false;
   document.body.classList.remove('setor-mode'); restoreFullForm();
-  updateRoleUI(); go('painel'); window.scrollTo(0,0);
+  renderAll(); updateRoleUI(); go('painel'); window.scrollTo(0,0);
 };
 
 /* lista de obras abertas para o setor preencher */
@@ -2142,9 +2150,9 @@ function renderPainel(){
     let flag='';
     if(!koutOk && ko.termino){ const t=new Date(ko.termino+'T00:00:00'); const d=Math.round((t-hoje)/86400000); if(d<0)flag='<span class="pnflag late">🏁 vencido</span>'; else if(d<=30)flag=`<span class="pnflag soon">🏁 ${d}d</span>`; }
     const koCell=o.koStatus==='concluido'?'<span class="prog-chip on">✓ concluído</span>':(o.koStatus==='rascunho'?'<span class="prog-chip">✏️ rascunho</span>':'<span class="prog-chip">⏳ pendente</span>');
-    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<span class="prog-chip">${done.length}/6 setores</span>`:(o.koStatus==='concluido'?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">—</span>'));
-    const koPdf=o.kickoff?`<button class="pn-pdf" title="PDF do Kick Off" onclick="requireGestor(()=>imprimirKickoff('${jsq(o.obra)}'))">KO</button>`:'';
-    const koutPdf=koutOk?`<button class="pn-pdf" title="PDF do Kickout" onclick="requireGestor(()=>resumoObra('${jsq(o.obra)}'))">Out</button>`:'';
+    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<span class="pn-fill">✎ Preencher <small>· ${done.length}/${SECTIONS.length}</small></span>`:(o.koStatus==='concluido'?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">—</span>'));
+    const koPdf=o.kickoff?`<button class="pn-pdf" title="PDF do Kick Off" onclick="imprimirKickoff('${jsq(o.obra)}')">KO</button>`:'';
+    const koutPdf=koutOk?`<button class="pn-pdf" title="PDF do Kickout" onclick="resumoObra('${jsq(o.obra)}')">Out</button>`:'';
     return `<tr>
       <td><b>${esc(o.obra)||'(sem nome)'}</b>${flag}</td>
       <td class="pn-ko pn-click" onclick="requireGestor(()=>abrirKO('${jsq(o.obra)}'))">${koCell}</td>
