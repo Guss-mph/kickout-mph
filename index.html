@@ -2157,7 +2157,7 @@ function renderPainel(){
     const koutPdf=koutOk?`<button class="pn-pdf" title="PDF do Kickout" onclick="resumoObra('${jsq(o.obra)}')">Out</button>`:'';
     return `<tr>
       <td><b>${esc(o.obra)||'(sem nome)'}</b>${flag}</td>
-      <td class="pn-ko pn-click" onclick="requireGestor(()=>abrirKO('${jsq(o.obra)}'))">${koCell}</td>
+      <td class="pn-ko pn-click" onclick="abrirKoCell('${jsq(o.obra)}')">${koCell}</td>
       <td class="pn-kout pn-click" onclick="abrirKoutCell('${jsq(o.obra)}')">${koutCell}</td>
       <td>${fmtDate(ko.inicio)||'—'}</td>
       <td>${fmtDate(ko.termino)||'—'}</td>
@@ -2173,6 +2173,10 @@ window.liberarKickout=k=>{
   commitSynced(()=>{ const ob=obras.find(x=>norm(x.obra)===norm(k)); if(ob)ob.kickoutReleased=true; }).then(()=>toast('Kickout liberado para os setores ✓','ok'));
 };
 window.abrirKO=k=>{ currentRole='gestor'; updateRoleUI(); go('kickoff'); openKickoff(k); };
+window.abrirKoCell=k=>{ const o=obras.find(x=>norm(x.obra)===norm(k)); if(!o)return;
+  if(o.kickoff){ if(gestorAuth) abrirKO(k); else imprimirKickoff(k); }
+  else { requireGestor(()=>abrirKO(k)); }
+};
 window.imprimirKickoff=k=>{
   const o=obras.find(x=>norm(x.obra)===norm(k)); if(!o||!o.kickoff){toast('Sem Kick Off preenchido','warn');return;}
   const ko=o.kickoff; const kv=(l,v)=>v?`<div class="aa"><b>${esc(l)}:</b> ${esc(v)}</div>`:''; const yn=v=>v||'—';
