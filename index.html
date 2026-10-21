@@ -99,6 +99,9 @@ main{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
 .pn-click:hover{filter:brightness(.97)}
 .pn-fill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:6px 12px;border-radius:8px;background:var(--paper);color:var(--clay);border:1.5px solid var(--clay);cursor:pointer;transition:.12s;box-shadow:0 1px 2px rgba(0,0,0,.05)}
 .pn-fill small{font-weight:600;opacity:.8}
+.pn-setchips{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.pn-setchip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(224,138,30,.12);color:var(--gold);border:1px solid rgba(224,138,30,.32);white-space:nowrap}
+.pn-setchip.ok{background:rgba(31,166,90,.14);color:#1a7a45;border-color:rgba(31,166,90,.32)}
 .pn-kout.pn-click:hover .pn-fill{background:var(--clay);color:#fff}
 .pn-kout.pn-click:hover .pn-fill small{opacity:.9}
 .pn-pdf{background:var(--ink);color:#fff;border:none;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:4px}
@@ -1041,6 +1044,8 @@ function migrate(){
     ko.ferramentas.forEach(f=>{ const t=(f.tipo||'').trim(); if(t==='Construct In')ko.ferrConstructIn=true; else if(t==='Trello')ko.ferrTrello=true; else if(t==='Outros'||f.nome){ko.ferrOutros=true; if(f.nome)ko.ferrOutrosNome=(ko.ferrOutrosNome?ko.ferrOutrosNome+', ':'')+f.nome.trim();} });
     delete ko.ferramentas;
   }});
+  // Mestre: matriz única antiga -> avaliação do Engenheiro
+  obras.forEach(o=>{ const e=o.equipeobra; if(e && Array.isArray(e.mMestre)){ if(!e.mMestreEng)e.mMestreEng=e.mMestre; delete e.mMestre; }});
 }
 function addTipoSilent(t){ t=(t||'').trim(); if(!t)return; if(!tipos.some(x=>stripAcc(x)===stripAcc(t)))tipos.push(t); }
 const $ = id => document.getElementById(id);
@@ -1134,7 +1139,8 @@ const QA_ARQ=[
 const QA_EQO=[
   {k:'mEng',t:'matrix',q:'Engenheiro',legend:'avaliação preenchida pelo Coordenador',crits:CRIT_PAD},
   {k:'mCoord',t:'matrix',q:'Coordenador',legend:'avaliação preenchida pelo Engenheiro',crits:CRIT_PAD},
-  {k:'mMestre',t:'matrix',q:'Mestre / Encarregado',legend:'avaliação preenchida pelo Engenheiro e Coordenador',crits:CRIT_MESTRE},
+  {k:'mMestreCoord',t:'matrix',q:'Mestre / Encarregado',legend:'avaliação preenchida pelo Coordenador',crits:CRIT_MESTRE},
+  {k:'mMestreEng',t:'matrix',q:'Mestre / Encarregado',legend:'avaliação preenchida pelo Engenheiro',crits:CRIT_MESTRE},
   {k:'mSupri',t:'matrix',q:'Suprimentos / Compras',legend:'avaliação preenchida pelo Engenheiro',crits:CRIT_SUPRI},
   {k:'mAdm',t:'matrix',q:'Administrativo',legend:'avaliação preenchida pelo Engenheiro',crits:['(Definir critérios para ADM)']},
   {k:'fator',t:'buttons',q:'O mestre/encarregado foi um fator positivo ou negativo na satisfação do cliente?',opts:['Muito positivo','Positivo','Neutro','Negativo','Muito negativo'],cmt:true},
@@ -1529,6 +1535,9 @@ const SECTIONS=[
   {key:'engaval',setor:'Suprimentos'},
   {key:'rel',setor:'Gestor'}
 ];
+/* setores que preenchem o Kickout, p/ mostrar pendências no painel */
+const PAINEL_SETORES=[['Orçamentos',['prazos']],['Suprimentos',['forn','engaval']],['Engenharia',['forn','eng','relcli','relarq','equipeobra']],['Coordenação',['equipeobra']]];
+function painelSetorChips(done){ done=Array.isArray(done)?done:[]; return '<div class="pn-setchips">'+PAINEL_SETORES.map(([nome,secs])=>{const ok=secs.every(s=>done.includes(s));return `<span class="pn-setchip ${ok?'ok':''}">${ok?'✓':'⏳'} ${esc(nome)}</span>`;}).join('')+'</div>'; }
 function renderRascunhos(){
   const box=$('rascList'); if(!box)return;
   const koR=obras.filter(o=>o.koStatus==='rascunho').slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
@@ -1740,12 +1749,13 @@ function svgDonut(segs){
 function distSat(dObras,secKey){const m={};SAT5.forEach(l=>m[l]=0);dObras.forEach(o=>{const v=(o[secKey]||{}).satisf;if(v&&m[v]!==undefined)m[v]++;});return SAT5.map(l=>({label:l,value:m[l],color:SATCOLOR[l]}));}
 function avgSat(dObras,secKey){let s=0,c=0;dObras.forEach(o=>{const v=(o[secKey]||{}).satisf;if(SATSCORE[v]){s+=SATSCORE[v];c++;}});return{avg:c?s/c:0,n:c};}
 function avgMat(dObras,secKey,matKey){let s=0,c=0;dObras.forEach(o=>{const d=(o[secKey]||{})[matKey];if(Array.isArray(d))d.forEach(n=>{if(n>0){s+=n;c++;}});});return{avg:c?s/c:0,n:c};}
+function avgMats(dObras,secKey,keys){let s=0,c=0;dObras.forEach(o=>keys.forEach(k=>{const d=(o[secKey]||{})[k];if(Array.isArray(d))d.forEach(n=>{if(n>0){s+=n;c++;}});}));return{avg:c?s/c:0,n:c};}
 function notaBarColor(a){return a>=4?'#2E7D6B':a>=3?'#E0A800':'#C0392B';}
 function pctPrazo(dObras){let ok=0,tot=0;dObras.forEach(o=>{const p=(o.prazos||{}).prazo||{};const pv=+p.pv||0,rl=+p.rl||0;if(pv>0&&rl>0){tot++;if(rl<=pv)ok++;}});return tot?Math.round(ok/tot*100):null;}
 function renderDashNovos(dObras){
   // KPIs
   const satc=avgSat(dObras,'relcli');
-  const eqParts=['mEng','mCoord','mMestre','mSupri'].map(k=>avgMat(dObras,'equipeobra',k)).concat([avgMat(dObras,'engaval','matriz')]);
+  const eqParts=[avgMat(dObras,'equipeobra','mEng'),avgMat(dObras,'equipeobra','mCoord'),avgMats(dObras,'equipeobra',['mMestreCoord','mMestreEng']),avgMat(dObras,'equipeobra','mSupri'),avgMat(dObras,'engaval','matriz')];
   const eqSum=eqParts.reduce((a,b)=>({s:a.s+b.avg*b.n,n:a.n+b.n}),{s:0,n:0});
   const eqAvg=eqSum.n?eqSum.s/eqSum.n:0;
   const pz=pctPrazo(dObras);
@@ -1767,7 +1777,7 @@ function renderDashNovos(dObras){
   let rsim=0,rnao=0;dObras.forEach(o=>{const v=(o.equipeobra||{}).recom;if(v==='Sim')rsim++;else if(v==='Não')rnao++;});
   $('dashRecom').innerHTML=svgDonut([{label:'Sim',value:rsim,color:'#2E7D6B'},{label:'Não',value:rnao,color:'#C0392B'}]);
   // notas médias por papel
-  const papeis=[['Engenheiro',avgMat(dObras,'equipeobra','mEng')],['Coordenador',avgMat(dObras,'equipeobra','mCoord')],['Mestre/Encarregado',avgMat(dObras,'equipeobra','mMestre')],['Suprimentos',avgMat(dObras,'equipeobra','mSupri')],['Engenharia',avgMat(dObras,'engaval','matriz')]];
+  const papeis=[['Engenheiro',avgMat(dObras,'equipeobra','mEng')],['Coordenador',avgMat(dObras,'equipeobra','mCoord')],['Mestre/Encarregado',avgMats(dObras,'equipeobra',['mMestreCoord','mMestreEng'])],['Suprimentos',avgMat(dObras,'equipeobra','mSupri')],['Engenharia',avgMat(dObras,'engaval','matriz')]];
   const withData=papeis.filter(([n,x])=>x.n>0);
   $('dashNotasEq').innerHTML=withData.length?withData.map(([n,x])=>`<div class="rank"><span class="nm">${esc(n)}</span><div class="minibar"><div style="width:${(x.avg/5*100).toFixed(0)}%;background:${notaBarColor(x.avg)}"></div></div><span class="vv">${x.avg.toFixed(1).replace('.',',')}<small>/5</small></span></div>`).join(''):'<p class="hint">Sem avaliações de equipe ainda. Aparece quando houver Kickouts no formato novo.</p>';
 }
@@ -1811,13 +1821,16 @@ function novoKickoutDireto(){ currentRole='gestor'; currentObraName=null; docume
 /* ================= LOGIN / PAPÉIS ================= */
 const ROLES={
   gestor:{nome:'Gestor', full:true},
-  suprimentos:{nome:'Suprimentos', secs:['forn','equipeobra','engaval']},
+  suprimentos:{nome:'Suprimentos', secs:['forn','engaval']},
   orcamentos:{nome:'Orçamentos', secs:['prazos']},
   engenharia:{nome:'Engenharia', secs:['forn','eng','relcli','relarq','equipeobra']},
   coordenacao:{nome:'Coordenação', secs:['equipeobra']},
   admobra:{nome:'ADM de Obra', secs:[]}
 };
 const SEC_LABEL={ident:'Identificação',equipe:'Equipe do Projeto',prazos:'Prazos e Orçamentos',forn:'Avaliação de Fornecedores',eng:'Engenharia',relcli:'Relacionamento Cliente',relarq:'Relacionamento com Arquitetura',equipeobra:'Equipe de Obra',engaval:'Avaliação da Engenharia',rel:'Outros'};
+/* dentro do item 8 (Equipe de Obra), cada setor vê só os seus blocos */
+const EQO_ROLE_ITEMS={ coordenacao:['mEng','mMestreCoord'], engenharia:['mCoord','mMestreEng','mSupri','mAdm','fator','subst','recl','recom'] };
+function applyEqoRoleView(){ const allow=EQO_ROLE_ITEMS[currentRole]; document.querySelectorAll('#equipeobraBlock .qa-item').forEach(it=>{ it.style.display=(!allow||allow.includes(it.dataset.k))?'':'none'; }); }
 let currentRole=null, currentObraName=null, gestorAuth=false, pendingGestorCb=null;
 
 function updateRoleUI(){
@@ -1864,6 +1877,7 @@ function restoreFullForm(){
   if($('setorActions'))$('setorActions').style.display='none';
   const h=document.querySelector('#v-form .howto'); if(h)h.style.display='';
   document.querySelectorAll('#v-form .section').forEach(s=>s.style.display='');
+  document.querySelectorAll('#equipeobraBlock .qa-item').forEach(it=>it.style.display='');
 }
 if($('logoutBtn'))$('logoutBtn').onclick=()=>{
   currentRole=null; currentObraName=null; gestorAuth=false;
@@ -1901,6 +1915,7 @@ window.abrirSetorObra=k=>{
   const h=document.querySelector('#v-form .howto'); if(h)h.style.display='none';
   const secs=r.secs||[];
   document.querySelectorAll('#v-form .section').forEach(s=>{ s.style.display=secs.includes(s.dataset.sec)?'':'none'; });
+  applyEqoRoleView();
   go('form'); window.scrollTo(0,0);
 };
 if($('setorBack'))$('setorBack').onclick=()=>{ currentObraName=null; renderSetorList(); go('setor'); window.scrollTo(0,0); };
@@ -2152,7 +2167,7 @@ function renderPainel(){
     let flag='';
     if(!koutOk && ko.termino){ const t=new Date(ko.termino+'T00:00:00'); const d=Math.round((t-hoje)/86400000); if(d<0)flag='<span class="pnflag late">🏁 vencido</span>'; else if(d<=30)flag=`<span class="pnflag soon">🏁 ${d}d</span>`; }
     const koCell=o.koStatus==='concluido'?'<span class="prog-chip on">✓ concluído</span>':(o.koStatus==='rascunho'?'<span class="prog-chip">✏️ rascunho</span>':'<span class="prog-chip">⏳ pendente</span>');
-    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<span class="pn-fill">✎ Preencher <small>· ${done.length}/${SECTIONS.length}</small></span>`:(o.koStatus==='concluido'?(gestorAuth?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">⏳ aguardando liberação</span>'):'<span class="prog-chip">—</span>'));
+    const koutCell=koutOk?'<span class="prog-chip on">✓ concluído</span>':(o.kickoutReleased?`<span class="pn-fill">✎ Preencher <small>· ${done.length}/${SECTIONS.length}</small></span>${painelSetorChips(done)}`:(o.koStatus==='concluido'?(gestorAuth?'<button class="btn" style="padding:4px 9px;font-size:11px" onclick="event.stopPropagation();requireGestor(()=>liberarKickout(\''+jsq(o.obra)+'\'))">🔓 Liberar</button>':'<span class="prog-chip">⏳ aguardando liberação</span>'):'<span class="prog-chip">—</span>'));
     const koPdf=o.kickoff?`<button class="pn-pdf" title="PDF do Kick Off" onclick="imprimirKickoff('${jsq(o.obra)}')">KO</button>`:'';
     const koutPdf=koutOk?`<button class="pn-pdf" title="PDF do Kickout" onclick="resumoObra('${jsq(o.obra)}')">Out</button>`:'';
     return `<tr>
