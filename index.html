@@ -1149,13 +1149,13 @@ const QA_ARQ=[
 const QA_EQO=[
   {k:'mMestreCoord',t:'mpoints',q:'Mestre / Encarregado',legend:'avaliação preenchida pelo Coordenador',topics:CRIT_MESTRE,cmt:true},
   {k:'mMestreEng',t:'mpoints',q:'Mestre / Encarregado',legend:'avaliação preenchida pelo Engenheiro',topics:CRIT_MESTRE,cmt:true},
-  {k:'mSupri',t:'matrix',q:'Suprimentos / Compras',legend:'avaliação preenchida pelo Engenheiro',crits:CRIT_SUPRI},
+  {k:'mSupri',t:'mpoints',q:'Suprimentos / Compras',legend:'avaliação preenchida pelo Engenheiro',topics:CRIT_SUPRI,cmt:true},
   {k:'fator',t:'buttons',q:'O mestre/encarregado foi um fator positivo ou negativo na satisfação do cliente?',opts:['Muito positivo','Positivo','Neutro','Negativo','Muito negativo'],cmt:true},
   {k:'subst',t:'buttons',q:'Foi necessário substituir algum encarregado ou membro-chave da equipe durante a obra? Por quê?',opts:['Sim','Não'],cmt:true},
   {k:'recl',t:'checksgate',q:'Houve alguma reclamação direta relacionada à equipe da construtora?',showOn:'Sim',opts:['Engenheiro','Mestre / Encarregado','Terceirizados','Limpeza / organização','Postura / comportamento'],outros:true},
   {k:'recom',t:'buttons',q:'Você recomendaria esta equipe de campo (mestre/encarregados) para a próxima obra de {TIPO}?',opts:['Sim','Não'],cmt:true}
 ];
-const QA_ENGAVAL=[ {k:'matriz',t:'matrix',q:'Avalie a Engenharia',crits:CRIT_ENGAVAL} ];
+const QA_ENGAVAL=[ {k:'matriz',t:'mpoints',q:'Avalie a Engenharia',topics:CRIT_ENGAVAL,cmt:true} ];
 const QA_SECTIONS=[['relcliBlock',QA_CLI],['relarqBlock',QA_ARQ],['equipeobraBlock',QA_EQO],['engavalBlock',QA_ENGAVAL]];
 
 function curTipoLabel(o){ const t=(o&&o.tipo)|| ($('f_tipo')?$('f_tipo').value:'') ; return t?('próxima obra de '+t):'próxima obra'; }
@@ -1236,13 +1236,17 @@ function qaView(cfg,data,title,tipoLbl){
 }
 
 /* --- histórico: avaliações de equipe no formato antigo (matriz 1-5) --- */
-const EQO_LEGACY_MATS=[['mEng','Engenheiro',CRIT_PAD],['mCoord','Coordenador',CRIT_PAD],['mMestreCoord','Mestre / Encarregado (pelo Coordenador)',CRIT_MESTRE],['mMestreEng','Mestre / Encarregado (pelo Engenheiro)',CRIT_MESTRE],['mAdm','Administrativo',['(Definir critérios para ADM)']]];
+const EQO_LEGACY_MATS=[['mEng','Engenheiro',CRIT_PAD],['mCoord','Coordenador',CRIT_PAD],['mMestreCoord','Mestre / Encarregado (pelo Coordenador)',CRIT_MESTRE],['mMestreEng','Mestre / Encarregado (pelo Engenheiro)',CRIT_MESTRE],['mSupri','Suprimentos / Compras',CRIT_SUPRI],['mAdm','Administrativo',['(Definir critérios para ADM)']]];
 function qaEqoLegacyView(eqo){ eqo=eqo||{};
   const parts=EQO_LEGACY_MATS.map(([k,label,crits])=>{ const arr=eqo[k]; if(!Array.isArray(arr)||!arr.some(x=>x))return '';
     const rows=crits.map((cr,r)=>arr[r]?`<div class="aa"><b>${esc(cr)}:</b> ${arr[r]}/5</div>`:'').join('');
     return `<div class="qa-v"><div class="qq">${esc(label)}</div>${rows}</div>`; }).filter(Boolean);
   return parts.length?`<div class="mh">Equipe de Obra — avaliações anteriores (formato antigo)</div>${parts.join('')}`:''; }
 function keepEqoLegacy(newEqo,oldEqo){ newEqo=newEqo||{}; if(!oldEqo)return newEqo; EQO_LEGACY_MATS.forEach(([k])=>{ if(Array.isArray(oldEqo[k])&&oldEqo[k].some(x=>x)) newEqo[k]=oldEqo[k]; }); return newEqo; }
+function engavalLegacyView(ev){ ev=ev||{}; const arr=ev.matriz; if(!Array.isArray(arr)||!arr.some(x=>x))return '';
+  const rows=CRIT_ENGAVAL.map((cr,r)=>arr[r]?`<div class="aa"><b>${esc(cr)}:</b> ${arr[r]}/5</div>`:'').join('');
+  return `<div class="mh">Avaliação da Engenharia — anterior (formato antigo)</div><div class="qa-v"><div class="qq">Avalie a Engenharia</div>${rows}</div>`; }
+function keepEngavalLegacy(newEv,oldEv){ newEv=newEv||{}; if(oldEv&&Array.isArray(oldEv.matriz)&&oldEv.matriz.some(x=>x))newEv.matriz=oldEv.matriz; return newEv; }
 buildEng(); buildRel(); buildQAll();
 
 /* ---------- fornecedor rows ---------- */
@@ -1484,7 +1488,7 @@ async function saveObra(status){
   let novos=0,upd=0;
   await commitSynced(()=>{
     const oi=obras.findIndex(x=>norm(x.obra)===norm(o.obra));
-    if(oi>=0){ const prev=obras[oi]; o.kickoff=prev.kickoff; o.koStatus=prev.koStatus; o.kickoutReleased=prev.kickoutReleased; if(prev.done&&(!o.done||!o.done.length))o.done=prev.done; if(prev.forn_na)o.forn_na=prev.forn_na; if((!o.rel_qa||!o.rel_qa.length)&&prev.rel_qa)o.rel_qa=prev.rel_qa; o.equipeobra=keepEqoLegacy(o.equipeobra,prev.equipeobra); obras[oi]=o; }
+    if(oi>=0){ const prev=obras[oi]; o.kickoff=prev.kickoff; o.koStatus=prev.koStatus; o.kickoutReleased=prev.kickoutReleased; if(prev.done&&(!o.done||!o.done.length))o.done=prev.done; if(prev.forn_na)o.forn_na=prev.forn_na; if((!o.rel_qa||!o.rel_qa.length)&&prev.rel_qa)o.rel_qa=prev.rel_qa; o.equipeobra=keepEqoLegacy(o.equipeobra,prev.equipeobra); o.engaval=keepEngavalLegacy(o.engaval,prev.engaval); obras[oi]=o; }
     else obras.push(o);
     if(status==='rascunho' && !o.koStatus){ const _i=obras.findIndex(x=>norm(x.obra)===norm(o.obra)); if(_i>=0 && !obras[_i].kickoutReleased)obras[_i].kickoutReleased=true; }
     if(status!=='rascunho'){
@@ -1665,6 +1669,7 @@ window.viewObra=k=>{
   html+= qaView(QA_EQO,o.equipeobra,'Equipe de Obra',_tl);
   html+= qaEqoLegacyView(o.equipeobra);
   html+= qaView(QA_ENGAVAL,o.engaval,'Avaliação da Engenharia',_tl);
+  html+= engavalLegacyView(o.engaval);
   html+= relView();
   openModal(html+'</div>');
 };
@@ -1971,7 +1976,7 @@ if($('setorSave'))$('setorSave').onclick=()=>{
       else if(sec==='relcli') ob.relcli=o.relcli;
       else if(sec==='relarq') ob.relarq=o.relarq;
       else if(sec==='equipeobra') ob.equipeobra=keepEqoLegacy(o.equipeobra,ob.equipeobra);
-      else if(sec==='engaval') ob.engaval=o.engaval;
+      else if(sec==='engaval') ob.engaval=keepEngavalLegacy(o.engaval,ob.engaval);
       if(!ob.done.includes(sec))ob.done.push(sec);
     });
   }).then(()=>{ toast('Sua parte foi salva! ✓','ok'); currentObraName=null; renderSetorList(); go('setor'); window.scrollTo(0,0); });
