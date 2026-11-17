@@ -483,7 +483,7 @@ body.setor-mode .sec-done{display:none}
       <button class="role-btn" data-role="suprimentos">📦 Suprimentos <small>Fornecedores, Equipe de Obra e Avaliação da Engenharia</small></button>
       <button class="role-btn" data-role="orcamentos">💰 Orçamentos <small>Sem seção no momento (uso futuro)</small></button>
       <button class="role-btn" data-role="engenharia">🏗️ Engenharia <small>Prazos e Orçamentos, Engenharia, Fornecedores, Relacionamentos e Equipe de Obra</small></button>
-      <button class="role-btn" data-role="coordenacao">🧭 Coordenação <small>Preenche a Equipe de Obra (avaliação cruzada)</small></button>
+      <button class="role-btn" data-role="coordenacao">🧭 Coordenação <small>Sem seção no momento (uso futuro)</small></button>
       <button class="role-btn" data-role="admobra">📋 ADM de Obra <small>Sem seção no momento (uso futuro)</small></button>
     </div>
     <div id="gestorPass" class="gestor-pass" style="display:none">
@@ -629,7 +629,7 @@ body.setor-mode .sec-done{display:none}
 
   <!-- 8 Equipe de Obra -->
   <div class="section" data-sec="equipeobra">
-    <div class="sh"><span class="num">8</span><h2>Equipe de Obra</h2><div class="sec-meta"><span class="sec-tag">Coord. / Eng. / Supri.</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="equipeobra"> Parte preenchida</label></div></div>
+    <div class="sh"><span class="num">8</span><h2>Equipe de Obra</h2><div class="sec-meta"><span class="sec-tag">Engenharia</span><label class="sec-done"><input type="checkbox" class="secChk" data-sec="equipeobra"> Parte preenchida</label></div></div>
     <div class="bd" id="equipeobraBlock"></div>
   </div>
 
@@ -1147,7 +1147,6 @@ const QA_ARQ=[
   {k:'revisoes',t:'numimpact',q:'Quantas alterações relevantes de projeto ocorreram durante a execução? Impactaram prazo e/ou orçamento?'}
 ];
 const QA_EQO=[
-  {k:'mMestreCoord',t:'mpoints',q:'Mestre / Encarregado',legend:'avaliação preenchida pelo Coordenador',topics:CRIT_MESTRE,cmt:true},
   {k:'mMestreEng',t:'mpoints',q:'Mestre / Encarregado',legend:'avaliação preenchida pelo Engenheiro',topics:CRIT_MESTRE,cmt:true},
   {k:'mSupri',t:'mpoints',q:'Suprimentos / Compras',legend:'avaliação preenchida pelo Engenheiro',topics:CRIT_SUPRI,cmt:true},
   {k:'fator',t:'buttons',q:'O mestre/encarregado foi um fator positivo ou negativo na satisfação do cliente?',opts:['Muito positivo','Positivo','Neutro','Negativo','Muito negativo'],cmt:true},
@@ -1571,7 +1570,7 @@ const SECTIONS=[
   {key:'engaval',setor:'Suprimentos'}
 ];
 /* setores que preenchem o Kickout, p/ mostrar pendências no painel */
-const PAINEL_SETORES=[['Suprimentos','Supri',['forn','engaval']],['Engenharia','Eng',['prazos','forn','eng','relcli','relarq','equipeobra']],['Coordenação','Coord',['equipeobra']]];
+const PAINEL_SETORES=[['Suprimentos','Supri',['forn','engaval']],['Engenharia','Eng',['prazos','forn','eng','relcli','relarq','equipeobra']]];
 function painelSetorChips(done){ done=Array.isArray(done)?done:[]; return '<div class="pn-setchips">'+PAINEL_SETORES.map(([nome,ab,secs])=>{const ok=secs.every(s=>done.includes(s));return `<span class="pn-setchip ${ok?'ok':''}" title="${esc(nome)}">${ok?'✓':'⏳'} ${esc(ab)}</span>`;}).join('')+'</div>'; }
 function renderRascunhos(){
   const box=$('rascList'); if(!box)return;
@@ -1863,12 +1862,12 @@ const ROLES={
   suprimentos:{nome:'Suprimentos', secs:['forn','engaval']},
   orcamentos:{nome:'Orçamentos', secs:[]},
   engenharia:{nome:'Engenharia', secs:['prazos','forn','eng','relcli','relarq','equipeobra']},
-  coordenacao:{nome:'Coordenação', secs:['equipeobra']},
+  coordenacao:{nome:'Coordenação', secs:[]},
   admobra:{nome:'ADM de Obra', secs:[]}
 };
 const SEC_LABEL={ident:'Identificação',equipe:'Equipe do Projeto',prazos:'Prazos e Orçamentos',forn:'Avaliação de Fornecedores',eng:'Engenharia',relcli:'Relacionamento Cliente',relarq:'Relacionamento com Arquitetura',equipeobra:'Equipe de Obra',engaval:'Avaliação da Engenharia',rel:'Outros'};
 /* dentro do item 8 (Equipe de Obra), cada setor vê só os seus blocos */
-const EQO_ROLE_ITEMS={ coordenacao:['mMestreCoord'], engenharia:['mMestreEng','mSupri','fator','subst','recl','recom'] };
+const EQO_ROLE_ITEMS={ engenharia:['mMestreEng','mSupri','fator','subst','recl','recom'] };
 function applyEqoRoleView(){ const allow=EQO_ROLE_ITEMS[currentRole]; document.querySelectorAll('#equipeobraBlock .qa-item').forEach(it=>{ it.style.display=(!allow||allow.includes(it.dataset.k))?'':'none'; }); }
 let currentRole=null, currentObraName=null, gestorAuth=false, pendingGestorCb=null;
 
